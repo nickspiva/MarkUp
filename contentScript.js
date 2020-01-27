@@ -144,6 +144,15 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
       stickerButton.innerHTML = "save";
       stickerContainer.appendChild(stickerButton);
 
+      let stickerDelete = document.createElement("Button");
+      stickerDelete.style.position = "absolute";
+      stickerDelete.style.bottom = "5%";
+      stickerDelete.innerHTML = "delete";
+      stickerDelete.style.right = "5%";
+      stickerDelete.innerHTML = "delete";
+
+      stickerContainer.appendChild(stickerDelete);
+
       //send message to background w/ sticker info (successful)
       stickerButton.addEventListener("click", function() {
         console.log("clicked");
@@ -151,6 +160,12 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
           URL: window.location.href,
           sticker: saveSticker()
         });
+      });
+
+      //delete the sticker
+      stickerDelete.addEventListener("click", function() {
+        console.log("clicked");
+        stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
       });
     }
 

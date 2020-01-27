@@ -131,6 +131,21 @@ function buildSticker(
   stickerButton.innerHTML = "save";
   stickerContainer.appendChild(stickerButton);
 
+  //add delete button
+  let stickerDelete = document.createElement("Button");
+  stickerDelete.style.position = "absolute";
+  stickerDelete.style.bottom = "5%";
+  stickerDelete.innerHTML = "delete";
+  stickerDelete.style.right = "5%";
+  stickerDelete.innerHTML = "delete";
+  stickerContainer.appendChild(stickerDelete);
+
+  //delete the sticker
+  stickerDelete.addEventListener("click", function() {
+    console.log("clicked");
+    stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
+  });
+
   //send message to background w/ sticker info (successful)
   stickerButton.addEventListener("click", function() {
     console.log("clicked");
