@@ -34,35 +34,33 @@ window.onload = function() {
   };
 
   document.getElementById("addSticker").onclick = function() {
-    alert("you clicked add sticker");
+    console.log("you clicked add sticker");
     chrome.tabs.executeScript({
       file: "addSticker.js"
     });
-    // window.addEventListener("DOMContentLoaded", () => {
-    //   chrome.tabs.query(
-    //     {
-    //       active: true,
-    //       currentWindow: true
-    //     },
-    //     tabs => {
-    //       chrome.tabs.sendMessage(tabs[0], {
-    //         from: "popup",
-    //         subject: "DOMInfo"
-    //       });
-    //     }
-    //   );
+  };
+
+  document.getElementById("getSticker").onclick = function() {
+    //get url of current tab
+    var query = { active: true, currentWindow: true };
+    let currentTab;
+    let thisTab;
+    function getTabs(tabs) {
+      thisTab = tabs[0];
+      currentTab = tabs[0].url; // there will be only one in this array
+      console.log("tabs[0", tabs[0]); // also has properties like currentTab.id
+      //to send message to current tab has to be within this query
+      chrome.storage.sync.get(currentTab, function(sticker) {
+        console.log("retrieved sticker**", sticker[currentTab]);
+        chrome.tabs.sendMessage(thisTab.id, {
+          sticker: sticker[currentTab]
+        });
+      });
+    }
+    chrome.tabs.query(query, getTabs);
+    //with just currentTab variable gets all saved info? trying brackets, brackets throw error
+    // chrome.storage.sync.get(currentTab, function(sticker) {
+    //   console.log("retrieved sticker**", sticker[currentTab]);
     // });
   };
 };
-
-// chrome.runtime.onConnect.addListener(function(port) {
-//   console.assert(port.name == "knockknock");
-//   port.onMessage.addListener(function(msg) {
-//     if (msg.joke == "Knock knock")
-//       port.postMessage({ question: "Who's there?" });
-//     else if (msg.answer == "Madame")
-//       port.postMessage({ question: "Madame who?" });
-//     else if (msg.answer == "Madame... Bovary")
-//       port.postMessage({ question: "I don't get it." });
-//   });
-// });
