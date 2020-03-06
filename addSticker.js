@@ -1,38 +1,126 @@
 //sets up functionality to create and edit stickers
 console.log("add Sticker function");
+
+//sticker creation functionality
+//High level - will be a sticker container DIV, wrapping a sticker DIV,
+//when the sticker is double clicked, it will generate an input area
+
+function buildSticker(
+  text = "default sticker",
+  left = "100px",
+  top = "100px",
+  width = "200px",
+  height = "200px"
+) {
+  //build sticker container
+  let stickerContainer = document.createElement("DIV");
+
+  let stickerId = parseFloat(Math.random() * 10000);
+  //stickerContainer styling
+  stickerContainer.setAttribute("id", `sticker${stickerId}`);
+  stickerContainer.style.padding = "20px";
+  stickerContainer.style.top = top;
+  stickerContainer.style.height = height;
+  stickerContainer.style.width = width;
+  stickerContainer.style.left = left;
+  stickerContainer.style.borderColor = "blue";
+  stickerContainer.style.position = "absolute";
+  stickerContainer.style.backgroundColor = "lightgrey";
+  stickerContainer.style.border = "5px solid black";
+  stickerContainer.style["border-radius"] = "3px";
+  stickerContainer.style.overflow = "auto";
+  stickerContainer.style.resize = "both";
+  stickerContainer.style.zIndex = 999;
+  stickerContainer.className = "stickerContainer";
+
+  //build actual sticker
+  let sticker = document.createElement("DIV");
+  //affix to sticker container
+  stickerContainer.appendChild(sticker);
+
+  //affix both to document body (high level)
+  document.body.appendChild(stickerContainer);
+  sticker.innerHTML = text;
+  sticker.setAttribute("id", "sticker");
+  sticker.className = "sticker";
+  sticker.style.height = "100%";
+  sticker.style.width = "100%";
+  sticker.ondragstart = function() {
+    return false;
+  };
+  sticker.ondblclick = dblClickHandler;
+  stickerContainer.onmousedown = clickDown;
+
+  //add save button
+  let stickerButton = document.createElement("Button");
+  stickerButton.style.position = "absolute";
+  stickerButton.style.bottom = "5%";
+  stickerButton.innerHTML = "save";
+  stickerContainer.appendChild(stickerButton);
+
+  //add delete button
+  let stickerDelete = document.createElement("Button");
+  stickerDelete.style.position = "absolute";
+  stickerDelete.style.bottom = "5%";
+  stickerDelete.innerHTML = "delete";
+  stickerDelete.style.right = "5%";
+  stickerDelete.innerHTML = "delete";
+  stickerContainer.appendChild(stickerDelete);
+
+  //delete the sticker
+  stickerDelete.addEventListener("click", function() {
+    console.log("clicked");
+    stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
+  });
+
+  //send message to background w/ sticker info (successful)
+  stickerButton.addEventListener("click", function(event) {
+    console.log("clicked");
+    console.log("event: ", event);
+    chrome.runtime.sendMessage({
+      URL: window.location.href,
+      sticker: saveSticker(event)
+    });
+  });
+}
+
 //dragging functionality
-let mouseStatus;
+// let mouseStatus;
 //on down click add event listeners for movement and mouseup
 function clickDown(event) {
   //ensures they aren't clicking the resize stickerContainer
-  if (event.target.id === "sticker") {
+  if (event.target.className === "sticker") {
     document.addEventListener("mousemove", dragging, false);
     document.addEventListener("mouseup", releaseClick);
-    mouseStatus = "down";
-    document.getElementById("stickerContainer").style.borderColor = "blue";
+    // mouseStatus = "down";
+    console.log("event: ", event);
+    event.target.parentNode.style.borderColor = "blue";
   }
 }
 
 //if mouse is clicked drag the thing
 function dragging(event) {
-  if (mouseStatus === "down") {
-    let x = event.clientX;
-    let y = event.clientY;
-    let stickerContainer = document.getElementById("stickerContainer");
-    //centers the drag, would prefer to have it drag from where you clicked
-    stickerContainer.style.left = `${x -
-      Number(stickerContainer.style.width.split("p")[0]) / 2}px`;
-    stickerContainer.style.top = `${y -
-      Number(stickerContainer.style.height.split("p")[0]) / 2}px`;
-  }
+  // console.log("event: ", event);
+  // if (mouseStatus === "down") {
+  let x = event.clientX;
+  let y = event.clientY;
+  // let stickerContainer = document.getElementById("stickerContainer");
+  let stickerContainer = event.target.parentNode;
+  //centers the drag, would prefer to have it drag from where you clicked
+  stickerContainer.style.left = `${x -
+    Number(stickerContainer.style.width.split("p")[0]) / 2}px`;
+  stickerContainer.style.top = `${y -
+    Number(stickerContainer.style.height.split("p")[0]) / 2}px`;
+  // }
 }
 
-function releaseClick() {
+function releaseClick(event) {
   //remove event listener change mouse status
   mouseStatus = "up";
   document.removeEventListener("mousemove", dragging, false);
-  document.getElementById("stickerContainer").style.borderColor = "black";
-  saveSticker();
+  event.target.parentNode.style.borderColor = "black";
+  //turned off so it only saves on click
+  // saveSticker(event);
 }
 
 //focus functionality (flipping between input and text)
@@ -80,94 +168,27 @@ function dblClickHandler(event) {
   document.addEventListener("focusout", focusOutText, true);
 }
 
-//sticker creation functionality
-function buildSticker(
-  text = "default sticker",
-  left = "100px",
-  top = "100px",
-  width = "200px",
-  height = "200px"
-) {
-  //build sticker container
-  let stickerContainer = document.createElement("DIV");
-  //stickerContainer styling
-  stickerContainer.setAttribute("id", "stickerContainer");
-  stickerContainer.style.padding = "20px";
-  stickerContainer.style.top = top;
-  stickerContainer.style.height = height;
-  stickerContainer.style.width = width;
-  stickerContainer.style.left = left;
-  stickerContainer.style.borderColor = "blue";
-  stickerContainer.style.position = "absolute";
-  stickerContainer.style.backgroundColor = "lightgrey";
-  stickerContainer.style.border = "5px solid black";
-  stickerContainer.style["border-radius"] = "3px";
-  stickerContainer.style.overflow = "auto";
-  stickerContainer.style.resize = "both";
-  stickerContainer.style.zIndex = 999;
-
-  //build actual sticker
-  let sticker = document.createElement("DIV");
-  //affix to sticker container
-  stickerContainer.appendChild(sticker);
-
-  //affix both to document body (high level)
-  document.body.appendChild(stickerContainer);
-  sticker.innerHTML = text;
-  sticker.setAttribute("id", "sticker");
-  sticker.className = "sticker";
-  sticker.style.height = "100%";
-  sticker.style.width = "100%";
-  sticker.ondragstart = function() {
-    return false;
-  };
-  sticker.ondblclick = dblClickHandler;
-  stickerContainer.onmousedown = clickDown;
-
-  //add save button
-  let stickerButton = document.createElement("Button");
-  stickerButton.style.position = "absolute";
-  stickerButton.style.bottom = "5%";
-  stickerButton.innerHTML = "save";
-  stickerContainer.appendChild(stickerButton);
-
-  //add delete button
-  let stickerDelete = document.createElement("Button");
-  stickerDelete.style.position = "absolute";
-  stickerDelete.style.bottom = "5%";
-  stickerDelete.innerHTML = "delete";
-  stickerDelete.style.right = "5%";
-  stickerDelete.innerHTML = "delete";
-  stickerContainer.appendChild(stickerDelete);
-
-  //delete the sticker
-  stickerDelete.addEventListener("click", function() {
-    console.log("clicked");
-    stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
-  });
-
-  //send message to background w/ sticker info (successful)
-  stickerButton.addEventListener("click", function() {
-    console.log("clicked");
-    chrome.runtime.sendMessage({
-      URL: window.location.href,
-      sticker: saveSticker()
-    });
-  });
-}
-
 //build a sticker onload
 document.onload = buildSticker();
 
-saveSticker = () => {
-  let stickerObj = {
-    message: document.getElementById("sticker").innerHTML,
-    left: document.getElementById("stickerContainer").style.left,
-    top: document.getElementById("stickerContainer").style.top,
-    height: document.getElementById("stickerContainer").style.height,
-    width: document.getElementById("stickerContainer").style.width,
-    user: "inProgress"
-  };
+saveSticker = event => {
+  let stickerObj;
+  if (event.target.className == "sticker") {
+    console.log("coming from sticker");
+    console.log("event: ", event);
+  } else {
+    console.log("coming from save button");
+    console.log("sticker container: ", event.target.parentNode);
+    console.log("inner html: ", event.target.previousElementSibling.innerText);
+    stickerObj = {
+      message: event.target.previousElementSibling.innerText,
+      left: event.target.parentNode.style.left,
+      top: event.target.parentNode.style.top,
+      height: event.target.parentNode.style.height,
+      width: event.target.parentNode.style.width,
+      user: "inProgress"
+    };
+  }
 
   return stickerObj;
 };
