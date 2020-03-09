@@ -144,10 +144,13 @@ function focusOutText(event) {
 }
 
 function dblClickHandler(event) {
-  let sticker = document.getElementById("sticker");
-  let input;
+  console.log("dblclick event: ", event);
+  // let sticker = document.getElementById("sticker");
+  let sticker = event.target;
+  console.log("sticker: ", sticker);
   //if the sticker doesn't have an input field already (e.g. hasn't been dbl clicked)
-  if (sticker.childElementCount < 1) {
+  if (sticker.id !== "stickerInput") {
+    let input;
     //store the sticker html as default text for the input field
     let defaultText = sticker.innerHTML;
     //clear the sticker html
@@ -163,9 +166,11 @@ function dblClickHandler(event) {
     input.style.width = "100%";
     input.style.height = "100%";
     input.style.resize = "none";
+    input.focus();
   }
   document.addEventListener("focusin", focusInText, true);
   document.addEventListener("focusout", focusOutText, true);
+  console.log("sticker: ", sticker);
 }
 
 //build a sticker onload
