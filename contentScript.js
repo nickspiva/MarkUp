@@ -45,7 +45,7 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
       mouseStatus = "up";
       document.removeEventListener("mousemove", dragging, false);
       document.getElementById("stickerContainer").style.borderColor = "black";
-      saveSticker();
+      getStickerInfo();
     }
 
     //focus functionality (flipping between input and text)
@@ -138,34 +138,34 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
       stickerContainer.onmousedown = clickDown;
 
       //add save button
-      let stickerButton = document.createElement("Button");
-      stickerButton.style.position = "absolute";
-      stickerButton.style.bottom = "5%";
-      stickerButton.innerHTML = "save";
-      stickerContainer.appendChild(stickerButton);
+      let saveButton = document.createElement("Button");
+      saveButton.style.position = "absolute";
+      saveButton.style.bottom = "5%";
+      saveButton.innerHTML = "save";
+      stickerContainer.appendChild(saveButton);
 
-      let stickerDelete = document.createElement("Button");
-      stickerDelete.style.position = "absolute";
-      stickerDelete.style.bottom = "5%";
-      stickerDelete.innerHTML = "delete";
-      stickerDelete.style.right = "5%";
-      stickerDelete.innerHTML = "delete";
+      let deleteButton = document.createElement("Button");
+      deleteButton.style.position = "absolute";
+      deleteButton.style.bottom = "5%";
+      deleteButton.innerHTML = "delete";
+      deleteButton.style.right = "5%";
+      deleteButton.innerHTML = "delete";
 
-      stickerContainer.appendChild(stickerDelete);
+      stickerContainer.appendChild(deleteButton);
 
       //send message to background w/ sticker info (successful)
-      stickerButton.addEventListener("click", function() {
+      saveButton.addEventListener("click", function() {
         console.log("clicked");
         chrome.runtime.sendMessage({
           URL: window.location.href,
-          sticker: saveSticker()
+          sticker: getStickerInfo()
         });
       });
 
       //delete the sticker
-      stickerDelete.addEventListener("click", function() {
+      deleteButton.addEventListener("click", function() {
         console.log("clicked");
-        stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
+        deleteButton.parentNode.parentNode.removeChild(stickerContainer);
       });
     }
 
@@ -184,7 +184,7 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
       msg.sticker.height
     );
 
-    saveSticker = () => {
+    getStickerInfo = () => {
       let stickerObj = {
         message: document.getElementById("sticker").innerHTML,
         left: document.getElementById("stickerContainer").style.left,
