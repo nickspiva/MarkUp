@@ -1,9 +1,9 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./contentScripts/index.js",
+  entry: "./contentScripts/subScripts/contentScript.js",
   output: {
     filename: "bundledContentScripts.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname)
   }
 };
