@@ -48,11 +48,11 @@ export default function buildSticker(
   stickerContainer.onmousedown = clickDown;
 
   //add save button
-  let stickerButton = document.createElement("Button");
-  stickerButton.style.position = "absolute";
-  stickerButton.style.bottom = "5%";
-  stickerButton.innerHTML = "save";
-  stickerContainer.appendChild(stickerButton);
+  let saveButton = document.createElement("Button");
+  saveButton.style.position = "absolute";
+  saveButton.style.bottom = "5%";
+  saveButton.innerHTML = "save";
+  stickerContainer.appendChild(saveButton);
 
   //add delete button
   let stickerDelete = document.createElement("Button");
@@ -70,7 +70,7 @@ export default function buildSticker(
   });
 
   //send message to background w/ sticker info (successful)
-  stickerButton.addEventListener("click", function(event) {
+  saveButton.addEventListener("click", function(event) {
     console.log("clicked");
     console.log("event: ", event);
     chrome.runtime.sendMessage({
