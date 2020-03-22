@@ -1,0 +1,27 @@
+{
+  "name": "MarkUp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "addSticker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickspiva/MarkUp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickspiva/MarkUp/issues"
+  },
+  "homepage": "https://github.com/nickspiva/MarkUp#readme",
+  "devDependencies": {
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}
