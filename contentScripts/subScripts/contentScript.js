@@ -1,5 +1,7 @@
 import buildSticker from "./buildSticker";
 
+console.log("running content script");
+
 //what exactly is this doing?
 chrome.runtime.sendMessage({
   from: "content",

@@ -41,6 +41,7 @@ window.onload = function() {
   };
 
   document.getElementById("getSticker").onclick = function() {
+    console.log("you clicked get sticker");
     //get url of current tab
     var query = { active: true, currentWindow: true };
     let currentTab;
