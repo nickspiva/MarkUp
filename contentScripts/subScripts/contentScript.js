@@ -1,16 +1,17 @@
 import buildSticker from "./buildSticker";
+import saveSticker from "./saveSticker";
 
-console.log("running content script");
+console.log("in content script");
 
 //what exactly is this doing?
-chrome.runtime.sendMessage({
-  from: "content",
-  subject: "setSticker"
-});
+// chrome.runtime.sendMessage({
+//   from: "content",
+//   subject: "setSticker"
+// });
 
 //Adds a listener
 chrome.runtime.onMessage.addListener((msg, sender, response) => {
-  console.log("message incoming");
+  console.log("in content script, message incoming");
   console.log(msg);
   if (msg.sticker.user) {
     console.log("adding sticker");
@@ -25,5 +26,3 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
     );
   }
 });
-
-console.log("sent message!");
