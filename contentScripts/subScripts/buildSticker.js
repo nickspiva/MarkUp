@@ -63,7 +63,7 @@ export default function buildSticker(
   stickerDelete.innerHTML = "delete";
   stickerContainer.appendChild(stickerDelete);
 
-  //delete the sticker
+  //delete the sticker ** NEED TO UPDATE TO REMOVE FROM DB
   stickerDelete.addEventListener("click", function() {
     console.log("clicked");
     stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
