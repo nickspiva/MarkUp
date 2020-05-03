@@ -8,8 +8,9 @@
     "rebundle-content": "npx webpack --config webpack.config.js",
     "start-server": "nodemon startServer.js -e html,js,css --ignore public",
     "lint": "eslint ./ --ignore-path .gitignore",
-    "lint-fix": "npm run lint -- --fix", 
-    "seed": "node seed.js"
+    "lint-fix": "npm run lint -- --fix",
+    "seed": "node seed.js",
+    "rebundle-popup": "npx webpack --config webpack.config.app.js"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,9 @@
   },
   "homepage": "https://github.com/nickspiva/MarkUp#readme",
   "devDependencies": {
-    "@babel/core": "^7.9.0",
+    "@babel/core": "^7.9.6",
     "@babel/polyfill": "^7.8.7",
-    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/register": "^7.9.0",
     "babel": "^6.23.0",
@@ -40,11 +41,22 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "chalk": "^4.0.0",
     "express": "^4.17.1",
     "path": "^0.12.7",
     "pg": "^8.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-react": "^0.88.2",
     "sequelize": "^5.21.6",
     "volleyball": "^1.5.1"
   }

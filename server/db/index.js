@@ -10,10 +10,11 @@ const User = require("./user");
 
 Sticker.belongsTo(User);
 User.hasMany(Sticker);
+User.belongsToMany(User, { as: "friend", through: "friends" });
 
 module.exports = {
   // Include your models in this exports object as well!
   db,
   Sticker,
-  User
+  User,
 };
