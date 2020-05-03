@@ -12,7 +12,7 @@ class LoginForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.handleClickTwo = this.handleClickTwo.bind(this);
+    // this.handleClickTwo = this.handleClickTwo.bind(this);
   }
 
   handleSubmit() {
@@ -37,46 +37,44 @@ class LoginForm extends React.Component {
     });
   }
 
-  handleClickTwo() {
-    this.props.changePage("profile");
-  }
+  // handleClickTwo() {
+  //   this.props.changePage("profile");
+  // }
 
-  addSticker() {
-    console.log("testing add");
-    chrome.tabs.executeScript({
-      file: "addSticker.js",
-    });
-  }
+  // addSticker() {
+  //   console.log("testing add");
+  //   chrome.tabs.executeScript({
+  //     file: "addSticker.js",
+  //   });
+  // }
 
-  getSticker() {
-    console.log("in popup, you clicked get sticker");
-    //get url of current tab
-    var query = { active: true, currentWindow: true };
-    let currentTab;
-    let thisTab;
-    function getTabs(tabs) {
-      thisTab = tabs[0];
-      currentTab = tabs[0].url; // there will be only one in this array
-      console.log("tabs[0", tabs[0]); // also has properties like currentTab.id
-      //to send message to current tab has to be within this query
-      chrome.storage.sync.get(currentTab, function (sticker) {
-        console.log("retrieved sticker**", sticker[currentTab]);
-        chrome.tabs.sendMessage(thisTab.id, {
-          sticker: sticker[currentTab],
-        });
-      });
-    }
-    chrome.tabs.query(query, getTabs);
-    //with just currentTab variable gets all saved info? trying brackets, brackets throw error
-  }
+  // getSticker() {
+  //   console.log("in popup, you clicked get sticker");
+  //   //get url of current tab
+  //   var query = { active: true, currentWindow: true };
+  //   let currentTab;
+  //   let thisTab;
+  //   function getTabs(tabs) {
+  //     thisTab = tabs[0];
+  //     currentTab = tabs[0].url; // there will be only one in this array
+  //     console.log("tabs[0", tabs[0]); // also has properties like currentTab.id
+  //     //to send message to current tab has to be within this query
+  //     chrome.storage.sync.get(currentTab, function (sticker) {
+  //       console.log("retrieved sticker**", sticker[currentTab]);
+  //       chrome.tabs.sendMessage(thisTab.id, {
+  //         sticker: sticker[currentTab],
+  //       });
+  //     });
+  //   }
+  //   chrome.tabs.query(query, getTabs);
+  //   //with just currentTab variable gets all saved info? trying brackets, brackets throw error
+  // }
 
   render() {
     return (
       <React.Fragment>
-        <Button onClick={this.addSticker}>Add Sticker</Button>
-        <Button onClick={this.getSticker}>Get Sticker</Button>
-        <Button onClick={this.handleClick}>Test</Button>
-        <Button onClick={this.handleClickTwo}>Go to Profile</Button>
+        {/* <Button onClick={this.addSticker}>Add Sticker</Button>
+        <Button onClick={this.getSticker}>Get Sticker</Button> */}
         <Form onSubmit={this.handleSubmit}>
           <Form.Input
             type="text"

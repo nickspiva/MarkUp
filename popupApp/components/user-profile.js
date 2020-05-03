@@ -7,8 +7,7 @@ const UserProfile = (props) => {
   };
   return (
     <div>
-      <h1>User Profile</h1>
-      <Button onClick={handleClick}>Go to Login</Button>
+      <h2>User Profile</h2>
     </div>
   );
 };
