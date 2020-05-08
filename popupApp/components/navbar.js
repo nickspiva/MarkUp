@@ -7,10 +7,10 @@ const Navbar = (props) => {
   };
   return (
     <div>
-      <Button name="home" onClick={handleClick}>
+      <Button name="login" onClick={handleClick}>
         Log-In
       </Button>
-      <Button name="home" onClick={handleClick}>
+      <Button name="signup" onClick={handleClick}>
         Sign-Up
       </Button>
       <Button name="myStickers" onClick={handleClick}>

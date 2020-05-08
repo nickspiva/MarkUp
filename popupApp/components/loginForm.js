@@ -8,18 +8,33 @@ class LoginForm extends React.Component {
     this.state = {
       userName: "",
       password: "",
+      loggedIn: this.props.user,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    // this.handleClickTwo = this.handleClickTwo.bind(this);
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     console.log("username: ", this.state.userName);
-    console.log("username: ", this.state.password);
-    const ngrokURL = "http://6f3ac6a6.ngrok.io/api/users";
-    axios.post(`${ngrokURL}`, {});
+    console.log("password: ", this.state.password);
+    const ngrokURL = "http://3f28444d.ngrok.io/api/login";
+    let response = await axios.post(`${ngrokURL}`, {
+      userName: this.state.userName,
+      password: this.state.password,
+    });
+    console.log("response: ", response);
+    console.log("userId: ", response.data.id);
+    if (response.data) {
+      await chrome.storage.sync.set({ user: response.data.id }, function () {
+        console.log(`userID saved in local storage: ${response.data.id}`);
+      });
+      // this.setState({
+      //   userName: "",
+      //   password: "",
+      //   loggedIn: true,
+      // });
+    }
   }
 
   handleChange() {
@@ -37,62 +52,40 @@ class LoginForm extends React.Component {
     });
   }
 
-  // handleClickTwo() {
-  //   this.props.changePage("profile");
-  // }
-
-  // addSticker() {
-  //   console.log("testing add");
-  //   chrome.tabs.executeScript({
-  //     file: "addSticker.js",
-  //   });
-  // }
-
-  // getSticker() {
-  //   console.log("in popup, you clicked get sticker");
-  //   //get url of current tab
-  //   var query = { active: true, currentWindow: true };
-  //   let currentTab;
-  //   let thisTab;
-  //   function getTabs(tabs) {
-  //     thisTab = tabs[0];
-  //     currentTab = tabs[0].url; // there will be only one in this array
-  //     console.log("tabs[0", tabs[0]); // also has properties like currentTab.id
-  //     //to send message to current tab has to be within this query
-  //     chrome.storage.sync.get(currentTab, function (sticker) {
-  //       console.log("retrieved sticker**", sticker[currentTab]);
-  //       chrome.tabs.sendMessage(thisTab.id, {
-  //         sticker: sticker[currentTab],
-  //       });
-  //     });
-  //   }
-  //   chrome.tabs.query(query, getTabs);
-  //   //with just currentTab variable gets all saved info? trying brackets, brackets throw error
-  // }
+  componentDidMount() {
+    console.log("login mounted");
+    console.log("this.props.user: ", this.props.user);
+    console.log("this.state.loggedIn: ", this.state.loggedIn);
+  }
 
   render() {
-    return (
-      <React.Fragment>
-        {/* <Button onClick={this.addSticker}>Add Sticker</Button>
+    if (!this.state.loggedIn) {
+      return (
+        <React.Fragment>
+          {/* <Button onClick={this.addSticker}>Add Sticker</Button>
         <Button onClick={this.getSticker}>Get Sticker</Button> */}
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Input
-            type="text"
-            label="username"
-            name="userName"
-            value={this.state.userName}
-            onChange={this.handleChange}
-          />
-          <Form.Input
-            type="text"
-            label="password"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
-        </Form>
-      </React.Fragment>
-    );
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Input
+              type="text"
+              label="username"
+              name="userName"
+              value={this.state.userName}
+              onChange={this.handleChange}
+            />
+            <Form.Input
+              type="text"
+              label="password"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleChange}
+            />
+            <Form.Input type="submit" value="Submit" />
+          </Form>
+        </React.Fragment>
+      );
+    } else {
+      return <h1>Logged In! {this.props.user}</h1>;
+    }
   }
 }
 
