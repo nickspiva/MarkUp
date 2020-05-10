@@ -1,0 +1,115 @@
+import React, { Component } from "react";
+import LoginForm from "./components/loginForm";
+import UserProfile from "./components/user-profile";
+import Navbar from "./components/navbar";
+import MyStickers from "./components/myStickers";
+import TaggedStickers from "./components/taggedStickers";
+import MyFriends from "./components/friends";
+import SignupForm from "./components/signup-form";
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      page: "login",
+      user: null,
+    };
+    this.changePage = this.changePage.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+    this.logout = this.logout.bind(this);
+  }
+
+  updateUser(user) {
+    this.setState((state) => {
+      return { ...state, user };
+    });
+  }
+
+  logout() {
+    //Removes userdata from local storage & sets local app state for user to null
+    chrome.storage.sync.remove("user", function (response) {});
+    this.setState((state) => {
+      return { ...state, user: null };
+    });
+  }
+
+  async componentDidMount() {
+    //Checks to see if the user has already logged in recently, if so...
+    //Grabs their info from chrome storage and sets it on popup local state
+    if (!this.state.user) {
+      let promise = new Promise(function (resolve, reject) {
+        chrome.storage.sync.get("user", function (user) {
+          resolve(user);
+        });
+      });
+      const { user } = await promise;
+      if (user) {
+        this.updateUser(user);
+      }
+    }
+  }
+
+  changePage(page) {
+    this.setState({ page: page });
+  }
+
+  render() {
+    switch (this.state.page) {
+      case "login":
+        return (
+          <div>
+            <Navbar changePage={this.changePage} />
+            <LoginForm
+              changePage={this.changePage}
+              user={this.state.user}
+              logout={this.logout}
+              updateUser={this.updateUser}
+            />
+          </div>
+        );
+      case "signup":
+        return (
+          <div>
+            <Navbar changePage={this.changePage} />
+            <SignupForm changePage={this.changePage} />
+          </div>
+        );
+      case "profile":
+        return (
+          <div>
+            <Navbar changePage={this.changePage} />
+            <UserProfile changePage={this.changePage} />
+          </div>
+        );
+      case "myStickers":
+        return (
+          <div>
+            <Navbar changePage={this.changePage} />
+            <MyStickers changePage={this.changePage} />
+          </div>
+        );
+      case "taggedStickers":
+        return (
+          <div>
+            <Navbar changePage={this.changePage} />
+            <TaggedStickers changePage={this.changePage} />
+          </div>
+        );
+      case "friends":
+        return (
+          <div>
+            <Navbar changePage={this.changePage} />
+            <MyFriends changePage={this.changePage} />
+          </div>
+        );
+      default:
+        return (
+          <div>
+            <Navbar />
+            <div>Default</div>
+          </div>
+        );
+    }
+  }
+}
+export default App;

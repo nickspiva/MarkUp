@@ -1,0 +1,7 @@
+{
+  "root": true,
+  "extends": ["fullstack", "prettier"],
+  "rules": {
+    "semi": 0
+  }
+}

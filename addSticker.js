@@ -15,6 +15,31 @@ function buildSticker(
   //build sticker container
   let stickerContainer = document.createElement("DIV");
 
+  const saveSticker = event => {
+    let stickerObj;
+    if (event.target.className == "sticker") {
+      console.log("coming from sticker");
+      console.log("event: ", event);
+    } else {
+      console.log("coming from save button");
+      console.log("sticker container: ", event.target.parentNode);
+      console.log(
+        "inner html: ",
+        event.target.previousElementSibling.innerText
+      );
+      stickerObj = {
+        message: event.target.previousElementSibling.innerText,
+        left: event.target.parentNode.style.left,
+        top: event.target.parentNode.style.top,
+        height: event.target.parentNode.style.height,
+        width: event.target.parentNode.style.width,
+        user: "inProgress"
+      };
+    }
+
+    return stickerObj;
+  };
+
   let stickerId = parseFloat(Math.random() * 10000);
   //stickerContainer styling
   stickerContainer.setAttribute("id", `sticker${stickerId}`);
@@ -175,25 +200,3 @@ function dblClickHandler(event) {
 
 //build a sticker onload
 document.onload = buildSticker();
-
-saveSticker = event => {
-  let stickerObj;
-  if (event.target.className == "sticker") {
-    console.log("coming from sticker");
-    console.log("event: ", event);
-  } else {
-    console.log("coming from save button");
-    console.log("sticker container: ", event.target.parentNode);
-    console.log("inner html: ", event.target.previousElementSibling.innerText);
-    stickerObj = {
-      message: event.target.previousElementSibling.innerText,
-      left: event.target.parentNode.style.left,
-      top: event.target.parentNode.style.top,
-      height: event.target.parentNode.style.height,
-      width: event.target.parentNode.style.width,
-      user: "inProgress"
-    };
-  }
-
-  return stickerObj;
-};

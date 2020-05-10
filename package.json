@@ -1,0 +1,66 @@
+{
+  "name": "MarkUp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "addSticker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rebundle-content": "npx webpack --config webpack.config.js",
+    "start-server": "nodemon startServer.js -e html,js,css --ignore public",
+    "lint": "eslint ./ --ignore-path .gitignore",
+    "lint-fix": "npm run lint -- --fix",
+    "seed": "node seed.js",
+    "rebundle-popup": "npx webpack --config webpack.config.app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickspiva/MarkUp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickspiva/MarkUp/issues"
+  },
+  "homepage": "https://github.com/nickspiva/MarkUp#readme",
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/register": "^7.9.0",
+    "babel": "^6.23.0",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-fullstack": "^6.0.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-react": "^7.19.0",
+    "prettier": "^2.0.2",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.0.0",
+    "express": "^4.17.1",
+    "history": "^4.10.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "pg": "^8.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-react": "^0.88.2",
+    "sequelize": "^5.21.6",
+    "volleyball": "^1.5.1"
+  }
+}
