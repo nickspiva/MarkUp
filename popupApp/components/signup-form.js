@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, Button } from "semantic-ui-react";
 import axios from "axios";
+const ngrokUrl = require("./ngrok");
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -17,8 +18,11 @@ class SignupForm extends React.Component {
   handleSubmit() {
     console.log("username: ", this.state.userName);
     console.log("username: ", this.state.password);
-    const ngrokURL = "http://6f3ac6a6.ngrok.io/api/users";
-    axios.post(`${ngrokURL}`, {});
+    const postUrl = ngrokUrl + "api/users";
+    axios.post(`${postUrl}`, {
+      userName: this.state.userName,
+      password: this.state.password,
+    });
   }
 
   handleChange() {
@@ -29,8 +33,8 @@ class SignupForm extends React.Component {
 
   handleClick() {
     console.log("clicked button");
-    const ngrokURL = "http://990f20a1.ngrok.io/api/users";
-    axios.post(`${ngrokURL}`, {
+    const postUrl = ngrokUrl + "api/users";
+    axios.post(`${postUrl}`, {
       userName: "Kerri",
       password: "REI",
     });
@@ -56,6 +60,7 @@ class SignupForm extends React.Component {
             value={this.state.password}
             onChange={this.handleChange}
           />
+          <Button type="submit">Submit</Button>
         </Form>
       </React.Fragment>
     );

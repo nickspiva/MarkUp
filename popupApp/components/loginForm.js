@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, Button } from "semantic-ui-react";
 import axios from "axios";
+const ngrokUrl = require("./ngrok");
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -16,24 +17,16 @@ class LoginForm extends React.Component {
   }
 
   async handleSubmit() {
-    console.log("username: ", this.state.userName);
-    console.log("password: ", this.state.password);
-    const ngrokURL = "http://3f28444d.ngrok.io/api/login";
-    let response = await axios.post(`${ngrokURL}`, {
+    //Checks to see if the username/password match the database.
+    //If so, saves userinfo in chrome storage & updates app state w/ user info
+    const loginURL = ngrokUrl + "api/login";
+    let response = await axios.post(`${loginURL}`, {
       userName: this.state.userName,
       password: this.state.password,
     });
-    console.log("response: ", response);
-    console.log("userId: ", response.data.id);
     if (response.data) {
-      await chrome.storage.sync.set({ user: response.data.id }, function () {
-        console.log(`userID saved in local storage: ${response.data.id}`);
-      });
-      // this.setState({
-      //   userName: "",
-      //   password: "",
-      //   loggedIn: true,
-      // });
+      await chrome.storage.sync.set({ user: response.data }, function () {});
+      this.props.updateUser(response.data.id);
     }
   }
 
@@ -45,25 +38,17 @@ class LoginForm extends React.Component {
 
   handleClick() {
     console.log("clicked button");
-    const ngrokURL = "http://990f20a1.ngrok.io/api/users";
+    const ngrokURL = "http://acae84e8.ngrok.io/api/users";
     axios.post(`${ngrokURL}`, {
       userName: "Kerri",
       password: "REI",
     });
   }
 
-  componentDidMount() {
-    console.log("login mounted");
-    console.log("this.props.user: ", this.props.user);
-    console.log("this.state.loggedIn: ", this.state.loggedIn);
-  }
-
   render() {
-    if (!this.state.loggedIn) {
+    if (!this.props.user) {
       return (
         <React.Fragment>
-          {/* <Button onClick={this.addSticker}>Add Sticker</Button>
-        <Button onClick={this.getSticker}>Get Sticker</Button> */}
           <Form onSubmit={this.handleSubmit}>
             <Form.Input
               type="text"
@@ -84,7 +69,12 @@ class LoginForm extends React.Component {
         </React.Fragment>
       );
     } else {
-      return <h1>Logged In! {this.props.user}</h1>;
+      return (
+        <div>
+          <h1>Logged In! {this.props.user.userName}</h1>
+          <Button onClick={this.props.logout}>Logout</Button>
+        </div>
+      );
     }
   }
 }

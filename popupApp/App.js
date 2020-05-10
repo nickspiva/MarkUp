@@ -16,38 +16,37 @@ class App extends React.Component {
     };
     this.changePage = this.changePage.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
-  // componentDidMount() {
-  //   chrome.runtime.sendMessage(
-  //     {
-  //       message: "CheckUser",
-  //     },
-  //     function (response) {
-  //       if (response.user) {
-  //         this.setState((state) => {
-  //           return { ...state, user: response.user };
-  //         });
-  //       }
-  //     }
-  //   );
-  // }
-  updateUser(userId) {
+  updateUser(user) {
     this.setState((state) => {
-      return { ...state, user: userId };
+      return { ...state, user };
+    });
+  }
+
+  logout() {
+    //Removes userdata from local storage & sets local app state for user to null
+    chrome.storage.sync.remove("user", function (response) {});
+    this.setState((state) => {
+      return { ...state, user: null };
     });
   }
 
   async componentDidMount() {
-    console.log("component did mount");
-    let promise = new Promise(function (resolve, reject) {
-      chrome.storage.sync.get("user", function (user) {
-        console.log("retrieved user: ", user);
-        resolve(user);
+    //Checks to see if the user has already logged in recently, if so...
+    //Grabs their info from chrome storage and sets it on popup local state
+    if (!this.state.user) {
+      let promise = new Promise(function (resolve, reject) {
+        chrome.storage.sync.get("user", function (user) {
+          resolve(user);
+        });
       });
-    });
-    const userId = await promise;
-    this.updateUser(userId);
+      const { user } = await promise;
+      if (user) {
+        this.updateUser(user);
+      }
+    }
   }
 
   changePage(page) {
@@ -60,7 +59,12 @@ class App extends React.Component {
         return (
           <div>
             <Navbar changePage={this.changePage} />
-            <LoginForm changePage={this.changePage} user={this.state.user} />
+            <LoginForm
+              changePage={this.changePage}
+              user={this.state.user}
+              logout={this.logout}
+              updateUser={this.updateUser}
+            />
           </div>
         );
       case "signup":
