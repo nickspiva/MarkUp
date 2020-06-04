@@ -3,6 +3,11 @@ const db = require("./server/db/database");
 const { Sticker, User } = require("./server/db");
 const faker = require("faker/locale/en_US");
 
+const numOfUsers = 10;
+const numOfStickers = 20;
+const maxFriends = 4;
+const minFriends = 1;
+
 const makeUser = () => {
   return { userName: faker.internet.userName(), password: "123" };
 };
@@ -43,7 +48,7 @@ const seed = async () => {
 
     //create random users to seed
     const seedUsers = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < numOfUsers; i++) {
       seedUsers.push(makeUser());
     }
 
@@ -55,7 +60,7 @@ const seed = async () => {
 
     //create random stickers to seed
     const seedStickers = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < numOfStickers; i++) {
       let sticker = makeSticker();
       let taggedSticker = addTags(sticker, seedUserNames);
       taggedSticker = addTags(taggedSticker, seedUserNames);
@@ -80,7 +85,9 @@ const seed = async () => {
     const friendsArr = users.map((elem) => {
       let friendArr = [];
       let friendsNames = [];
-      const numberOfFriends = Math.floor(Math.random() * 5 + 1);
+      const numberOfFriends = Math.floor(
+        Math.random() * maxFriends + minFriends
+      );
 
       for (let i = 0; i < numberOfFriends; i++) {
         const thisFriend = randArrElem(users);

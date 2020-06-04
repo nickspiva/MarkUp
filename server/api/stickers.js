@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const Sticker = require("../db/sticker");
 const User = require("../db/user");
+const Friends = require("../db/friends");
 
-//get all stickers
+//get all the user's stickers
 router.get("/", async (req, res, next) => {
   try {
     //in the future would like to set up req.user
@@ -11,6 +12,32 @@ router.get("/", async (req, res, next) => {
     const user = await User.findByPk(userId);
     let stickers = await user.getStickers();
     res.json(stickers);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//get all the user's friends stickers
+router.get("/friends", async (req, res, next) => {
+  try {
+    const userId = req.body.userId;
+    const friends = await Friends.findAll({
+      where: {
+        userId,
+      },
+    });
+    const friendIds = friends.map((elem) => elem.friendId);
+    //gets all friends stickers where the user is tagged
+    const taggedStickers = await Sticker.findAll({
+      where: {
+        userId: friendIds,
+        //at some point need to do an either here, aka either withFriends or withAFew, and includes
+        //this user's username
+        shareType: "withFriends",
+      },
+    });
+
+    res.json(taggedStickers);
   } catch (err) {
     next(err);
   }
