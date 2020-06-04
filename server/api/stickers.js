@@ -19,6 +19,12 @@ router.get("/", async (req, res, next) => {
 //getting stickers based on URL
 router.use("/URL", require("./URL"));
 
+//getting stickers based on tagged
+router.use("/tagged", require("./tagged"));
+
+//getting public stickers
+router.use("/public", require("./public"));
+
 //get all the stickers that my friends tagged me in
 
 //get all the stickers that my friends tagged me in from a given URL
@@ -42,6 +48,34 @@ router.post("/", async (req, res, next) => {
       ["message", "height", "width", "xPos", "yPos", "url"],
       req.body
     );
+
+    //extract @ tags & # tags
+    const words = req.body.message.split(" ");
+    const atTags = words
+      .filter((elem) => elem[0] === "@")
+      .map((elem) => elem.slice(1));
+    stickerData.atTags = atTags;
+
+    const hashTags = words
+      .filter((elem) => elem[0] === "#")
+      .map((elem) => elem.slice(1));
+    stickerData.hashTags = hashTags;
+
+    //determine share type (scoping down from public to self only)
+    let shareType;
+
+    //if there are any at tags it is atleast to be shared with a few
+    if (atTags.length) shareType = "withAFew";
+    //if it includes friends tag, share with all friends, update
+    if (atTags.includes("friends")) shareType = "withFriends";
+    //if it includes public tag, share with public, update
+    if (atTags.includes("public")) shareType = "withWorld";
+    //if @onlyMe disregard other sharing info
+    if (atTags.includes("onlyMe")) shareType = "withSelf";
+    //default: if no tags, share with friends
+    if (atTags.length === 0) shareType = "withFriends";
+    stickerData.shareType = shareType;
+
     const sticker = await Sticker.create(stickerData);
     //currently hardcoded the user pk, will need to update
     const user = await User.findByPk(1);
