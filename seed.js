@@ -55,6 +55,9 @@ const seed = async () => {
     //get list of userNames for seeding @tags
     const seedUserNames = seedUsers.map((elem) => elem.userName);
 
+    //add admin user seed
+    seedUsers.push({ userName: "Nicky", password: "123" });
+
     //seed users
     const users = await Promise.all(seedUsers.map((user) => User.create(user)));
 
