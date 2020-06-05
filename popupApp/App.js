@@ -53,6 +53,7 @@ class App extends React.Component {
       const { user } = await promise;
       if (user) {
         this.updateUser(user);
+        this.loggedIn();
       }
     }
   }
@@ -80,15 +81,19 @@ class App extends React.Component {
           </div>
         );
       case "signup":
-        return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-            />
-            <SignupForm changePage={this.changePage} />
-          </div>
-        );
+        if (this.state.loggedIn) {
+          return (
+            <div>
+              <Navbar
+                changePage={this.changePage}
+                loggedIn={this.state.loggedIn}
+              />
+              <SignupForm changePage={this.changePage} />
+            </div>
+          );
+        } else {
+          return;
+        }
       case "profile":
         return (
           <div>
@@ -116,7 +121,10 @@ class App extends React.Component {
               changePage={this.changePage}
               loggedIn={this.state.loggedIn}
             />
-            <TaggedStickers changePage={this.changePage} />
+            <TaggedStickers
+              changePage={this.changePage}
+              user={this.state.user}
+            />
           </div>
         );
       case "friends":

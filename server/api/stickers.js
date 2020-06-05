@@ -4,9 +4,9 @@ const User = require("../db/user");
 const Friends = require("../db/friends");
 
 //get all the user's friends stickers
-router.get("/friends", async (req, res, next) => {
+router.get("/friends/:userId", async (req, res, next) => {
   try {
-    const userId = req.body.userId;
+    const userId = req.params.userId;
     const friends = await Friends.findAll({
       where: {
         userId,

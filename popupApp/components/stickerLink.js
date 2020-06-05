@@ -16,6 +16,7 @@ const stickerLink = (props) => {
         background: "lightblue",
         backgroudColor: "lightblue",
         margin: "10px",
+        padding: "5px",
       }}
       onClick={() => openNewTab(url)}
     >
