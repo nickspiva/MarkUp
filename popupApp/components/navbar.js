@@ -8,7 +8,7 @@ const Navbar = (props) => {
   return (
     <div>
       <Button name="login" onClick={handleClick}>
-        Log-In
+        {props.loggedIn ? "Log-out" : "Log-in"}
       </Button>
       <Button name="signup" onClick={handleClick}>
         Sign-Up

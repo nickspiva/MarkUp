@@ -57,28 +57,11 @@ class App extends React.Component {
     }
   }
 
-  // async shouldComponentUpdate(nextProps, nextState) {
-  //   console.log("should component update happening");
-  //   if (nextState.loggedIn) {
-  //     console.log("loggedIn is true in next state");
-  //     let promise = new Promise(function (resolve, reject) {
-  //       chrome.storage.sync.get("user", function (user) {
-  //         resolve(user);
-  //       });
-  //     });
-  //     const { user } = await promise;
-  //     // if (user) {
-  //     //   this.updateUser(user);
-  //     // }
-  //   }
-  // }
-
   changePage(page) {
     this.setState({ page: page });
   }
 
   render() {
-    let currentPage;
     switch (this.state.page) {
       case "login":
         return (
@@ -149,7 +132,7 @@ class App extends React.Component {
       default:
         return (
           <div>
-            <Navbar />
+            <Navbar loggedIn={this.state.loggedIn} />
             <div>Default</div>
           </div>
         );

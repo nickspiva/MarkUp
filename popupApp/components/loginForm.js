@@ -9,7 +9,6 @@ class LoginForm extends React.Component {
     this.state = {
       userName: "",
       password: "",
-      loggedIn: this.props.loggedIn,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -25,13 +24,16 @@ class LoginForm extends React.Component {
       password: this.state.password,
     });
     if (response.data) {
+      //store user info in chrome storage
       await chrome.storage.sync.set({ user: response.data }, function () {});
+      //add logged in status to app state
       this.props.loggedIn();
+      //add user to app state
       await this.props.updateUser(response.data);
-      //new
-      // this.setState((prevState) => {
-      //   return { userName: "", password: "", loggedIn: true };
-      // });
+      //clear form
+      this.setState((prevState) => {
+        return { userName: "", password: "" };
+      });
     }
   }
 
