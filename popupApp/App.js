@@ -33,11 +33,11 @@ class App extends React.Component {
     });
   }
 
-  logout() {
+  async logout() {
     //Removes userdata from local storage & sets local app state for user to null
-    chrome.storage.sync.remove("user", function (response) {});
+    await chrome.storage.sync.remove("user", function (response) {});
     this.setState((state) => {
-      return { ...state, user: null, loggedIn: false };
+      return { page: "login", user: null, loggedIn: false };
     });
   }
 
@@ -57,19 +57,21 @@ class App extends React.Component {
     }
   }
 
-  async shouldComponentUpdate() {
-    if (!this.state.user && this.state.loggedIn) {
-      let promise = new Promise(function (resolve, reject) {
-        chrome.storage.sync.get("user", function (user) {
-          resolve(user);
-        });
-      });
-      const { user } = await promise;
-      if (user) {
-        this.updateUser(user);
-      }
-    }
-  }
+  // async shouldComponentUpdate(nextProps, nextState) {
+  //   console.log("should component update happening");
+  //   if (nextState.loggedIn) {
+  //     console.log("loggedIn is true in next state");
+  //     let promise = new Promise(function (resolve, reject) {
+  //       chrome.storage.sync.get("user", function (user) {
+  //         resolve(user);
+  //       });
+  //     });
+  //     const { user } = await promise;
+  //     // if (user) {
+  //     //   this.updateUser(user);
+  //     // }
+  //   }
+  // }
 
   changePage(page) {
     this.setState({ page: page });
