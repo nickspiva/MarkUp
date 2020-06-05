@@ -12,7 +12,6 @@ class LoginForm extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
   async handleSubmit() {
@@ -40,15 +39,6 @@ class LoginForm extends React.Component {
   handleChange() {
     this.setState({
       [event.target.name]: event.target.value,
-    });
-  }
-
-  handleClick() {
-    console.log("clicked button");
-    const ngrokURL = "http://acae84e8.ngrok.io/api/users";
-    axios.post(`${ngrokURL}`, {
-      userName: "Kerri",
-      password: "REI",
     });
   }
 

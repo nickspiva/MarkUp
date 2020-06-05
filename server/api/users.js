@@ -1,9 +1,29 @@
 const router = require("express").Router();
 const User = require("../db/user");
+const Sequelize = require("sequelize");
 
 //get all users; GET /users
 router.get("/", function (req, res, next) {
   res.json({ message: "in users router" });
+});
+
+router.post("/friendSearch", async function (req, res, next) {
+  const query = req.body.query.toLowerCase();
+  console.log("req.body.query: ", query);
+  const potentialFriends = await User.findAll({
+    attributes: ["userName", "id"],
+    where: {
+      // userName: {
+      //   [Sequelize.Op.like]: `%${query}%`,
+      // },
+      userName: Sequelize.where(
+        Sequelize.fn("LOWER", Sequelize.col("userName")),
+        "LIKE",
+        `%${query}%`
+      ),
+    },
+  });
+  res.json(potentialFriends);
 });
 
 //picks the array of props from an object and doesn't assign keys to the returned object

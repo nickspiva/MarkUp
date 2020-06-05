@@ -130,7 +130,7 @@ class App extends React.Component {
               changePage={this.changePage}
               loggedIn={this.state.loggedIn}
             />
-            <MyFriends changePage={this.changePage} />
+            <MyFriends changePage={this.changePage} user={this.state.user} />
           </div>
         );
       default:

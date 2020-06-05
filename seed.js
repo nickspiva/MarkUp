@@ -67,7 +67,6 @@ const seed = async () => {
       let sticker = makeSticker();
       let taggedSticker = addTags(sticker, seedUserNames);
       taggedSticker = addTags(taggedSticker, seedUserNames);
-      // console.log("taggedSticker: ", taggedSticker);
       seedStickers.push(taggedSticker);
     }
 

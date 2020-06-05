@@ -14,7 +14,6 @@ class TaggedStickers extends React.Component {
 
   async componentDidMount() {
     const { id } = this.props.user;
-    console.log("id: ", id);
     const atTaggedResponse = await axios.get(
       `${ngrokUrl}api/stickers/tagged/ByFriends/${id}`
     );
@@ -30,7 +29,6 @@ class TaggedStickers extends React.Component {
   }
 
   render() {
-    console.log("this.state.stickers: ", this.state.stickers);
     return (
       <div>
         <h2>@ Tagged Stickers</h2>
