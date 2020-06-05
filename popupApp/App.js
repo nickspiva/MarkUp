@@ -81,19 +81,15 @@ class App extends React.Component {
           </div>
         );
       case "signup":
-        if (this.state.loggedIn) {
-          return (
-            <div>
-              <Navbar
-                changePage={this.changePage}
-                loggedIn={this.state.loggedIn}
-              />
-              <SignupForm changePage={this.changePage} />
-            </div>
-          );
-        } else {
-          return;
-        }
+        return (
+          <div>
+            <Navbar
+              changePage={this.changePage}
+              loggedIn={this.state.loggedIn}
+            />
+            <SignupForm changePage={this.changePage} />
+          </div>
+        );
       case "profile":
         return (
           <div>

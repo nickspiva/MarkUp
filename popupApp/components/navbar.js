@@ -10,9 +10,11 @@ const Navbar = (props) => {
       <Button name="login" onClick={handleClick}>
         {props.loggedIn ? "Log-out" : "Log-in"}
       </Button>
-      <Button name="signup" onClick={handleClick}>
-        Sign-Up
-      </Button>
+      {!props.loggedIn && (
+        <Button name="signup" onClick={handleClick}>
+          Sign-Up
+        </Button>
+      )}
       <Button name="myStickers" onClick={handleClick}>
         My Stickers
       </Button>
