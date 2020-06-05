@@ -3,20 +3,6 @@ const Sticker = require("../db/sticker");
 const User = require("../db/user");
 const Friends = require("../db/friends");
 
-//get all the user's stickers
-router.get("/", async (req, res, next) => {
-  try {
-    //in the future would like to set up req.user
-    //not sure how that works w/ extensions...
-    const userId = req.body.userId;
-    const user = await User.findByPk(userId);
-    let stickers = await user.getStickers();
-    res.json(stickers);
-  } catch (err) {
-    next(err);
-  }
-});
-
 //get all the user's friends stickers
 router.get("/friends", async (req, res, next) => {
   try {
@@ -55,6 +41,17 @@ router.use("/public", require("./public"));
 //get all the stickers that my friends tagged me in
 
 //get all the stickers that my friends tagged me in from a given URL
+
+//get all the user's stickers
+router.get("/:userId", async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.userId);
+    let stickers = await user.getStickers();
+    res.json(stickers);
+  } catch (err) {
+    next(err);
+  }
+});
 
 //picks the array of props from an object and doesn't assign keys to the returned object
 //that are falsey

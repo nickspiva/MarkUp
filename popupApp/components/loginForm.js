@@ -26,7 +26,7 @@ class LoginForm extends React.Component {
     });
     if (response.data) {
       await chrome.storage.sync.set({ user: response.data }, function () {});
-      this.props.updateUser(response.data.id);
+      this.props.loggedIn();
     }
   }
 
