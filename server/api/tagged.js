@@ -4,10 +4,10 @@ const User = require("../db/user");
 const Friends = require("../db/friends");
 const Sequelize = require("sequelize");
 
-router.get("/ByFriends", async (req, res, next) => {
+router.get("/ByFriends/:userId", async (req, res, next) => {
   try {
-    const userId = req.body.userId;
-    const user = await User.findByPk(userId);
+    const userId = req.params.userId;
+    const user = await User.findByPk(req.params.userId);
     const friends = await Friends.findAll({
       where: {
         userId,

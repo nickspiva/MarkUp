@@ -9,11 +9,9 @@ class LoginForm extends React.Component {
     this.state = {
       userName: "",
       password: "",
-      loggedIn: this.props.user,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
   async handleSubmit() {
@@ -25,23 +23,22 @@ class LoginForm extends React.Component {
       password: this.state.password,
     });
     if (response.data) {
+      //store user info in chrome storage
       await chrome.storage.sync.set({ user: response.data }, function () {});
-      this.props.updateUser(response.data.id);
+      //add logged in status to app state
+      this.props.loggedIn();
+      //add user to app state
+      await this.props.updateUser(response.data);
+      //clear form
+      this.setState((prevState) => {
+        return { userName: "", password: "" };
+      });
     }
   }
 
   handleChange() {
     this.setState({
       [event.target.name]: event.target.value,
-    });
-  }
-
-  handleClick() {
-    console.log("clicked button");
-    const ngrokURL = "http://acae84e8.ngrok.io/api/users";
-    axios.post(`${ngrokURL}`, {
-      userName: "Kerri",
-      password: "REI",
     });
   }
 

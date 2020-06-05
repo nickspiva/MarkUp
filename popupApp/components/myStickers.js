@@ -1,6 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Button } from "semantic-ui-react";
+import axios from "axios";
+import StickerLink from "./stickerLink";
+const ngrokUrl = require("./ngrok");
 
 const addSticker = function () {
   console.log("testing add");
@@ -31,14 +33,40 @@ const getSticker = function () {
   //with just currentTab variable gets all saved info? trying brackets, brackets throw error
 };
 
-const MyStickers = () => {
-  return (
-    <div>
-      <h2>My Stickers</h2>
-      <Button onClick={addSticker}>Add Sticker</Button>
-      <Button onClick={getSticker}>Get Sticker</Button>
-    </div>
-  );
-};
+class MyStickers extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      stickers: [],
+    };
+  }
+
+  async componentDidMount() {
+    const { id } = this.props.user;
+    let response = await axios.get(`${ngrokUrl}api/stickers/${id}`);
+    this.setState((prevState) => {
+      return { stickers: response.data };
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>My Stickers</h2>
+        <Button onClick={addSticker}>Add Sticker</Button>
+        <Button onClick={getSticker}>Get Sticker</Button>
+        {this.state.stickers.length ? (
+          <div>
+            {this.state.stickers.map((sticker) => (
+              <StickerLink sticker={sticker} key={sticker.id} />
+            ))}
+          </div>
+        ) : (
+          <div>No Stickers</div>
+        )}
+      </div>
+    );
+  }
+}
 
 export default MyStickers;

@@ -1,18 +1,27 @@
 const router = require("express").Router();
 const User = require("../db/user");
 const Friends = require("../db/friends");
+const Sequelize = require("sequelize");
 
 //get all friend ID's
-router.get("/", async (req, res, next) => {
+router.get("/:userId", async (req, res, next) => {
   try {
-    const userId = req.body.userId;
+    const userId = req.params.userId;
     const friends = await Friends.findAll({
       where: {
         userId,
       },
     });
     const friendIds = friends.map((elem) => elem.friendId);
-    res.json(friendIds);
+    const friendUsers = await User.findAll({
+      attributes: { exclude: ["password"] },
+      where: {
+        id: {
+          [Sequelize.Op.in]: friendIds,
+        },
+      },
+    });
+    res.json(friendUsers);
   } catch (err) {
     next(err);
   }
@@ -26,12 +35,26 @@ router.post("/", async (req, res, next) => {
     const user = await User.findByPk(userId);
     const friend = await User.findByPk(friendId);
     user.addFriend(friend);
-    res.sendStatus(200);
+    res.json(friend);
   } catch (err) {
     next(err);
   }
 });
 
 //delete an existing friendship
+router.delete("/", async (req, res, next) => {
+  try {
+    const friendship = await Friends.findOne({
+      where: {
+        userId: req.body.userId,
+        friendId: req.body.friendId,
+      },
+    });
+    await friendship.destroy();
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;

@@ -12,12 +12,9 @@ class SignupForm extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
   handleSubmit() {
-    console.log("username: ", this.state.userName);
-    console.log("username: ", this.state.password);
     const postUrl = ngrokUrl + "api/users";
     axios.post(`${postUrl}`, {
       userName: this.state.userName,
@@ -28,15 +25,6 @@ class SignupForm extends React.Component {
   handleChange() {
     this.setState({
       [event.target.name]: event.target.value,
-    });
-  }
-
-  handleClick() {
-    console.log("clicked button");
-    const postUrl = ngrokUrl + "api/users";
-    axios.post(`${postUrl}`, {
-      userName: "Kerri",
-      password: "REI",
     });
   }
 

@@ -13,10 +13,12 @@ class App extends React.Component {
     this.state = {
       page: "login",
       user: null,
+      loggedIn: false,
     };
     this.changePage = this.changePage.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.logout = this.logout.bind(this);
+    this.loggedIn = this.loggedIn.bind(this);
   }
 
   updateUser(user) {
@@ -25,11 +27,17 @@ class App extends React.Component {
     });
   }
 
-  logout() {
-    //Removes userdata from local storage & sets local app state for user to null
-    chrome.storage.sync.remove("user", function (response) {});
+  loggedIn() {
     this.setState((state) => {
-      return { ...state, user: null };
+      return { ...state, loggedIn: true };
+    });
+  }
+
+  async logout() {
+    //Removes userdata from local storage & sets local app state for user to null
+    await chrome.storage.sync.remove("user", function (response) {});
+    this.setState((state) => {
+      return { page: "login", user: null, loggedIn: false };
     });
   }
 
@@ -45,6 +53,7 @@ class App extends React.Component {
       const { user } = await promise;
       if (user) {
         this.updateUser(user);
+        this.loggedIn();
       }
     }
   }
@@ -58,54 +67,76 @@ class App extends React.Component {
       case "login":
         return (
           <div>
-            <Navbar changePage={this.changePage} />
+            <Navbar
+              changePage={this.changePage}
+              loggedIn={this.state.loggedIn}
+            />
             <LoginForm
               changePage={this.changePage}
               user={this.state.user}
               logout={this.logout}
               updateUser={this.updateUser}
+              loggedIn={this.loggedIn}
             />
           </div>
         );
       case "signup":
         return (
           <div>
-            <Navbar changePage={this.changePage} />
+            <Navbar
+              changePage={this.changePage}
+              loggedIn={this.state.loggedIn}
+            />
             <SignupForm changePage={this.changePage} />
           </div>
         );
       case "profile":
         return (
           <div>
-            <Navbar changePage={this.changePage} />
+            <Navbar
+              changePage={this.changePage}
+              loggedIn={this.state.loggedIn}
+            />
             <UserProfile changePage={this.changePage} />
           </div>
         );
       case "myStickers":
         return (
           <div>
-            <Navbar changePage={this.changePage} />
-            <MyStickers changePage={this.changePage} />
+            <Navbar
+              changePage={this.changePage}
+              loggedIn={this.state.loggedIn}
+            />
+            <MyStickers changePage={this.changePage} user={this.state.user} />
           </div>
         );
       case "taggedStickers":
         return (
           <div>
-            <Navbar changePage={this.changePage} />
-            <TaggedStickers changePage={this.changePage} />
+            <Navbar
+              changePage={this.changePage}
+              loggedIn={this.state.loggedIn}
+            />
+            <TaggedStickers
+              changePage={this.changePage}
+              user={this.state.user}
+            />
           </div>
         );
       case "friends":
         return (
           <div>
-            <Navbar changePage={this.changePage} />
-            <MyFriends changePage={this.changePage} />
+            <Navbar
+              changePage={this.changePage}
+              loggedIn={this.state.loggedIn}
+            />
+            <MyFriends changePage={this.changePage} user={this.state.user} />
           </div>
         );
       default:
         return (
           <div>
-            <Navbar />
+            <Navbar loggedIn={this.state.loggedIn} />
             <div>Default</div>
           </div>
         );
