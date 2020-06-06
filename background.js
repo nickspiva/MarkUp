@@ -1,6 +1,6 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("in background, message received!!");
-  console.log(request);
+  console.log("request", request);
   let URL = request.URL;
   let sticker = request.sticker;
   console.log("request sticker", request.sticker);
@@ -8,6 +8,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.sticker) {
     chrome.storage.sync.set({ [URL]: sticker }, function () {
       console.log(`URL of ${URL} saved with sticker`);
+    });
+    chrome.runtime.sendMessage({
+      msg: "passing saved sticker to popup",
+      sticker,
+      website: URL,
     });
   }
 

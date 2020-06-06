@@ -68,6 +68,8 @@ const pickPropsFromObj = (props, obj) => {
 //add a sticker to the database
 router.post("/", async (req, res, next) => {
   try {
+    console.log("in post sticker route");
+    console.log("req.body: ", req.body);
     const stickerData = pickPropsFromObj(
       ["message", "height", "width", "xPos", "yPos", "url"],
       req.body
@@ -99,8 +101,9 @@ router.post("/", async (req, res, next) => {
     //default: if no tags, share with friends
     if (atTags.length === 0) shareType = "withFriends";
     stickerData.shareType = shareType;
-
+    console.log("sticker data in db: ", stickerData);
     const sticker = await Sticker.create(stickerData);
+    console.log("sticker in db: ", sticker);
     //currently hardcoded the user pk, will need to update
     const user = await User.findByPk(1);
     sticker.setUser(user);

@@ -1,4 +1,9 @@
+/* eslint-disable max-statements */
+// import axios from "axios";
+// const ngrokUrl = require("./popupApp/components/ngrok");
+
 //sets up functionality to create and edit stickers
+
 console.log("add Sticker function");
 
 //sticker creation functionality
@@ -15,27 +20,28 @@ function buildSticker(
   //build sticker container
   let stickerContainer = document.createElement("DIV");
 
-  const saveSticker = event => {
+  const saveSticker = (event) => {
     let stickerObj;
-    if (event.target.className == "sticker") {
+    if (event.target.className === "sticker") {
       console.log("coming from sticker");
       console.log("event: ", event);
     } else {
       console.log("coming from save button");
-      console.log("sticker container: ", event.target.parentNode);
-      console.log(
-        "inner html: ",
-        event.target.previousElementSibling.innerText
-      );
+      // console.log("sticker container: ", event.target.parentNode);
+      // console.log(
+      //   "inner html: ",
+      //   event.target.previousElementSibling.innerText
+      // );
       stickerObj = {
         message: event.target.previousElementSibling.innerText,
         left: event.target.parentNode.style.left,
         top: event.target.parentNode.style.top,
         height: event.target.parentNode.style.height,
         width: event.target.parentNode.style.width,
-        user: "inProgress"
+        user: "inProgress",
       };
     }
+    console.log("stickerObj in save: ", stickerObj);
 
     return stickerObj;
   };
@@ -70,7 +76,7 @@ function buildSticker(
   sticker.className = "sticker";
   sticker.style.height = "100%";
   sticker.style.width = "100%";
-  sticker.ondragstart = function() {
+  sticker.ondragstart = function () {
     return false;
   };
   sticker.ondblclick = dblClickHandler;
@@ -93,18 +99,22 @@ function buildSticker(
   stickerContainer.appendChild(stickerDelete);
 
   //delete the sticker
-  stickerDelete.addEventListener("click", function() {
+  stickerDelete.addEventListener("click", function () {
     console.log("clicked");
     stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
   });
 
   //send message to background w/ sticker info (successful)
-  stickerButton.addEventListener("click", function(event) {
+  stickerButton.addEventListener("click", async function (event) {
     console.log("clicked");
     console.log("event: ", event);
+    const savedSticker = saveSticker(event);
+    console.log("saving sticker: ", savedSticker);
+    // const saveStickerUrl = ngrokUrl + "api/stickers";
+    // await axios.post(`${saveStickerUrl}`, saveSticker(event));
     chrome.runtime.sendMessage({
       URL: window.location.href,
-      sticker: saveSticker(event)
+      sticker: savedSticker,
     });
   });
 }
@@ -132,10 +142,12 @@ function dragging(event) {
   // let stickerContainer = document.getElementById("stickerContainer");
   let stickerContainer = event.target.parentNode;
   //centers the drag, would prefer to have it drag from where you clicked
-  stickerContainer.style.left = `${x -
-    Number(stickerContainer.style.width.split("p")[0]) / 2}px`;
-  stickerContainer.style.top = `${y -
-    Number(stickerContainer.style.height.split("p")[0]) / 2}px`;
+  stickerContainer.style.left = `${
+    x - Number(stickerContainer.style.width.split("p")[0]) / 2
+  }px`;
+  stickerContainer.style.top = `${
+    y - Number(stickerContainer.style.height.split("p")[0]) / 2
+  }px`;
   // }
 }
 

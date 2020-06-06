@@ -6,7 +6,6 @@ const ngrokUrl = require("./ngrok");
 const SearchResults = (props) => {
   //add in add button next to each search result
   const { results, searched, userId, addFriend } = props;
-  };
 
   return (
     <div>
