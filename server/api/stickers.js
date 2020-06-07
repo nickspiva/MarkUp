@@ -105,7 +105,7 @@ router.post("/", async (req, res, next) => {
     const sticker = await Sticker.create(stickerData);
     console.log("sticker in db: ", sticker);
     //currently hardcoded the user pk, will need to update
-    const user = await User.findByPk(1);
+    const user = await User.findByPk(req.body.user.id);
     sticker.setUser(user);
     res.json(sticker);
   } catch (err) {

@@ -71,10 +71,10 @@ class App extends React.Component {
       console.log("user: ", user);
       if (req.msg === "passing saved sticker to popup") {
         const sticker = req.sticker;
-        sticker.xPos = sticker.left;
-        sticker.yPos = sticker.top;
         sticker.url = req.website;
         sticker.user = user;
+        sticker.xPos = sticker.left;
+        sticker.yPos = sticker.top;
         console.log("comp mount req.sticker: ", req.sticker);
         const stickerResponse = await axios.post(
           `${ngrokUrl}api/stickers/`,

@@ -15,10 +15,10 @@ const makeUser = () => {
 const makeSticker = () => {
   return {
     message: faker.hacker.phrase(),
-    height: Math.floor(Math.random() * 300 + 100),
-    width: Math.floor(Math.random() * 300 + 200),
-    xPos: Math.floor(Math.random() * 300 + 200),
-    yPos: Math.floor(Math.random() * 300 + 200),
+    height: Math.floor(Math.random() * 300 + 100) + "px",
+    width: Math.floor(Math.random() * 300 + 200) + "px",
+    xPos: Math.floor(Math.random() * 300 + 200) + "px",
+    yPos: Math.floor(Math.random() * 300 + 200) + "px",
     url: faker.internet.url(),
     shareType: "withFriends",
     atTags: [],

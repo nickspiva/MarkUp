@@ -8,24 +8,24 @@ const Sticker = db.define("sticker", {
     validate: { notEmpty: true },
   },
   height: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
-    validate: { notEmpty: true, min: 1, max: 10000 },
+    //validate: { notEmpty: true, min: 1, max: 10000 },
   },
   width: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
-    validate: { notEmpty: true, min: 1, max: 10000 },
+    //validate: { notEmpty: true, min: 1, max: 10000 },
   },
   xPos: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
-    validate: { notEmpty: true, min: 1, max: 10000 },
+    //validate: { notEmpty: true, min: 1, max: 10000 },
   },
   yPos: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
-    validate: { notEmpty: true, min: 1, max: 10000 },
+    //validate: { notEmpty: true, min: 1, max: 10000 },
   },
   url: {
     type: Sequelize.TEXT,
