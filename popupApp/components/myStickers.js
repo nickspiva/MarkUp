@@ -2,13 +2,44 @@ import React from "react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
 import StickerLink from "./stickerLink";
+import getUser from "../../utils/getUser";
 const ngrokUrl = require("./ngrok");
 
-const addSticker = function () {
+const addSticker = async function () {
   console.log("testing add");
-  chrome.tabs.executeScript({
-    file: "addSticker.js",
-  });
+  const user = await getUser();
+  console.log("user: ", user);
+  const query = { active: true, currentWindow: true };
+  const returnUrl = async (tabs) => {
+    const currentTab = tabs[0];
+    console.log("tab id: ", currentTab.id);
+    const defaultSticker = {
+      message: "default sticker",
+      height: "200px",
+      width: "200px",
+      xPos: "200px",
+      yPos: "200px",
+      url: currentTab.url,
+      user: user,
+    };
+    const dbSticker = await axios.post(
+      `${ngrokUrl}api/stickers/`,
+      defaultSticker
+    );
+    dbSticker.data.mine = true;
+    console.log("db sticker: ", dbSticker);
+    console.log("default sticker: ", defaultSticker);
+    chrome.tabs.sendMessage(currentTab.id, {
+      subject: "adding new sticker",
+      sticker: dbSticker,
+    });
+  };
+
+  chrome.tabs.query(query, returnUrl);
+
+  //create new sticker in db
+
+  //send message with new sticker to content script
 };
 
 const getSticker = function () {

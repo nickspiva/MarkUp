@@ -4,12 +4,21 @@
 import axios from "axios";
 const ngrokUrl = require("./popupApp/components/ngrok");
 import getStickers from "./utils/getStickers";
+import getUser from "./utils/getUser";
 
+//Listening for the on-load message
 chrome.extension.onConnect.addListener(function (port) {
-  port.onMessage.addListener(async (msg) => {
-    const stickers = await getStickers(msg.url);
-    port.postMessage({ msg: "sending stickers", urlStickers: stickers });
-  });
+  if (port.name === "loadedURL") {
+    port.onMessage.addListener(async (msg) => {
+      if (msg.subject === "site ready") {
+        const stickers = await getStickers(msg.url);
+        port.postMessage({
+          subject: "sending stickers",
+          urlStickers: stickers,
+        });
+      }
+    });
+  }
 });
 
 chrome.runtime.onMessage.addListener(async function (
@@ -17,16 +26,12 @@ chrome.runtime.onMessage.addListener(async function (
   sender,
   sendResponse
 ) {
+  console.log("background script receiving message");
   if (request.msg && request.msg === "saveSticker") {
     //define sticker, fetch user
     const sticker = request.sticker;
     sticker.url = request.URL;
-    let promise = new Promise(function (resolve, reject) {
-      chrome.storage.sync.get("user", function (user) {
-        resolve(user);
-      });
-    });
-    const { user } = await promise;
+    const user = await getUser();
     sticker.user = user;
     sticker.xPos = sticker.left;
     sticker.yPos = sticker.top;
@@ -36,13 +41,17 @@ chrome.runtime.onMessage.addListener(async function (
       console.log(`URL of ${URL} saved with sticker`);
     });
 
+    console.log("stickerid: ", sticker.id);
     //testing axios post from background
-    const stickerResponse = await axios.post(
-      `${ngrokUrl}api/stickers/`,
-      sticker
+    const stickerResponse = await axios.put(
+      `${ngrokUrl}api/stickers/${sticker.id}`,
+      {
+        sticker,
+        user,
+      }
     );
 
-    console.log("sticker response from db: ", stickerResponse);
+    console.log("update sticker response from db: ", stickerResponse);
 
     //want to send sticker back to dom to update it's ID
 
@@ -52,55 +61,6 @@ chrome.runtime.onMessage.addListener(async function (
     //   sticker,
     //   website: URL,
     // });
-  }
-
-  if (request.msg && request.msg === "hey background, doc is ready") {
-    console.log("finished loading dom");
-    const newUrl = request.url;
-
-    if (newUrl.startsWith("chrome://")) {
-      console.log("on chrome page");
-      return;
-    }
-
-    //get user from chrome storage
-    let promise = new Promise(function (resolve, reject) {
-      chrome.storage.sync.get("user", function (user) {
-        resolve(user);
-      });
-    });
-    const { user } = await promise;
-
-    //need to add conditional if user isn't in chrome storage
-
-    const urlStickers = await axios.get(
-      `${ngrokUrl}api/stickers/url/${encodeURIComponent(newUrl)}/${user.id}`
-    );
-    //console.log("url stickers: ", urlStickers);
-    const message = { message: "sending stickers", stickers: urlStickers };
-    //check db for related stickers, fetch all, send back to content script
-    console.log("about to send async response: ", message);
-    console.log("sending response");
-    sendResponse({ msg: "test sync response" });
-    return true;
-    console.log("should not see this");
-
-    // const sendStickers = () => {
-    //   console.log("trying to send now...");
-    //   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    //     //the query may need to be updated... in the situation that the current/active tab is not
-    //     //the one that just updated...? could match tab w/ url of sticker
-    //     chrome.tabs.sendMessage(
-    //       tabs[0].id,
-    //       { message: "sending stickers", urlStickers },
-    //       function (response) {
-    //         console.log("response received");
-    //       }
-    //     );
-    //   });
-    // };
-    // setTimeout(sendStickers, 4000);
-    return true;
   }
 
   return true;

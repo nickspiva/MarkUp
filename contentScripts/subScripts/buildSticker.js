@@ -8,7 +8,10 @@ export default function buildSticker(
   top = "100px",
   width = "200px",
   height = "200px",
-  id = 1
+  id = 1,
+  shareType,
+  userId,
+  mine
 ) {
   //build sticker container
   let stickerContainer = document.createElement("DIV");
@@ -25,7 +28,7 @@ export default function buildSticker(
   stickerContainer.style.left = left;
   stickerContainer.style.borderColor = "blue";
   stickerContainer.style.position = "absolute";
-  stickerContainer.style.backgroundColor = "lightgrey";
+  stickerContainer.style.backgroundColor = mine ? "lightgrey" : "lightblue";
   stickerContainer.style.border = "5px solid black";
   stickerContainer.style["border-radius"] = "3px";
   stickerContainer.style.overflow = "auto";
@@ -51,12 +54,26 @@ export default function buildSticker(
   sticker.ondblclick = dblClickHandler;
   stickerContainer.onmousedown = clickDown;
 
-  //add save button
-  let saveButton = document.createElement("Button");
-  saveButton.style.position = "absolute";
-  saveButton.style.bottom = "5%";
-  saveButton.innerHTML = "save";
-  stickerContainer.appendChild(saveButton);
+  //add save button if it's my own sticker
+  if (mine) {
+    let saveButton = document.createElement("Button");
+    saveButton.style.position = "absolute";
+    saveButton.style.bottom = "5%";
+    saveButton.innerHTML = "save";
+    stickerContainer.appendChild(saveButton);
+
+    //send message to background w/ sticker info (successful)
+    saveButton.addEventListener("click", function (event) {
+      const updatedSticker = saveSticker(event);
+      updatedSticker.id = id;
+      chrome.runtime.sendMessage({
+        msg: "saveSticker",
+        URL: window.location.href,
+        sticker: updatedSticker,
+      });
+      return true;
+    });
+  }
 
   //add delete button
   let stickerDelete = document.createElement("Button");
@@ -71,25 +88,6 @@ export default function buildSticker(
   stickerDelete.addEventListener("click", function () {
     console.log("clicked");
     stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
-  });
-
-  //send message to background w/ sticker info (successful)
-  saveButton.addEventListener("click", function (event) {
-    console.log("clicked");
-    console.log("event: ", event);
-    chrome.runtime.sendMessage(
-      {
-        msg: "saveSticker",
-        URL: window.location.href,
-        sticker: saveSticker(event),
-      },
-      function (response) {
-        console.log("response received from popup app");
-        console.log("response: ", response);
-        return true;
-      }
-    );
-    return true;
   });
 }
 

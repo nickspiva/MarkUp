@@ -68,8 +68,6 @@ const pickPropsFromObj = (props, obj) => {
 //add a sticker to the database
 router.post("/", async (req, res, next) => {
   try {
-    console.log("in post sticker route");
-    console.log("req.body: ", req.body);
     const stickerData = pickPropsFromObj(
       ["message", "height", "width", "xPos", "yPos", "url"],
       req.body
@@ -114,7 +112,52 @@ router.post("/", async (req, res, next) => {
 });
 
 //update an existing sticker
-router.put("/", async (req, res, next) => {});
+router.put("/:stickerId", async (req, res, next) => {
+  try {
+    const sticker = await Sticker.findByPk(req.params.stickerId);
+
+    sticker.message = req.body.sticker.message;
+    sticker.width = req.body.sticker.width;
+    sticker.height = req.body.sticker.height;
+    sticker.xPos = req.body.sticker.xPos;
+    sticker.yPos = req.body.sticker.yPos;
+
+    //extract @ tags & # tags (should set this up as a standalone func)
+    const words = req.body.sticker.message.split(" ");
+    const atTags = words
+      .filter((elem) => elem[0] === "@")
+      .map((elem) => elem.slice(1));
+    sticker.atTags = atTags;
+
+    const hashTags = words
+      .filter((elem) => elem[0] === "#")
+      .map((elem) => elem.slice(1));
+    sticker.hashTags = hashTags;
+
+    //determine share type (scoping down from public to self only)
+    let shareType;
+
+    //if there are any at tags it is atleast to be shared with a few
+    if (atTags.length) shareType = "withAFew";
+    //if it includes friends tag, share with all friends, update
+    if (atTags.includes("friends")) shareType = "withFriends";
+    //if it includes public tag, share with public, update
+    if (atTags.includes("public")) shareType = "withWorld";
+    //if @onlyMe disregard other sharing info
+    if (atTags.includes("onlyMe")) shareType = "withSelf";
+    //default: if no tags, share with friends
+    if (atTags.length === 0) shareType = "withFriends";
+    sticker.shareType = shareType;
+
+    console.log("sticker data in db: ", sticker);
+    await sticker.save();
+
+    console.log("sticker info: ", sticker);
+    res.send(sticker);
+  } catch (err) {
+    next(err);
+  }
+});
 
 //delete a sticker
 
