@@ -3,25 +3,7 @@
 //if the popup isn't open it can't receive messaages so that's a reason we need the background script
 import axios from "axios";
 const ngrokUrl = require("./popupApp/components/ngrok");
-
-async function getUser() {
-  let promise = new Promise(function (resolve, reject) {
-    chrome.storage.sync.get("user", function (user) {
-      resolve(user);
-    });
-  });
-  const { user } = await promise;
-  return user;
-}
-
-async function getStickers(url) {
-  //get user from chrome storage, need to add conditional in case no user
-  const user = await getUser();
-  const urlStickers = await axios.get(
-    `${ngrokUrl}api/stickers/url/${encodeURIComponent(url)}/${user.id}`
-  );
-  return urlStickers;
-}
+import getStickers from "./utils/getStickers";
 
 chrome.extension.onConnect.addListener(function (port) {
   port.onMessage.addListener(async (msg) => {
@@ -35,12 +17,6 @@ chrome.runtime.onMessage.addListener(async function (
   sender,
   sendResponse
 ) {
-  if (request.msg === "site ready") {
-    console.log("testing approach");
-    getStickers(request, sender, sendResponse);
-    return true;
-  }
-
   if (request.msg && request.msg === "saveSticker") {
     //define sticker, fetch user
     const sticker = request.sticker;
