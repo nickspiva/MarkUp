@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 console.log("in build sticker...");
 import saveSticker from "./saveSticker";
 
@@ -6,12 +7,15 @@ export default function buildSticker(
   left = "100px",
   top = "100px",
   width = "200px",
-  height = "200px"
+  height = "200px",
+  id = 1
 ) {
   //build sticker container
   let stickerContainer = document.createElement("DIV");
 
-  let stickerId = parseFloat(Math.random() * 10000);
+  // let stickerId = parseFloat(Math.random() * 10000);
+  let stickerId = id;
+
   //stickerContainer styling
   stickerContainer.setAttribute("id", `sticker${stickerId}`);
   stickerContainer.style.padding = "20px";
@@ -41,7 +45,7 @@ export default function buildSticker(
   sticker.className = "sticker";
   sticker.style.height = "100%";
   sticker.style.width = "100%";
-  sticker.ondragstart = function() {
+  sticker.ondragstart = function () {
     return false;
   };
   sticker.ondblclick = dblClickHandler;
@@ -64,19 +68,28 @@ export default function buildSticker(
   stickerContainer.appendChild(stickerDelete);
 
   //delete the sticker ** NEED TO UPDATE TO REMOVE FROM DB
-  stickerDelete.addEventListener("click", function() {
+  stickerDelete.addEventListener("click", function () {
     console.log("clicked");
     stickerDelete.parentNode.parentNode.removeChild(stickerContainer);
   });
 
   //send message to background w/ sticker info (successful)
-  saveButton.addEventListener("click", function(event) {
+  saveButton.addEventListener("click", function (event) {
     console.log("clicked");
     console.log("event: ", event);
-    chrome.runtime.sendMessage({
-      URL: window.location.href,
-      sticker: saveSticker(event)
-    });
+    chrome.runtime.sendMessage(
+      {
+        msg: "saveSticker",
+        URL: window.location.href,
+        sticker: saveSticker(event),
+      },
+      function (response) {
+        console.log("response received from popup app");
+        console.log("response: ", response);
+        return true;
+      }
+    );
+    return true;
   });
 }
 
@@ -103,10 +116,12 @@ function dragging(event) {
   // let stickerContainer = document.getElementById("stickerContainer");
   let stickerContainer = event.target.parentNode;
   //centers the drag, would prefer to have it drag from where you clicked
-  stickerContainer.style.left = `${x -
-    Number(stickerContainer.style.width.split("p")[0]) / 2}px`;
-  stickerContainer.style.top = `${y -
-    Number(stickerContainer.style.height.split("p")[0]) / 2}px`;
+  stickerContainer.style.left = `${
+    x - Number(stickerContainer.style.width.split("p")[0]) / 2
+  }px`;
+  stickerContainer.style.top = `${
+    y - Number(stickerContainer.style.height.split("p")[0]) / 2
+  }px`;
   // }
 }
 

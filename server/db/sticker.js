@@ -28,7 +28,7 @@ const Sticker = db.define("sticker", {
     //validate: { notEmpty: true, min: 1, max: 10000 },
   },
   url: {
-    type: Sequelize.TEXT,
+    type: Sequelize.STRING,
     allowNull: false,
     validate: { isUrl: true },
   },

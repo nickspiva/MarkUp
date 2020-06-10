@@ -80,8 +80,25 @@ class App extends React.Component {
           `${ngrokUrl}api/stickers/`,
           sticker
         );
-        console.log("sticker response: ", stickerResponse);
+        console.log("sending sticker response: ", stickerResponse);
+        // chrome.tabs.query({ active: true, currentWindow: true }, function (
+        //   tabs
+        // ) {
+        //   chrome.tabs.sendMessage(
+        //     tabs[0].id,
+        //     { msg: "sending updated sticker back", sticker: stickerResponse },
+        //     function (response) {
+        //       console.log("response received");
+        //     }
+        //   );
+        // });
+        sendResponse({
+          msg: "got info on stickers",
+          sticker: "testing empty sticker",
+        });
+        return true;
       }
+      return true;
     });
   }
 

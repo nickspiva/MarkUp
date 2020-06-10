@@ -83,11 +83,11 @@ function buildSticker(
   stickerContainer.onmousedown = clickDown;
 
   //add save button
-  let stickerButton = document.createElement("Button");
-  stickerButton.style.position = "absolute";
-  stickerButton.style.bottom = "5%";
-  stickerButton.innerHTML = "save";
-  stickerContainer.appendChild(stickerButton);
+  let saveButton = document.createElement("Button");
+  saveButton.style.position = "absolute";
+  saveButton.style.bottom = "5%";
+  saveButton.innerHTML = "save";
+  stickerContainer.appendChild(saveButton);
 
   //add delete button
   let stickerDelete = document.createElement("Button");
@@ -105,17 +105,42 @@ function buildSticker(
   });
 
   //send message to background w/ sticker info (successful)
-  stickerButton.addEventListener("click", async function (event) {
+  // saveButton.addEventListener("click", async function (event) {
+  //   console.log("clicked");
+  //   console.log("event: ", event);
+  //   const savedSticker = saveSticker(event);
+  //   console.log("saving sticker: ", savedSticker);
+  //   // const saveStickerUrl = ngrokUrl + "api/stickers";
+  //   // await axios.post(`${saveStickerUrl}`, saveSticker(event));
+  //   chrome.runtime.sendMessage(
+  //     {
+  //       URL: window.location.href,
+  //       sticker: savedSticker,
+  //     },
+  //     function (response) {
+  //       console.log("response received from popup app");
+  //       console.log("response: ", response);
+  //       return true;
+  //     }
+  //   );
+  // });
+
+  saveButton.addEventListener("click", function (event) {
     console.log("clicked");
     console.log("event: ", event);
-    const savedSticker = saveSticker(event);
-    console.log("saving sticker: ", savedSticker);
-    // const saveStickerUrl = ngrokUrl + "api/stickers";
-    // await axios.post(`${saveStickerUrl}`, saveSticker(event));
-    chrome.runtime.sendMessage({
-      URL: window.location.href,
-      sticker: savedSticker,
-    });
+    chrome.runtime.sendMessage(
+      {
+        msg: "saveSticker",
+        URL: window.location.href,
+        sticker: saveSticker(event),
+      },
+      function (response) {
+        console.log("response received from popup app");
+        console.log("response: ", response);
+        return true;
+      }
+    );
+    return true;
   });
 }
 
