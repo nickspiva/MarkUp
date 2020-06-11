@@ -30,9 +30,9 @@ router.get("/ByFriends/:userId", async (req, res, next) => {
   }
 });
 
-router.get("/ByRandos", async (req, res, next) => {
+router.get("/ByRandos/:userId", async (req, res, next) => {
   try {
-    const userId = req.body.userId;
+    const userId = req.params.userId;
     const user = await User.findByPk(userId);
     const friends = await Friends.findAll({
       where: {
