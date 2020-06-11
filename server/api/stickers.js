@@ -1,31 +1,10 @@
 const router = require("express").Router();
 const Sticker = require("../db/sticker");
 const User = require("../db/user");
-const Friends = require("../db/friends");
+const getFriendIds = require("./utils/getFriendIds");
+const pickPropsFromObj = require("./utils/pickPropsFromObj");
 
 //**HELPER FUNCTIONS**
-//helper function to get friend ids
-const getFriendIds = async (userId) => {
-  const friends = await Friends.findAll({
-    where: {
-      userId,
-    },
-  });
-  const friendIds = friends.map((elem) => elem.friendId);
-  return friendIds;
-};
-
-//helper function to pick array of props from an object
-//for posting new sticker purposes
-const pickPropsFromObj = (props, obj) => {
-  return props.reduce((acc, prop) => {
-    const value = obj[prop];
-    if (obj[prop]) {
-      return { ...acc, [prop]: value };
-    }
-    return acc;
-  }, {});
-};
 
 //helper function to extract and assign @ and # tags
 //to sticker from message prior to creation/update of sticker in db
@@ -59,6 +38,12 @@ const assignShareType = (sticker) => {
 };
 
 //**API ROUTES**
+
+//middleware routers (advanced sticker fetching)
+router.use("/URL", require("./URL")); //getting stickers based on URL
+router.use("/tagged", require("./tagged")); //getting tagged stickers
+router.use("/public", require("./public")); //getting public stickers
+
 //get all the user's friends stickers that have been shared with all friends
 router.get("/friends/:userId", async (req, res, next) => {
   try {
@@ -75,10 +60,6 @@ router.get("/friends/:userId", async (req, res, next) => {
     next(err);
   }
 });
-
-router.use("/URL", require("./URL")); //getting stickers based on URL
-router.use("/tagged", require("./tagged")); //getting tagged stickers
-router.use("/public", require("./public")); //getting public stickers
 
 //get all the user's stickers
 router.get("/:userId", async (req, res, next) => {

@@ -2,17 +2,14 @@ const router = require("express").Router();
 const User = require("../db/user");
 const Friends = require("../db/friends");
 const Sequelize = require("sequelize");
+const getFriendIds = require("./utils/getFriendIds");
 
 //get all friend ID's
 router.get("/:userId", async (req, res, next) => {
   try {
     const userId = req.params.userId;
-    const friends = await Friends.findAll({
-      where: {
-        userId,
-      },
-    });
-    const friendIds = friends.map((elem) => elem.friendId);
+    const friendIds = await getFriendIds(userId);
+    console.log("friendIds: ", friendIds);
     const friendUsers = await User.findAll({
       attributes: { exclude: ["password"] },
       where: {

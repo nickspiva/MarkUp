@@ -2,22 +2,15 @@ const router = require("express").Router();
 const User = require("../db/user");
 const Sticker = require("../db/sticker");
 const { Op } = require("sequelize");
-const Friends = require("../db/friends");
+const getFriendIds = require("./utils/getFriendIds");
 
-//get all stickers from this URL that this user has made
+//get all relevant stickers for this user at this url
 router.get("/:url/:userId", async function (req, res, next) {
   try {
     const decodedUrl = decodeURIComponent(req.params.url);
     const userId = req.params.userId;
     const user = await User.findByPk(req.params.userId);
-
-    //get friendIds - these could also be stored in chrome storage... so you don't have to request them everytime...
-    const friends = await Friends.findAll({
-      where: {
-        userId,
-      },
-    });
-    const friendIds = friends.map((elem) => elem.friendId);
+    const friendIds = await getFriendIds(userId);
 
     //get (1) my stickers @ this url; (2) my friend's shared stickers @this url
     //(3) my friends stickers with me tagged @ this url, & (4) public stickers @ this url
@@ -46,7 +39,6 @@ router.get("/:url/:userId", async function (req, res, next) {
         ],
       },
     });
-    console.log("stickers: ", urlStickers);
     res.json(urlStickers);
   } catch (err) {
     next(err);
