@@ -18,6 +18,7 @@ export default function buildSticker(stickerProp) {
   } = stickerProp;
   //build sticker container
 
+  let toggleEdit = false;
   // let stickerId = parseFloat(Math.random() * 10000);
   let stickerId = id;
 
@@ -81,49 +82,63 @@ export default function buildSticker(stickerProp) {
     stickerButtons.appendChild(editButton);
 
     const editButtonHandler = (event) => {
-      console.log("edit clicked");
-      let sticker = document.getElementById(`sticker${stickerId}`);
-      console.log("sticker: ", sticker);
+      const currentSticker = document.getElementById(`sticker${stickerId}`);
+      if (!toggleEdit) {
+        console.log("edit clicked");
+        console.log("sticker: ", sticker);
 
-      let input;
-      //store the sticker html as default text for the input field
-      let defaultText = sticker.innerHTML;
-      //clear the sticker html
-      sticker.innerHTML = "";
-      //build input field
-      input = document.createElement("TEXTAREA");
-      input.setAttribute("id", `stickerInput${stickerId}`);
-      //set text from earlier sticker text
-      input.innerHTML = defaultText;
-      input.setAttribute("value", defaultText);
-      sticker.appendChild(input);
-      //set size of textbox
-      input.style.width = "100%";
-      input.style.height = "100%";
-      input.style.resize = "none";
-      editButton.innerHTML = "done";
+        let input;
+        //store the sticker html as default text for the input field
+        let defaultText = sticker.innerHTML;
+        //clear the sticker html
+        currentSticker.innerHTML = "";
+        //build input field
+        input = document.createElement("TEXTAREA");
+        input.setAttribute("id", `stickerInput${stickerId}`);
+        //set text from earlier sticker text
+        input.innerHTML = defaultText;
+        input.setAttribute("value", defaultText);
+        currentSticker.appendChild(input);
+        //set size of textbox
+        input.style.width = "100%";
+        input.style.height = "100%";
+        input.style.resize = "none";
+        editButton.innerHTML = "done";
+      } else {
+        console.log("done clicked");
+        editButton.innerHTML = "edit";
+        const input = document.getElementById(`stickerInput${stickerId}`);
+        currentSticker.innerHTML = input.value;
+        input.remove();
+      }
+      toggleEdit = !toggleEdit;
       //input.focus();
     };
 
-    const finishEditingHandler = (event) => {};
-
     editButton.addEventListener("click", (event) => editButtonHandler(event));
     // editButton.onclick((event) => editButtonHandler(event));
-
-    //add delete button
-    let stickerDelete = document.createElement("Button");
-    stickerDelete.style.bottom = "10%";
-    stickerDelete.innerHTML = "delete";
-    stickerDelete.innerHTML = "delete";
-    stickerButtons.appendChild(stickerDelete);
-
-    //delete the sticker ** NEED TO UPDATE TO REMOVE FROM DB
-    stickerDelete.addEventListener("click", function () {
-      console.log("clicked");
-      document.body.removeChild(stickerContainer);
-    });
   }
 
+  //add delete button
+  let stickerDelete = document.createElement("Button");
+  stickerDelete.style.bottom = "10%";
+  stickerDelete.innerHTML = "delete";
+  stickerDelete.innerHTML = "delete";
+  stickerButtons.appendChild(stickerDelete);
+
+  //delete the sticker ** NEED TO UPDATE TO REMOVE FROM DB
+  stickerDelete.addEventListener("click", function () {
+    console.log("clicked");
+    document.body.removeChild(stickerContainer);
+    if (mine) {
+      //send message to background to delete from db
+      chrome.runtime.sendMessage({
+        msg: "deleteSticker",
+        URL: window.location.href,
+        stickerId,
+      });
+    }
+  });
   //dragging functionality
   // let mouseStatus;
   //on down click add event listeners for movement and mouseup

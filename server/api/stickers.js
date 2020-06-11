@@ -110,6 +110,7 @@ router.put("/:stickerId", async (req, res, next) => {
 //delete a sticker
 router.delete("/:stickerId/:userId", async (req, res, next) => {
   try {
+    console.log("attempting delete");
     const sticker = await Sticker.findByPk(req.params.stickerId);
     if (sticker.userId.toString() === req.params.userId) {
       console.log("deleting");

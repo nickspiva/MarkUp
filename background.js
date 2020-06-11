@@ -44,4 +44,11 @@ chrome.runtime.onMessage.addListener(async function (
     console.log("update sticker response from db: ", stickerResponse);
     return true;
   }
+
+  if (request.msg && request.msg === "deleteSticker") {
+    const user = await getUser();
+    const { stickerId } = request;
+    await axios.delete(`${ngrokUrl}api/stickers/${stickerId}/${user.id}`);
+    return true;
+  }
 });
