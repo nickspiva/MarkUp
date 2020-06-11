@@ -10,7 +10,8 @@
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint-fix": "npm run lint -- --fix",
     "seed": "node seed.js",
-    "rebundle-popup": "npx webpack --config webpack.config.app.js"
+    "rebundle-popup": "npx webpack --config webpack.config.app.js", 
+    "rebundle-background": "npx webpack --config webpack.config.background.js"
   },
   "repository": {
     "type": "git",
