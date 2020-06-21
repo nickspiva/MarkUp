@@ -9,7 +9,7 @@
     "tabs",
     "identity"
   ],
-  "version": "1.0",
+  "version": "0.0.0.1",
   "background": {
     "scripts": ["bundledBackground.js"],
     "persistent": false
