@@ -1,7 +1,13 @@
 {
   "name": "MarkUp Extension",
   "description": "Base Level Extension",
-  "permissions": ["http://localhost/*", "storage", "activeTab", "tabs"],
+  "permissions": [
+    "http://localhost/*",
+    "https://markup-extension.herokuapp.com/*",
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
   "version": "0.0.0.1",
   "background": {
     "scripts": ["bundledBackground.js"],
