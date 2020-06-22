@@ -2,7 +2,7 @@
 // Postgres database by creating a Sequelize instance (called `db`).
 // You shouldn't need to make any modifications here.
 
-const chalk = require("chalk");
+// const chalk = require("chalk");
 const Sequelize = require("sequelize");
 const pkg = require("../../package.json");
 
@@ -14,10 +14,10 @@ const pkg = require("../../package.json");
 
 //Currently have it set to test DB
 const dbName = `${pkg.name}-test`;
-console.log(chalk.yellow(`Opening database connection to ${dbName}`));
+console.log(`Opening database connection to ${dbName}`);
 
 const db = new Sequelize(`postgres://localhost:5432/${dbName}`, {
-  logging: false
+  logging: false,
 });
 
 module.exports = db;
