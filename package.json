@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "rebundle-content": "npx webpack --config webpack.config.js",
     "start-server": "nodemon startServer.js -e html,js,css --ignore public",
-    "start": "nodemon startServer.js -e html,js,css --ignore public",
+    "start": "node startServer.js -e html,js,css --ignore public",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint-fix": "npm run lint -- --fix",
     "seed": "node seed.js",
