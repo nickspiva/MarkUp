@@ -12,7 +12,8 @@
     "lint-fix": "npm run lint -- --fix",
     "seed": "node seed.js",
     "rebundle-popup": "npx webpack --config webpack.config.app.js",
-    "rebundle-background": "npx webpack --config webpack.config.background.js"
+    "rebundle-background": "npx webpack --config webpack.config.background.js",
+    "deploy": "script/deploy"
   },
   "repository": {
     "type": "git",
