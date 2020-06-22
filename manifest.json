@@ -1,14 +1,7 @@
 {
   "name": "MarkUp Extension",
   "description": "Base Level Extension",
-  "permissions": [
-    "http://localhost/*",
-    "storage",
-    "declarativeContent",
-    "activeTab",
-    "tabs",
-    "identity"
-  ],
+  "permissions": ["http://localhost/*", "storage", "activeTab", "tabs"],
   "version": "0.0.0.1",
   "background": {
     "scripts": ["bundledBackground.js"],
