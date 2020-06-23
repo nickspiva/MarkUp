@@ -3,5 +3,14 @@
   "extends": ["fullstack", "prettier"],
   "rules": {
     "semi": 0
+  },
+  "env": {
+    "webextensions": true,
+    "browser": true,
+    "chrome": true,
+    "es6": true
+  },
+  "globals": {
+    "chrome": true
   }
 }

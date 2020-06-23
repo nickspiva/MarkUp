@@ -2,7 +2,7 @@ import axios from "axios";
 const ngrokUrl = require("./popupApp/components/ngrok");
 import getStickers from "./utils/getStickers";
 import getUser from "./utils/getUser";
-
+/* global chrome */
 //Listening for the on-load message
 chrome.extension.onConnect.addListener(function (port) {
   if (port.name === "loadedURL") {
