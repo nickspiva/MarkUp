@@ -32,6 +32,9 @@ chrome.runtime.onMessage.addListener(async function (
     sticker.user = user;
     sticker.xPos = sticker.left;
     sticker.yPos = sticker.top;
+    if (sticker.message === "") {
+      sticker.message = "empty";
+    }
 
     const stickerResponse = await axios.put(
       `${ngrokUrl}api/stickers/${sticker.id}`,
