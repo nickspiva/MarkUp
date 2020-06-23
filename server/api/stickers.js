@@ -93,7 +93,12 @@ router.post("/", async (req, res, next) => {
 //update an existing sticker
 router.put("/:stickerId", async (req, res, next) => {
   try {
+    console.log("in sticker update");
     const sticker = await Sticker.findByPk(req.params.stickerId);
+    if (sticker.message === "") {
+      console.log("message empty");
+      res.sendStatus(200);
+    }
     const updateFields = ["message", "height", "width", "xPos", "yPos"];
     updateFields.forEach((elem) => {
       sticker[elem] = req.body.sticker[elem];
@@ -101,6 +106,7 @@ router.put("/:stickerId", async (req, res, next) => {
     extractAndAssignTags(sticker, req.body.sticker.message);
     assignShareType(sticker);
     await sticker.save();
+    console.log("sticker updated");
     res.send(sticker);
   } catch (err) {
     next(err);
