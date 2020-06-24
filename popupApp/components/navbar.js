@@ -5,7 +5,6 @@ const Navbar = (props) => {
   const handleClick = (event) => {
     props.changePage(event.target.name);
   };
-
   const pages = ["myStickers", "taggedStickers", "friends", "profile"];
   return (
     <div>
@@ -28,8 +27,6 @@ const Navbar = (props) => {
         </Button>
       )}
       {pages.map((page) => {
-        // console.log("page: ", page);
-        // console.log("active? ", page === props.page);
         return (
           <Button
             name={page}

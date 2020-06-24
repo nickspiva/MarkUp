@@ -46,7 +46,6 @@ class App extends React.Component {
   async componentDidMount() {
     //Checks to see if the user has already logged in recently, if so...
     //Grabs their info from chrome storage and sets it on popup local state
-
     if (!this.state.user) {
       let promise = new Promise(function (resolve, reject) {
         chrome.storage.sync.get("user", function (user) {

@@ -3,9 +3,9 @@ const db = require("./server/db/database");
 const { Sticker, User } = require("./server/db");
 const faker = require("faker/locale/en_US");
 
-const numOfUsers = 10;
-const numOfStickers = 20;
-const maxFriends = 4;
+const numOfUsers = 4;
+const numOfStickers = 3;
+const maxFriends = 2;
 const minFriends = 1;
 
 const makeUser = () => {
@@ -57,6 +57,7 @@ const seed = async () => {
 
     //add admin user seed
     seedUsers.push({ userName: "Nicky", password: "123" });
+    seedUsers.push({ userName: "Courtney", password: "123" });
 
     //seed users
     const users = await Promise.all(seedUsers.map((user) => User.create(user)));

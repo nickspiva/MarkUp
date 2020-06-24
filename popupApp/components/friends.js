@@ -21,8 +21,6 @@ class Friends extends React.Component {
   }
 
   async componentDidMount() {
-    console.log("mounting loggedIn: ", this.props.loggedIn);
-    console.log("component is mounting");
     if (!this.props.loggedIn) return;
     const { id } = this.props.user;
     const response = await axios.get(`${ngrokUrl}api/friends/${id}`);
@@ -30,24 +28,6 @@ class Friends extends React.Component {
       return { friends: response.data };
     });
   }
-
-  //not needed b/c the component unmounts when loggedIn is updated on the parent component
-  //if the user logs in, this component will get new props, which will trigger
-  //lifecylce method componentDidUpdate, in which we need to now fetch the friend info
-  //because we didn't earlier when the component was first loaded
-  // async componentDidUpdate(prevProps) {
-  //   console.log("component is updating");
-  //   console.log("prevProps: ", prevProps.loggedIn);
-  //   console.log("props: ", this.props.loggedIn);
-  //   if (this.props.loggedIn !== prevProps.loggedIn) {
-  //     console.log("user logged in so component is updating");
-  //     const { id } = this.props.user;
-  //     const response = await axios.get(`${ngrokUrl}api/friends/${id}`);
-  //     this.setState((prevState) => {
-  //       return { friends: response.data };
-  //     });
-  //   }
-  // }
 
   async deleteFriend(userId, friendId) {
     await axios.delete(`${ngrokUrl}api/friends/`, {
