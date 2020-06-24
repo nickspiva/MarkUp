@@ -114,6 +114,7 @@ class App extends React.Component {
             <Navbar
               changePage={this.changePage}
               loggedIn={this.state.loggedIn}
+              page={this.state.page}
             />
             <LoginForm
               changePage={this.changePage}
@@ -130,6 +131,7 @@ class App extends React.Component {
             <Navbar
               changePage={this.changePage}
               loggedIn={this.state.loggedIn}
+              page={this.state.page}
             />
             <SignupForm changePage={this.changePage} />
           </div>
@@ -140,6 +142,7 @@ class App extends React.Component {
             <Navbar
               changePage={this.changePage}
               loggedIn={this.state.loggedIn}
+              page={this.state.page}
             />
             <UserProfile changePage={this.changePage} />
           </div>
@@ -150,6 +153,7 @@ class App extends React.Component {
             <Navbar
               changePage={this.changePage}
               loggedIn={this.state.loggedIn}
+              page={this.state.page}
             />
             <MyStickers changePage={this.changePage} user={this.state.user} />
           </div>
@@ -160,6 +164,7 @@ class App extends React.Component {
             <Navbar
               changePage={this.changePage}
               loggedIn={this.state.loggedIn}
+              page={this.state.page}
             />
             <TaggedStickers
               changePage={this.changePage}
@@ -173,14 +178,23 @@ class App extends React.Component {
             <Navbar
               changePage={this.changePage}
               loggedIn={this.state.loggedIn}
+              page={this.state.page}
             />
-            <MyFriends changePage={this.changePage} user={this.state.user} />
+            <MyFriends
+              changePage={this.changePage}
+              user={this.state.user}
+              loggedIn={this.state.loggedIn}
+            />
           </div>
         );
       default:
         return (
           <div>
-            <Navbar loggedIn={this.state.loggedIn} />
+            <Navbar
+              loggedIn={this.state.loggedIn}
+              page={this.state.page}
+              changePage={this.changePage}
+            />
             <div>Default</div>
           </div>
         );

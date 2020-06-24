@@ -5,28 +5,41 @@ const Navbar = (props) => {
   const handleClick = (event) => {
     props.changePage(event.target.name);
   };
+
+  const pages = ["myStickers", "taggedStickers", "friends", "profile"];
   return (
     <div>
-      <Button name="login" onClick={handleClick}>
-        {props.loggedIn ? "Log-out" : "Log-in"}
-      </Button>
+      {
+        <Button
+          name="login"
+          onClick={handleClick}
+          className={props.page === "login" ? "active" : "passive"}
+        >
+          {props.loggedIn ? "logout" : "login"}
+        </Button>
+      }
       {!props.loggedIn && (
-        <Button name="signup" onClick={handleClick}>
-          Sign-Up
+        <Button
+          name="signup"
+          onClick={handleClick}
+          className={props.page === "signup" ? "active" : "passive"}
+        >
+          sign-up
         </Button>
       )}
-      <Button name="myStickers" onClick={handleClick}>
-        My Stickers
-      </Button>
-      <Button name="taggedStickers" onClick={handleClick}>
-        Friend's Stickers
-      </Button>
-      <Button name="friends" onClick={handleClick}>
-        Friends
-      </Button>
-      <Button name="profile" onClick={handleClick}>
-        Profile
-      </Button>
+      {pages.map((page) => {
+        // console.log("page: ", page);
+        // console.log("active? ", page === props.page);
+        return (
+          <Button
+            name={page}
+            onClick={handleClick}
+            className={props.page === page ? "active" : "passive"}
+          >
+            {page}
+          </Button>
+        );
+      })}
     </div>
   );
 };

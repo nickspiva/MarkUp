@@ -14,12 +14,13 @@ class SignupForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     const postUrl = ngrokUrl + "api/users";
-    axios.post(`${postUrl}`, {
+    await axios.post(`${postUrl}`, {
       userName: this.state.userName,
       password: this.state.password,
     });
+    this.props.changePage("login");
   }
 
   handleChange() {
@@ -33,6 +34,7 @@ class SignupForm extends React.Component {
       <React.Fragment>
         {/* <Button onClick={this.addSticker}>Add Sticker</Button>
         <Button onClick={this.getSticker}>Get Sticker</Button> */}
+        <h3>Sign-Up</h3>
         <Form onSubmit={this.handleSubmit}>
           <Form.Input
             type="text"

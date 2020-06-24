@@ -46,6 +46,7 @@ class LoginForm extends React.Component {
     if (!this.props.user) {
       return (
         <React.Fragment>
+          <h3>Log-in</h3>
           <Form onSubmit={this.handleSubmit}>
             <Form.Input
               type="text"
