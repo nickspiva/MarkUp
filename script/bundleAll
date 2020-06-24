@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Hello, welcome to a bash script.
+
+# This bash script bundles the content, background, and popup scripts into their 
+# three respective bundles
+
+# On the terminal you run individual
+# bash commands, and this file strings a bunch of commands together.
+
+# The first line of this file, or the `hashbang`, tells the system to
+# execute the text of this file as a bash program.
+
+# We want this entire script to exit if any single line fails.
+# So we set the `-e` flag.
+set -e
+
+npm run rebundle-background
+npm run rebundle-popup
+npm run rebundle-content

@@ -21,6 +21,7 @@ class Friends extends React.Component {
   }
 
   async componentDidMount() {
+    if (!this.props.loggedIn) return;
     const { id } = this.props.user;
     const response = await axios.get(`${ngrokUrl}api/friends/${id}`);
     this.setState((prevState) => {
@@ -73,6 +74,9 @@ class Friends extends React.Component {
   }
 
   render() {
+    console.log("this.props.loggedIn: ", this.props.loggedIn);
+    console.log("rendering");
+    if (!this.props.loggedIn) return <h3>Not Logged In...</h3>;
     const userId = this.props.user.id;
     return (
       <div>

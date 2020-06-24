@@ -1,0 +1,16 @@
+.active {
+  color: "blue";
+  background-color: darkkhaki;
+}
+
+body {
+  min-width: 225px;
+  min-height: 150px;
+  max-width: 450px;
+  max-height: 450px;
+  position: relative;
+  vertical-align: middle;
+  flex-wrap: wrap;
+  flex-direction: column;
+  display: flex;
+}

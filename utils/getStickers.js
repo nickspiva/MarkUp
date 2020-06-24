@@ -5,6 +5,9 @@ import axios from "axios";
 export default async function getStickers(url) {
   //get user from chrome storage, need to add conditional in case no user
   const user = await getUser();
+  if (!user) {
+    return [];
+  }
   const urlStickers = await axios.get(
     `${ngrokUrl}api/stickers/url/${encodeURIComponent(url)}/${user.id}`
   );
