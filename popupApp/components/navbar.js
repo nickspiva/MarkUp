@@ -7,7 +7,7 @@ const Navbar = (props) => {
   };
   const pages = ["myStickers", "taggedStickers", "friends", "profile"];
   return (
-    <div>
+    <div id="navbar">
       {
         <Button
           name="login"
