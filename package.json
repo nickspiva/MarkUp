@@ -4,7 +4,6 @@
   "description": "",
   "main": "addSticker.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "rebundle-content": "npx webpack --config webpack.config.js",
     "start-server": "nodemon startServer.js -e html,js,css --ignore public",
     "start": "node startServer.js -e html,js,css --ignore public",
@@ -14,7 +13,9 @@
     "rebundle-popup": "npx webpack --config webpack.config.app.js",
     "rebundle-background": "npx webpack --config webpack.config.background.js",
     "deploy": "script/deploy",
-    "bundleAll": "script/bundleAll"
+    "bundleAll": "script/bundleAll", 
+    "test": "mocha tests/basic.spec.js", 
+    "stage": "script/stage"
   },
   "repository": {
     "type": "git",
@@ -52,11 +53,13 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "history": "^4.10.1",
+    "mocha": "^8.0.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "pg": "^8.0.0",
     "prop-types": "^15.7.2",
+    "puppeteer": "^4.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
