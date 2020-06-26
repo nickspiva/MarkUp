@@ -16,7 +16,7 @@ export default function buildContainer(stickerProp) {
   stickerContainer.style["border-radius"] = "3px";
   stickerContainer.style.overflow = "auto";
   stickerContainer.style.resize = "both";
-  stickerContainer.style.zIndex = 999;
+  stickerContainer.style.zIndex = 99999999;
   stickerContainer.style.display = "flex";
   stickerContainer.style.flexDirection = "column";
   stickerContainer.className = "stickerContainer";
