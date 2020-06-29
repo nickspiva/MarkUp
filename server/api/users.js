@@ -23,6 +23,29 @@ router.post("/friendSearch", async function (req, res, next) {
   res.json(potentialFriends);
 });
 
+//update userinfo
+router.put("/", async (req, res, next) => {
+  try {
+    console.log("in backend update user");
+    const userData = pickPropsFromObj(
+      ["userName", "password", "userId"],
+      req.body
+    );
+    const user = await User.findByPk(userData.userId);
+    if (userData.userName) {
+      user.userName = userData.userName;
+    }
+    if (userData.password) {
+      user.password = userData.password;
+    }
+    await user.save();
+    console.log("user updated");
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
 //create user; POST /users
 router.post("/", async (req, res, next) => {
   try {

@@ -143,7 +143,7 @@ class App extends React.Component {
               loggedIn={this.state.loggedIn}
               page={this.state.page}
             />
-            <UserProfile changePage={this.changePage} />
+            <UserProfile changePage={this.changePage} user={this.state.user} />
           </div>
         );
       case "myStickers":

@@ -20,3 +20,5 @@ rm -R MarkUp-publication
 mkdir MarkUp-publication
 cd MarkUp
 cp {bundledBackground.js,bundledContentScripts.js,bundledApp.js,popup.html,readme.md,manifest.json} ../MarkUp-publication
+cp -R images ../MarkUp-publication
+cp -R popupApp ../MarkUp-publication

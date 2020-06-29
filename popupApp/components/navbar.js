@@ -26,17 +26,18 @@ const Navbar = (props) => {
           sign-up
         </Button>
       )}
-      {pages.map((page) => {
-        return (
-          <Button
-            name={page}
-            onClick={handleClick}
-            className={props.page === page ? "active" : "passive"}
-          >
-            {page}
-          </Button>
-        );
-      })}
+      {props.loggedIn &&
+        pages.map((page) => {
+          return (
+            <Button
+              name={page}
+              onClick={handleClick}
+              className={props.page === page ? "active" : "passive"}
+            >
+              {page}
+            </Button>
+          );
+        })}
     </div>
   );
 };
