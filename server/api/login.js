@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../db/user");
+const bcrypt = require("bcrypt");
 
 //get
 router.get("/", async (req, res, next) => {
@@ -18,11 +19,20 @@ router.post("/", async (req, res, next) => {
     const user = await User.findOne({
       where: {
         userName: userName,
-        password: password,
       },
     });
-    //console.log("user: ", user);
-    res.json(user);
+
+    console.log("user: ", user);
+    bcrypt.compare(password, user.password, function (err, result) {
+      if (err) {
+        throw err;
+      }
+      if (result) {
+        res.json(user);
+      } else {
+        res.json("wrong password");
+      }
+    });
   } catch (err) {
     next(err);
   }

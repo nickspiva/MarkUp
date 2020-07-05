@@ -2,6 +2,8 @@ const router = require("express").Router();
 const User = require("../db/user");
 const Sequelize = require("sequelize");
 const pickPropsFromObj = require("./utils/pickPropsFromObj");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 //get all users; GET /users
 router.get("/", function (req, res, next) {
@@ -50,9 +52,17 @@ router.put("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const userData = pickPropsFromObj(["userName", "password"], req.body);
-    const user = await User.create(userData);
+
+    bcrypt.hash(userData.password, saltRounds, async function (err, hash) {
+      if (err) {
+        throw err;
+      }
+      console.log("hash: ", await hash);
+      userData.password = await hash;
+      const user = await User.create(userData);
+      res.json(user);
+    });
     //currently hardcoded the user pk, will need to update
-    res.json(user);
   } catch (err) {
     next(err);
   }
