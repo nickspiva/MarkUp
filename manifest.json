@@ -4,6 +4,7 @@
   "permissions": [
     "http://localhost/*",
     "https://markup-extension.herokuapp.com/*",
+    "https://d735b5635bef.ngrok.io/*",
     "storage",
     "tabs"
   ],

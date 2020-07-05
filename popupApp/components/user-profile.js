@@ -59,9 +59,9 @@ class UserProfile extends React.Component {
       <div>
         <h2>User Profile</h2>
         <div>
-          <div>Username: </div>
           {this.state.editField === "userName" ? (
             <div>
+              <div>Username: </div>
               <input
                 type="text"
                 label="userName"
@@ -82,6 +82,7 @@ class UserProfile extends React.Component {
             </div>
           ) : (
             <div>
+              <div>Username: </div>
               <div>{this.props.user.userName}</div>
               <Button onClick={this.handleEditClick} id="userName">
                 Edit
@@ -93,6 +94,14 @@ class UserProfile extends React.Component {
           <div>Password: hidden</div>
           <Button onClick={this.handleEditClick}>Edit</Button>
         </div>
+        <div>
+          <div>Email: {this.props.user.email}</div>
+        </div>
+        <div>
+          <div>Image URL: {this.props.user.imageUrl}</div>
+          <Button onClick={this.handleEditClick}>Edit</Button>
+        </div>
+        <img src={this.props.user.imageUrl} alt="user profile img"></img>
       </div>
     );
   }

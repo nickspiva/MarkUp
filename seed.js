@@ -9,7 +9,12 @@ const maxFriends = 2;
 const minFriends = 1;
 
 const makeUser = () => {
-  return { userName: faker.internet.userName(), password: "123" };
+  return {
+    userName: faker.internet.userName(),
+    password: "123",
+    email: faker.internet.email(),
+    imageUrl: faker.image.imageUrl(),
+  };
 };
 
 const makeSticker = () => {
@@ -56,8 +61,20 @@ const seed = async () => {
     const seedUserNames = seedUsers.map((elem) => elem.userName);
 
     //add admin user seed
-    seedUsers.push({ userName: "Nicky", password: "123" });
-    seedUsers.push({ userName: "Courtney", password: "123" });
+    seedUsers.push({
+      userName: "Nicky",
+      password: "123",
+      email: "nick@gmail.com",
+      imageUrl:
+        "https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/blogs/1222/images/Vmi4xm56TPGDya2Xw60g_Nicky3_1_.png",
+    });
+    seedUsers.push({
+      userName: "Courtney",
+      password: "123",
+      email: "courtney@gmail.com",
+      imageUrl:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Ftwitter.com%2Fcourtneyldevin&psig=AOvVaw1pFyzCMzCWPavcl8qIgxJN&ust=1593648067318000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjsoenfquoCFQAAAAAdAAAAABAD",
+    });
 
     //seed users
     const users = await Promise.all(seedUsers.map((user) => User.create(user)));
