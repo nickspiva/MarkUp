@@ -37,7 +37,7 @@ class App extends React.Component {
 
   async logout() {
     //Removes userdata from local storage & sets local app state for user to null
-    await chrome.storage.sync.remove("user", function (response) {});
+    await chrome.storage.sync.remove("markUp", function (response) {});
     this.setState((state) => {
       return { page: "login", user: null, loggedIn: false };
     });
@@ -48,13 +48,28 @@ class App extends React.Component {
     //Grabs their info from chrome storage and sets it on popup local state
     if (!this.state.user) {
       let promise = new Promise(function (resolve, reject) {
-        chrome.storage.sync.get("user", function (user) {
-          resolve(user);
+        chrome.storage.sync.get("markUp", function (token) {
+          console.log("component mount: ", token);
+          resolve(token);
         });
       });
-      const { user } = await promise;
+      const fulfilledPromise = await promise;
+      const token = fulfilledPromise.markUp;
+      console.log("token: ", token);
+
+      //fetch user info w/ token
+      const config = {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      };
+      const user = await axios.get(`${ngrokUrl}api/auth/me`, config);
+      await chrome.storage.sync.set({ user: user.data }, function () {
+        console.log("user added to chrome");
+      });
+      console.log("user", user);
       if (user) {
-        this.updateUser(user);
+        this.updateUser(user.data);
         this.loggedIn();
       }
     }

@@ -8,8 +8,9 @@ export default async function getStickers(url) {
   if (!user) {
     return [];
   }
+  console.log("user: ", user);
   const urlStickers = await axios.get(
-    `${ngrokUrl}api/stickers/url/${encodeURIComponent(url)}/${user.id}`
+    `${ngrokUrl}api/stickers/url/${encodeURIComponent(url)}/${user.data.id}`
   );
 
   urlStickers.data.forEach((sticker) => {

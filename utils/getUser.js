@@ -5,5 +5,6 @@ export default async function getUser() {
     });
   });
   const { user } = await promise;
+  console.log("user: ", user);
   return user;
 }

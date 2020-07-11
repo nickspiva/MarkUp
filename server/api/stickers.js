@@ -3,6 +3,7 @@ const Sticker = require("../db/sticker");
 const User = require("../db/user");
 const getFriendIds = require("./utils/getFriendIds");
 const pickPropsFromObj = require("./utils/pickPropsFromObj");
+const jwt = require("jsonwebtoken");
 
 //**HELPER FUNCTIONS**
 
@@ -37,6 +38,61 @@ const assignShareType = (sticker) => {
   sticker.shareType = shareType;
 };
 
+//check req has token
+const checkToken = (req, res, next) => {
+  console.log("checking token: ", req.headers);
+  const header = req.headers["authorization"];
+  if (typeof header !== "undefined") {
+    const bearer = header.split(" ");
+    const token = bearer[1];
+
+    req.token = token;
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+};
+
+//check token is for correct user based on route params
+const checkUser = (req, res, next) => {
+  console.log("checking user");
+  jwt.verify(req.token, process.env.JWT_SECRET, (err, authorizedData) => {
+    if (err) {
+      console.log("ERROR: could not connect to protected route, no token");
+      res.sendStatus(403);
+    } else if (authorizedData.user.id !== parseInt(req.params.userId)) {
+      console.log(authorizedData.user.id);
+      console.log(req.params.userId);
+      console.log(req.params.userId === authorizedData.user.id);
+      console.log("not your user data");
+      res.status(403).send("wrong user");
+    } else {
+      console.log("user matches!");
+      next();
+    }
+  });
+};
+
+//check token is for correct user based on route params
+const checkUserPost = (req, res, next) => {
+  console.log("checking user post");
+  jwt.verify(req.token, process.env.JWT_SECRET, (err, authorizedData) => {
+    if (err) {
+      console.log("ERROR: could not connect to protected route, no token");
+      res.sendStatus(403);
+    } else if (authorizedData.user.id !== parseInt(req.body.user.id)) {
+      console.log(authorizedData.user.id);
+      console.log(req.body.user.id);
+      console.log(req.body.user.id === authorizedData.user.id);
+      console.log("not your user data");
+      res.status(403).send("wrong user");
+    } else {
+      console.log("user matches!");
+      next();
+    }
+  });
+};
+
 //**API ROUTES**
 
 //middleware routers (advanced sticker fetching)
@@ -45,21 +101,27 @@ router.use("/tagged", require("./tagged")); //getting tagged stickers
 router.use("/public", require("./public")); //getting public stickers
 
 //get all the user's friends stickers that have been shared with all friends
-router.get("/friends/:userId", async (req, res, next) => {
-  try {
-    const userId = req.params.userId;
-    const friendIds = await getFriendIds(userId);
-    const taggedStickers = await Sticker.findAll({
-      where: {
-        userId: friendIds,
-        shareType: "withFriends",
-      },
-    });
-    res.json(taggedStickers);
-  } catch (err) {
-    next(err);
+router.get(
+  "/friends/:userId",
+  checkToken,
+  checkUser,
+  async (req, res, next) => {
+    console.log("in api route");
+    try {
+      const userId = req.params.userId;
+      const friendIds = await getFriendIds(userId);
+      const taggedStickers = await Sticker.findAll({
+        where: {
+          userId: friendIds,
+          shareType: "withFriends",
+        },
+      });
+      res.json(taggedStickers);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 //get all the user's stickers
 router.get("/:userId", async (req, res, next) => {
@@ -73,8 +135,9 @@ router.get("/:userId", async (req, res, next) => {
 });
 
 //add a sticker to the database
-router.post("/", async (req, res, next) => {
+router.post("/", checkToken, checkUserPost, async (req, res, next) => {
   try {
+    console.log("setting up sticker in server");
     const stickerData = pickPropsFromObj(
       ["message", "height", "width", "xPos", "yPos", "url"],
       req.body

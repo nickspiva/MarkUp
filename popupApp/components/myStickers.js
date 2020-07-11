@@ -3,44 +3,8 @@ import { Button } from "semantic-ui-react";
 import axios from "axios";
 import StickerLink from "./stickerLink";
 import getUser from "../../utils/getUser";
+import getToken from "../../utils/getToken";
 const ngrokUrl = require("./ngrok");
-
-const addSticker = async function () {
-  console.log("testing add");
-  const user = await getUser();
-  console.log("user: ", user);
-  const query = { active: true, currentWindow: true };
-  const returnUrl = async (tabs) => {
-    const currentTab = tabs[0];
-    console.log("tab id: ", currentTab.id);
-    const defaultSticker = {
-      message: "default sticker",
-      height: "200px",
-      width: "200px",
-      xPos: "200px",
-      yPos: "200px",
-      url: currentTab.url,
-      user: user,
-    };
-    const dbSticker = await axios.post(
-      `${ngrokUrl}api/stickers/`,
-      defaultSticker
-    );
-    dbSticker.data.mine = true;
-    console.log("db sticker: ", dbSticker);
-    console.log("default sticker: ", defaultSticker);
-    chrome.tabs.sendMessage(currentTab.id, {
-      subject: "adding new sticker",
-      sticker: dbSticker,
-    });
-  };
-
-  chrome.tabs.query(query, returnUrl);
-
-  //create new sticker in db
-
-  //send message with new sticker to content script
-};
 
 const getSticker = function () {
   console.log("in popup, you clicked get sticker");
@@ -70,10 +34,55 @@ class MyStickers extends React.Component {
     this.state = {
       stickers: [],
     };
+    this.addSticker = this.addSticker.bind(this);
+  }
+
+  async addSticker() {
+    const query = { active: true, currentWindow: true };
+    const returnUrl = async (tabs) => {
+      const currentTab = tabs[0];
+      const defaultSticker = {
+        message: "default sticker",
+        height: "200px",
+        width: "200px",
+        xPos: "200px",
+        yPos: "200px",
+        url: currentTab.url,
+        user: this.props.user,
+      };
+      const token = await getToken();
+      console.log("token: ", token);
+      console.log("sticker: ", defaultSticker);
+      console.log("user: ", this.props.user);
+      const config = {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      };
+      const dbSticker = await axios.post(
+        `${ngrokUrl}api/stickers/`,
+        defaultSticker,
+        config
+      );
+      dbSticker.data.mine = true;
+      console.log("db sticker: ", dbSticker);
+      console.log("default sticker: ", defaultSticker);
+      chrome.tabs.sendMessage(currentTab.id, {
+        subject: "adding new sticker",
+        sticker: dbSticker,
+      });
+    };
+
+    chrome.tabs.query(query, returnUrl);
+
+    //create new sticker in db
+
+    //send message with new sticker to content script
   }
 
   async componentDidMount() {
     const { id } = this.props.user;
+    console.log("this.props.user: ", this.props.user);
     let response = await axios.get(`${ngrokUrl}api/stickers/${id}`);
     this.setState((prevState) => {
       return { stickers: response.data };
@@ -84,7 +93,7 @@ class MyStickers extends React.Component {
     return (
       <div>
         <h2>My Stickers</h2>
-        <Button onClick={addSticker}>Add Sticker</Button>
+        <Button onClick={this.addSticker}>Add Sticker</Button>
         <Button onClick={getSticker}>Get Sticker</Button>
         {this.state.stickers.length ? (
           <div>
