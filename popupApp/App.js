@@ -37,43 +37,39 @@ class App extends React.Component {
 
   async logout() {
     //Removes userdata from local storage & sets local app state for user to null
-    await chrome.storage.sync.remove("markUp", function (response) {});
+    await chrome.storage.sync.remove(["markUp", "user"], function (
+      response
+    ) {});
     this.setState((state) => {
       return { page: "login", user: null, loggedIn: false };
     });
   }
 
   async componentDidMount() {
+    console.log("mounting");
     //Checks to see if the user has already logged in recently, if so...
     //Grabs their info from chrome storage and sets it on popup local state
     if (!this.state.user) {
+      console.log("no user on state, check sync storage");
       let promise = new Promise(function (resolve, reject) {
-        chrome.storage.sync.get("markUp", function (token) {
-          console.log("component mount: ", token);
-          resolve(token);
+        chrome.storage.sync.get(["markUp", "user"], function (data) {
+          console.log("component mount data: ", data);
+          resolve(data);
         });
       });
       const fulfilledPromise = await promise;
       const token = fulfilledPromise.markUp;
       console.log("token: ", token);
+      const userData = fulfilledPromise.user;
+      console.log("userData from sync: ", userData);
 
-      //fetch user info w/ token
-      const config = {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      };
-      const user = await axios.get(`${ngrokUrl}api/auth/me`, config);
-      await chrome.storage.sync.set({ user: user.data }, function () {
-        console.log("user added to chrome");
-      });
-      console.log("user", user);
       if (user) {
-        this.updateUser(user.data);
+        this.updateUser(userData);
         this.loggedIn();
       }
     }
 
+    //if there is a user on state, bind it to a variable
     const user = this.state.user;
 
     chrome.runtime.onMessage.addListener(async function (
@@ -82,7 +78,7 @@ class App extends React.Component {
       sendResponse
     ) {
       console.log("in component did mount message inc");
-      console.log("user: ", user);
+      console.log("user in message passing: ", user);
       if (req.msg === "passing saved sticker to popup") {
         const sticker = req.sticker;
         sticker.url = req.website;

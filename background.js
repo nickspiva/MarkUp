@@ -8,6 +8,7 @@ chrome.extension.onConnect.addListener(function (port) {
   if (port.name === "loadedURL") {
     port.onMessage.addListener(async (msg) => {
       if (msg.subject === "site ready") {
+        console.log("fetching stickers...");
         const stickers = await getStickers(msg.url);
         port.postMessage({
           subject: "sending stickers",
