@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 //**HELPER FUNCTIONS**
 
 //helper function to extract and assign @ and # tags
-//to sticker from message prior to creation/update of sticker in db
+//used on sticker from message prior to creation/update of sticker in db
 const extractAndAssignTags = (sticker, message) => {
   const words = message.split(" ");
   const atTags = words
@@ -55,21 +55,13 @@ const checkToken = (req, res, next) => {
 
 //check token is for correct user based on route params
 const checkUser = (req, res, next) => {
-  console.log("checking user");
   jwt.verify(req.token, process.env.JWT_SECRET, (err, authorizedData) => {
     if (err) {
-      console.log(
-        "ERROR: could not connect to protected route token error issue"
-      );
-      res.sendStatus(403);
+      throw err;
     } else if (authorizedData.user.id !== parseInt(req.params.userId)) {
-      console.log(authorizedData.user.id);
-      console.log(req.params.userId);
-      console.log(req.params.userId === authorizedData.user.id);
-      console.log("not your user data");
       res.status(403).send("wrong user");
     } else {
-      console.log("user matches!");
+      //user matches
       next();
     }
   });
@@ -77,20 +69,13 @@ const checkUser = (req, res, next) => {
 
 //check token is for correct user based on route params
 const checkUserPost = (req, res, next) => {
-  console.log("checking user post");
-  console.log("req.token: ", req.token);
   jwt.verify(req.token, process.env.JWT_SECRET, (err, authorizedData) => {
     if (err) {
-      console.log("ERROR: could not connect to protected route, no token");
-      res.sendStatus(403);
+      throw err;
     } else if (authorizedData.user.id !== parseInt(req.body.user.id)) {
-      console.log(authorizedData.user.id);
-      console.log(req.body.user.id);
-      console.log(req.body.user.id === authorizedData.user.id);
-      console.log("not your user data");
       res.status(403).send("wrong user");
     } else {
-      console.log("user matches!");
+      //user matches
       next();
     }
   });
@@ -127,7 +112,7 @@ router.get(
 );
 
 //get all the user's stickers
-router.get("/:userId", async (req, res, next) => {
+router.get("/:userId", checkToken, checkUser, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId);
     const stickers = await user.getStickers();
@@ -180,20 +165,25 @@ router.put("/:stickerId", checkToken, checkUserPost, async (req, res, next) => {
 });
 
 //delete a sticker
-router.delete("/:stickerId/:userId", async (req, res, next) => {
-  try {
-    console.log("attempting delete");
-    const sticker = await Sticker.findByPk(req.params.stickerId);
-    if (sticker.userId.toString() === req.params.userId) {
-      console.log("deleting");
-      await sticker.destroy();
-      res.sendStatus(204);
-    } else {
-      res.json("not yours to delete");
+router.delete(
+  "/:stickerId/:userId",
+  checkToken,
+  checkUser,
+  async (req, res, next) => {
+    try {
+      console.log("attempting delete");
+      const sticker = await Sticker.findByPk(req.params.stickerId);
+      if (sticker.userId.toString() === req.params.userId) {
+        console.log("deleting");
+        await sticker.destroy();
+        res.sendStatus(204);
+      } else {
+        res.json("not yours to delete");
+      }
+    } catch (err) {
+      next(err);
     }
-  } catch (err) {
-    next(err);
   }
-});
+);
 
 module.exports = router;

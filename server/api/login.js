@@ -3,27 +3,21 @@ const User = require("../db/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-//get
-router.get("/", async (req, res, next) => {
-  try {
-    res.json("in login route");
-  } catch (err) {
-    next(err);
-  }
-});
-
-//login
+/*
+ * Handles users attempting to log in w/ encryption and jwt creation.
+ * @param {Object}, req, contains the username and password submitted by the user.
+ * FYI req is structured like: req = {body: {username: xx, password: xx}}
+ */
 router.post("/", async (req, res, next) => {
   try {
+    //From the username and password submitted, find a user in the db
     const { userName, password } = req.body;
-    //console.log("username / pword: ", userName, password);
     const user = await User.findOne({
       where: {
         userName: userName,
       },
     });
-    const basicInfo = {};
-    console.log("user: ", user);
+    //compare the encrypted db password with the submitted password
     bcrypt.compare(password, user.password, function (err, result) {
       if (err) {
         throw err;
@@ -31,13 +25,14 @@ router.post("/", async (req, res, next) => {
       if (!result) {
         res.json("wrong password");
       } else {
-        console.log("secret", process.env.JWT_SECRET);
+        //build the response object with only basic safe to send user info
         const response = {
           user: {
             userName: user.userName,
             id: user.id,
           },
         };
+        //also build a jwt token and attach it to the reponse to be sent
         jwt.sign(
           { user },
           process.env.JWT_SECRET,

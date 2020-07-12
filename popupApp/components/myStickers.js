@@ -83,7 +83,13 @@ class MyStickers extends React.Component {
   async componentDidMount() {
     const { id } = this.props.user;
     console.log("this.props.user: ", this.props.user);
-    let response = await axios.get(`${ngrokUrl}api/stickers/${id}`);
+    const token = await getToken();
+    const config = {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    };
+    let response = await axios.get(`${ngrokUrl}api/stickers/${id}`, config);
     this.setState((prevState) => {
       return { stickers: response.data };
     });

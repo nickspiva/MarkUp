@@ -58,9 +58,18 @@ chrome.runtime.onMessage.addListener(async function (
   }
 
   if (request.msg && request.msg === "deleteSticker") {
+    const token = await getToken();
+    const config = {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    };
     const user = await getUser();
     const { stickerId } = request;
-    await axios.delete(`${ngrokUrl}api/stickers/${stickerId}/${user.id}`);
+    await axios.delete(
+      `${ngrokUrl}api/stickers/${stickerId}/${user.id}`,
+      config
+    );
     return true;
   }
 });
