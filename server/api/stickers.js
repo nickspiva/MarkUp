@@ -94,7 +94,6 @@ router.get(
   checkToken,
   checkUser,
   async (req, res, next) => {
-    console.log("in api route");
     try {
       const userId = req.params.userId;
       const friendIds = await getFriendIds(userId);
@@ -111,7 +110,7 @@ router.get(
   }
 );
 
-//get all the user's stickers
+//get all the user's self-made stickers
 router.get("/:userId", checkToken, checkUser, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId);
@@ -122,10 +121,9 @@ router.get("/:userId", checkToken, checkUser, async (req, res, next) => {
   }
 });
 
-//add a sticker to the database
+//add a NEW sticker to the database
 router.post("/", checkToken, checkUserPost, async (req, res, next) => {
   try {
-    console.log("setting up sticker in server");
     const stickerData = pickPropsFromObj(
       ["message", "height", "width", "xPos", "yPos", "url"],
       req.body
@@ -144,20 +142,19 @@ router.post("/", checkToken, checkUserPost, async (req, res, next) => {
 //update an existing sticker
 router.put("/:stickerId", checkToken, checkUserPost, async (req, res, next) => {
   try {
-    console.log("in sticker update");
     const sticker = await Sticker.findByPk(req.params.stickerId);
     if (sticker.message === "") {
-      console.log("message empty");
-      res.sendStatus(200);
+      res.sendStatus(200); //message was empty...
     }
+    //update each sticker property
     const updateFields = ["message", "height", "width", "xPos", "yPos"];
     updateFields.forEach((elem) => {
       sticker[elem] = req.body.sticker[elem];
     });
+    //update tags & sharetype if they changed
     extractAndAssignTags(sticker, req.body.sticker.message);
     assignShareType(sticker);
     await sticker.save();
-    console.log("sticker updated");
     res.send(sticker);
   } catch (err) {
     next(err);
@@ -171,10 +168,9 @@ router.delete(
   checkUser,
   async (req, res, next) => {
     try {
-      console.log("attempting delete");
       const sticker = await Sticker.findByPk(req.params.stickerId);
+      //again confirm you have the right to delete the sticker
       if (sticker.userId.toString() === req.params.userId) {
-        console.log("deleting");
         await sticker.destroy();
         res.sendStatus(204);
       } else {
