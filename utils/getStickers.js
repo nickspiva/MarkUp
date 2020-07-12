@@ -3,19 +3,24 @@ import getUser from "./getUser";
 import axios from "axios";
 import getToken from "./getToken";
 
+/*
+ * Fetch relevant stickers for a user given the url of the page they just loaded.
+ * @param {String}, url, The url of the page they just loaded.
+ * @return {Array},    , Array of stickers (friends, self, public) for the user at the url.
+ */
+
 export default async function getStickers(url) {
-  //get user from chrome storage, need to add conditional in case no user
   const user = await getUser();
   if (!user) {
     return [];
   }
+
   const token = await getToken();
   const config = {
     headers: {
       Authorization: `bearer ${token}`,
     },
   };
-  console.log("background user: ", user);
   const urlStickers = await axios.get(
     `${ngrokUrl}api/stickers/url/${encodeURIComponent(url)}/${user.id}`,
     config
@@ -28,6 +33,5 @@ export default async function getStickers(url) {
       sticker.mine = false;
     }
   });
-  console.log("url stickers mine added: ", urlStickers);
   return urlStickers;
 }

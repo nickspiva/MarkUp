@@ -45,8 +45,8 @@ const checkToken = (req, res, next) => {
   if (typeof header !== "undefined") {
     const bearer = header.split(" ");
     const token = bearer[1];
-
     req.token = token;
+    console.log("token: ", token);
     next();
   } else {
     res.sendStatus(403);
@@ -58,7 +58,9 @@ const checkUser = (req, res, next) => {
   console.log("checking user");
   jwt.verify(req.token, process.env.JWT_SECRET, (err, authorizedData) => {
     if (err) {
-      console.log("ERROR: could not connect to protected route, no token");
+      console.log(
+        "ERROR: could not connect to protected route token error issue"
+      );
       res.sendStatus(403);
     } else if (authorizedData.user.id !== parseInt(req.params.userId)) {
       console.log(authorizedData.user.id);
@@ -76,6 +78,7 @@ const checkUser = (req, res, next) => {
 //check token is for correct user based on route params
 const checkUserPost = (req, res, next) => {
   console.log("checking user post");
+  console.log("req.token: ", req.token);
   jwt.verify(req.token, process.env.JWT_SECRET, (err, authorizedData) => {
     if (err) {
       console.log("ERROR: could not connect to protected route, no token");
@@ -154,7 +157,7 @@ router.post("/", checkToken, checkUserPost, async (req, res, next) => {
 });
 
 //update an existing sticker
-router.put("/:stickerId", async (req, res, next) => {
+router.put("/:stickerId", checkToken, checkUserPost, async (req, res, next) => {
   try {
     console.log("in sticker update");
     const sticker = await Sticker.findByPk(req.params.stickerId);

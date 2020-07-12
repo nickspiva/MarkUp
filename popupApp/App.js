@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import LoginForm from "./components/loginForm";
 import UserProfile from "./components/user-profile";
 import Navbar from "./components/navbar";
@@ -6,8 +6,7 @@ import MyStickers from "./components/myStickers";
 import TaggedStickers from "./components/taggedStickers";
 import MyFriends from "./components/friends";
 import SignupForm from "./components/signup-form";
-import axios from "axios";
-const ngrokUrl = require("./components/ngrok");
+import getUser from "../utils/getUser";
 
 class App extends React.Component {
   constructor(props) {
@@ -36,7 +35,6 @@ class App extends React.Component {
   }
 
   async logout() {
-    //Removes userdata from local storage & sets local app state for user to null
     await chrome.storage.sync.remove(["markUp", "user"], function (
       response
     ) {});
@@ -46,70 +44,16 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    console.log("mounting");
-    //Checks to see if the user has already logged in recently, if so...
-    //Grabs their info from chrome storage and sets it on popup local state
+    //Check to see if user is still logged in.
+    //To be done: check if the jwt is expired, if so, don't log in.
     if (!this.state.user) {
-      console.log("no user on state, check sync storage");
-      let promise = new Promise(function (resolve, reject) {
-        chrome.storage.sync.get(["markUp", "user"], function (data) {
-          console.log("component mount data: ", data);
-          resolve(data);
-        });
-      });
-      const fulfilledPromise = await promise;
-      const token = fulfilledPromise.markUp;
-      console.log("token: ", token);
-      const userData = fulfilledPromise.user;
-      console.log("userData from sync: ", userData);
+      const userData = await getUser();
 
-      if (user) {
+      if (userData) {
         this.updateUser(userData);
         this.loggedIn();
       }
     }
-
-    //if there is a user on state, bind it to a variable
-    const user = this.state.user;
-
-    chrome.runtime.onMessage.addListener(async function (
-      req,
-      res,
-      sendResponse
-    ) {
-      console.log("in component did mount message inc");
-      console.log("user in message passing: ", user);
-      if (req.msg === "passing saved sticker to popup") {
-        const sticker = req.sticker;
-        sticker.url = req.website;
-        sticker.user = user;
-        sticker.xPos = sticker.left;
-        sticker.yPos = sticker.top;
-        console.log("comp mount req.sticker: ", req.sticker);
-        const stickerResponse = await axios.post(
-          `${ngrokUrl}api/stickers/`,
-          sticker
-        );
-        console.log("sending sticker response: ", stickerResponse);
-        // chrome.tabs.query({ active: true, currentWindow: true }, function (
-        //   tabs
-        // ) {
-        //   chrome.tabs.sendMessage(
-        //     tabs[0].id,
-        //     { msg: "sending updated sticker back", sticker: stickerResponse },
-        //     function (response) {
-        //       console.log("response received");
-        //     }
-        //   );
-        // });
-        sendResponse({
-          msg: "got info on stickers",
-          sticker: "testing empty sticker",
-        });
-        return true;
-      }
-      return true;
-    });
   }
 
   changePage(page) {

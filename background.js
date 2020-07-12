@@ -2,6 +2,7 @@ import axios from "axios";
 const ngrokUrl = require("./popupApp/components/ngrok");
 import getStickers from "./utils/getStickers";
 import getUser from "./utils/getUser";
+import getToken from "./utils/getToken";
 /* global chrome */
 //Listening for the on-load message
 chrome.extension.onConnect.addListener(function (port) {
@@ -36,13 +37,20 @@ chrome.runtime.onMessage.addListener(async function (
     if (sticker.message === "") {
       sticker.message = "empty";
     }
-
+    const token = await getToken();
+    console.log("background token for save");
+    const config = {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    };
     const stickerResponse = await axios.put(
       `${ngrokUrl}api/stickers/${sticker.id}`,
       {
         sticker,
         user,
-      }
+      },
+      config
     );
 
     console.log("update sticker response from db: ", stickerResponse);
