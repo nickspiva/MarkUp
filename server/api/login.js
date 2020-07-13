@@ -36,7 +36,7 @@ router.post("/", async (req, res, next) => {
         jwt.sign(
           { user },
           process.env.JWT_SECRET,
-          { expiresIn: "1h" },
+          { expiresIn: "1d" },
           (err, token) => {
             if (err) {
               console.log(err);

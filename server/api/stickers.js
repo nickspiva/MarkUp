@@ -4,6 +4,7 @@ const User = require("../db/user");
 const getFriendIds = require("./utils/getFriendIds");
 const pickPropsFromObj = require("./utils/pickPropsFromObj");
 const jwt = require("jsonwebtoken");
+const checkToken = require("./utils/checkToken");
 
 //**HELPER FUNCTIONS**
 
@@ -38,33 +39,30 @@ const assignShareType = (sticker) => {
   sticker.shareType = shareType;
 };
 
-//check req has token
-const checkToken = (req, res, next) => {
-  console.log("checking token: ", req.headers);
-  const header = req.headers["authorization"];
-  if (typeof header !== "undefined") {
-    const bearer = header.split(" ");
-    const token = bearer[1];
-    req.token = token;
-    console.log("token: ", token);
-    next();
-  } else {
-    res.sendStatus(403);
-  }
-};
-
 //check token is for correct user based on route params
 const checkUser = (req, res, next) => {
-  jwt.verify(req.token, process.env.JWT_SECRET, (err, authorizedData) => {
-    if (err) {
-      throw err;
-    } else if (authorizedData.user.id !== parseInt(req.params.userId)) {
-      res.status(403).send("wrong user");
-    } else {
-      //user matches
-      next();
-    }
-  });
+  try {
+    jwt.verify(req.token, process.env.JWT_SECRET, (err, authorizedData) => {
+      if (err) {
+        console.log("err: ", err.message);
+        //if token is expired communicate that back to app
+        if (err.message == "jwt expired") {
+          res.status(401);
+          res.json("token expired");
+        } else {
+          res.sendStatus(400);
+        }
+        //throw err;
+      } else if (authorizedData.user.id !== parseInt(req.params.userId)) {
+        res.status(403).send("wrong user");
+      } else {
+        //user matches
+        next();
+      }
+    });
+  } catch (err) {
+    console.log("catching error: ", err);
+  }
 };
 
 //check token is for correct user based on route params
