@@ -7,6 +7,9 @@ import TaggedStickers from "./components/taggedStickers";
 import MyFriends from "./components/friends";
 import SignupForm from "./components/signup-form";
 import getUser from "../utils/getUser";
+import getToken from "../utils/getToken";
+import ngrokUrl from "./components/ngrok";
+import axios from "axios";
 
 class App extends React.Component {
   constructor(props) {
@@ -52,6 +55,27 @@ class App extends React.Component {
       if (userData) {
         this.updateUser(userData);
         this.loggedIn();
+      }
+    }
+
+    //check to see if token has expired
+    const token = await getToken();
+    //if no token, do nothing
+    if (token !== undefined) {
+      const config = {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      };
+      //check w/ server to see if token is still valid
+      const response = await axios.get(
+        `${ngrokUrl}api/auth/tokenDateCheck`,
+        config
+      );
+      const isCurrent = response.data === "token valid" ? true : false;
+      //if the token is expired, removed user info from chrome storage and empty state
+      if (!isCurrent) {
+        await this.logout();
       }
     }
   }
