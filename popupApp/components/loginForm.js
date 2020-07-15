@@ -62,7 +62,7 @@ class LoginForm extends React.Component {
               onChange={this.handleChange}
             />
             <Form.Input
-              type="text"
+              type="password"
               label="password"
               name="password"
               value={this.state.password}
@@ -75,7 +75,7 @@ class LoginForm extends React.Component {
     } else {
       return (
         <div>
-          <h1>Logged In! {this.props.user.userName}</h1>
+          <h1>Logged in as: {this.props.user.userName}</h1>
           <Button onClick={this.props.logout}>Logout</Button>
         </div>
       );

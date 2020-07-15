@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 
-const stickerLink = (props) => {
+const stickerLinkPersonal = (props) => {
   const { sticker } = props;
   const { message, url, createdAt } = sticker;
   let shortUrl = url;
@@ -15,11 +15,14 @@ const stickerLink = (props) => {
     shortUrl = url.slice(0, 35) + "...";
   }
 
+  const correctDate = moment(createdAt);
+  const displayDate = correctDate.calendar();
+
   return (
     <div className="stickerContainer">
       <div className="stickerHeader">
         <div className="userName">
-          {sticker.user.userName}{" "}
+          Mine{" "}
           <span class="timePassed"> {moment(sticker.createdAt).fromNow()}</span>
         </div>
         <div className="spacer"></div>
@@ -27,11 +30,9 @@ const stickerLink = (props) => {
       <div className="stickerLink" onClick={() => openNewTab(url)}>
         <div>{message} </div>
       </div>
-      <div className="urlFooter" onClick={() => openNewTab(url)}>
-        {shortUrl}
-      </div>
+      <div className="urlFooter">{shortUrl}</div>
     </div>
   );
 };
 
-export default stickerLink;
+export default stickerLinkPersonal;

@@ -17,7 +17,8 @@ chrome.runtime.onMessage.addListener(async function (
   sender,
   sendResponse
 ) {
-  console.log("content script / tab recieving message");
-  console.log("request: ", request);
-  insertStickers([request.sticker.data]);
+  //if the request is one requesting to add a new sticker, then insert the stickers
+  if (request.subject === "adding new sticker") {
+    insertStickers([request.sticker.data]);
+  }
 });

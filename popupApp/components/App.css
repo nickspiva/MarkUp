@@ -1,16 +1,129 @@
 .active {
-  color: "blue";
-  background-color: darkkhaki;
+  color: white;
 }
 
 body {
-  min-width: 225px;
+  min-width: 325px;
   min-height: 150px;
-  max-width: 450px;
+  max-width: 325px;
   max-height: 450px;
   position: relative;
   vertical-align: middle;
   flex-wrap: wrap;
   flex-direction: column;
   display: flex;
+  margin: 0px;
+}
+
+#navbar {
+  background-color: #e27d60;
+  padding: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.navButton {
+  align-items: center;
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+  background-color: transparent;
+}
+
+.navButton:hover {
+  text-decoration: underline;
+}
+
+button:focus {
+  outline: none;
+}
+
+.contentArea {
+  background-color: #d8c3a5;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-top: 2px;
+}
+
+#newSticker {
+  border-width: 1px;
+  border: solid;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#newSticker:hover {
+  background-color: #e85a4f;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+}
+
+.stickerContainer {
+  padding: 5px;
+  margin: 5px;
+}
+
+.stickerHeader {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.userName {
+  background-color: #ffcd86;
+  width: fit-content;
+  border-width: 0px 0px 0px 0px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 5px 5px 0px 0px;
+  padding: 2px 5px 2px 5px;
+  font-size: larger;
+  font-weight: 600;
+}
+
+/* .spacer {
+} */
+
+.stickerLink {
+  border-radius: 0px 5px 0px 0px;
+  background: lightcyan;
+  background-color: white;
+  border-width: 0px 1px 1px 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  padding-top: 3px;
+  cursor: pointer;
+}
+
+.stickerLinkPersonal {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  background: lightcyan;
+  background-color: #d8c3a5;
+  cursor: pointer;
+}
+
+.timePassed {
+  font-size: smaller;
+  color: gray;
+}
+
+.urlFooter {
+  background-color: #81a8ec;
+  border-radius: 0px 0px 5px 5px;
+  padding: 2px 2px 2px 10px;
+  font-style: italic;
+  color: white;
+  cursor: pointer;
 }

@@ -3,6 +3,7 @@ import axios from "axios";
 import StickerLink from "./stickerLink";
 import getToken from "../../utils/getToken";
 const ngrokUrl = require("./ngrok");
+import moment from "moment";
 
 class TaggedStickers extends React.Component {
   constructor(props) {
@@ -33,11 +34,14 @@ class TaggedStickers extends React.Component {
       config
     );
 
+    console.log("atTagged: ", atTaggedResponse);
+    console.log("friends: ", friendStickerResponse);
+
     //add stickers to local state
     this.setState((prevState) => {
       return {
-        taggedStickers: atTaggedResponse.data,
-        friendStickers: friendStickerResponse.data,
+        taggedStickers: atTaggedResponse.data.reverse(),
+        friendStickers: friendStickerResponse.data.reverse(),
       };
     });
   }

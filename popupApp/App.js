@@ -23,6 +23,7 @@ class App extends React.Component {
     this.updateUser = this.updateUser.bind(this);
     this.logout = this.logout.bind(this);
     this.loggedIn = this.loggedIn.bind(this);
+    this.renderPage = this.renderPage.bind(this);
   }
 
   updateUser(user) {
@@ -47,8 +48,8 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    //Check to see if user is still logged in.
-    //To be done: check if the jwt is expired, if so, don't log in.
+    //Check to see if user is still logged in & valid, and get their data on local state,
+    //else clear their data.
     if (!this.state.user) {
       const userData = await getUser();
 
@@ -77,106 +78,69 @@ class App extends React.Component {
       if (!isCurrent) {
         await this.logout();
       }
+
+      if (isCurrent) {
+        this.changePage("feed");
+      }
     }
   }
 
+  //changes the page to a different page using component state
   changePage(page) {
     this.setState({ page: page });
   }
 
-  render() {
+  //returns as JSX element of the current page (e.g. login page v. my stickers page)
+  renderPage() {
     switch (this.state.page) {
       case "login":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <LoginForm
-              changePage={this.changePage}
-              user={this.state.user}
-              logout={this.logout}
-              updateUser={this.updateUser}
-              loggedIn={this.loggedIn}
-            />
-          </div>
+          <LoginForm
+            changePage={this.changePage}
+            user={this.state.user}
+            logout={this.logout}
+            updateUser={this.updateUser}
+            loggedIn={this.loggedIn}
+          />
         );
       case "signup":
-        return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <SignupForm changePage={this.changePage} />
-          </div>
-        );
+        return <SignupForm changePage={this.changePage} />;
       case "profile":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <UserProfile changePage={this.changePage} user={this.state.user} />
-          </div>
+          <UserProfile changePage={this.changePage} user={this.state.user} />
         );
-      case "myStickers":
+      case "my stickers":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <MyStickers changePage={this.changePage} user={this.state.user} />
-          </div>
+          <MyStickers changePage={this.changePage} user={this.state.user} />
         );
-      case "taggedStickers":
+      case "feed":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <TaggedStickers
-              changePage={this.changePage}
-              user={this.state.user}
-            />
-          </div>
+          <TaggedStickers changePage={this.changePage} user={this.state.user} />
         );
       case "friends":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <MyFriends
-              changePage={this.changePage}
-              user={this.state.user}
-              loggedIn={this.state.loggedIn}
-            />
-          </div>
+          <MyFriends
+            changePage={this.changePage}
+            user={this.state.user}
+            loggedIn={this.state.loggedIn}
+          />
         );
       default:
-        return (
-          <div>
-            <Navbar
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-              changePage={this.changePage}
-            />
-            <div>Default</div>
-          </div>
-        );
+        return <div>Default</div>;
     }
+  }
+
+  render() {
+    return (
+      <div>
+        <Navbar
+          loggedIn={this.state.loggedIn}
+          page={this.state.page}
+          changePage={this.changePage}
+        />
+        <div className="contentArea">{this.renderPage()}</div>
+      </div>
+    );
   }
 }
 export default App;

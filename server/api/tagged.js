@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Sticker = require("../db/sticker");
-const User = require("../db/user");
+const { User } = require("../db/index");
 const Sequelize = require("sequelize");
 const getFriendIds = require("./utils/getFriendIds");
 const checkToken = require("../api/utils/checkToken");
@@ -15,7 +15,6 @@ router.get(
       const userId = req.params.userId;
       const user = await User.findByPk(req.params.userId);
       const friendIds = await getFriendIds(userId);
-
       //gets all friends stickers where the user is tagged
       const taggedStickers = await Sticker.findAll({
         where: {
@@ -23,6 +22,10 @@ router.get(
           atTags: {
             [Sequelize.Op.contains]: [user.userName],
           },
+        },
+        include: {
+          model: User,
+          attributes: ["userName"],
         },
       });
       res.json(taggedStickers);

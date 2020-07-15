@@ -1,32 +1,10 @@
 import React from "react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
-import StickerLink from "./stickerLink";
+import StickerLinkPersonal from "./stickerLinkPersonal";
 import getUser from "../../utils/getUser";
 import getToken from "../../utils/getToken";
 const ngrokUrl = require("./ngrok");
-
-const getSticker = function () {
-  console.log("in popup, you clicked get sticker");
-  //get url of current tab
-  var query = { active: true, currentWindow: true };
-  let currentTab;
-  let thisTab;
-  function getTabs(tabs) {
-    thisTab = tabs[0];
-    currentTab = tabs[0].url; // there will be only one in this array
-    console.log("tabs[0", tabs[0]); // also has properties like currentTab.id
-    //to send message to current tab has to be within this query
-    chrome.storage.sync.get(currentTab, function (sticker) {
-      console.log("retrieved sticker**", sticker[currentTab]);
-      chrome.tabs.sendMessage(thisTab.id, {
-        sticker: sticker[currentTab],
-      });
-    });
-  }
-  chrome.tabs.query(query, getTabs);
-  //with just currentTab variable gets all saved info? trying brackets, brackets throw error
-};
 
 class MyStickers extends React.Component {
   constructor(props) {
@@ -37,10 +15,16 @@ class MyStickers extends React.Component {
     this.addSticker = this.addSticker.bind(this);
   }
 
+  //adds a default sticker to the webpage
   async addSticker() {
+    //sets up the query to fetch the current url
     const query = { active: true, currentWindow: true };
+
+    //sets up the callback function to process result of the query,
+    //aka build the sticker
     const returnUrl = async (tabs) => {
       const currentTab = tabs[0];
+      //build a basic sticker with the url and user set
       const defaultSticker = {
         message: "default sticker",
         height: "200px",
@@ -50,23 +34,22 @@ class MyStickers extends React.Component {
         url: currentTab.url,
         user: this.props.user,
       };
+      //fetches the user's token
       const token = await getToken();
-      console.log("token: ", token);
-      console.log("sticker: ", defaultSticker);
-      console.log("user: ", this.props.user);
       const config = {
         headers: {
           Authorization: `bearer ${token}`,
         },
       };
+      //sends the default sticker to the database (to get the id)
       const dbSticker = await axios.post(
         `${ngrokUrl}api/stickers/`,
         defaultSticker,
         config
       );
+      //set's it as belonging to the user
       dbSticker.data.mine = true;
-      console.log("db sticker: ", dbSticker);
-      console.log("default sticker: ", defaultSticker);
+      //sends message to the content script for processing the new sticker
       chrome.tabs.sendMessage(currentTab.id, {
         subject: "adding new sticker",
         sticker: dbSticker,
@@ -74,22 +57,20 @@ class MyStickers extends React.Component {
     };
 
     chrome.tabs.query(query, returnUrl);
-
-    //create new sticker in db
-
-    //send message with new sticker to content script
   }
 
   async componentDidMount() {
+    //gets userId, and token
     const { id } = this.props.user;
-    console.log("this.props.user: ", this.props.user);
     const token = await getToken();
     const config = {
       headers: {
         Authorization: `bearer ${token}`,
       },
     };
+    //sends request to server for all this user's stickers
     let response = await axios.get(`${ngrokUrl}api/stickers/${id}`, config);
+    //updates state with stickers from server
     this.setState((prevState) => {
       return { stickers: response.data };
     });
@@ -98,16 +79,21 @@ class MyStickers extends React.Component {
   render() {
     return (
       <div>
-        <h2>My Stickers</h2>
-        <Button onClick={this.addSticker}>Add Sticker</Button>
-        <Button onClick={getSticker}>Get Sticker</Button>
+        <div id="header">
+          <h2>My Stickers</h2>
+          <h2 id="newSticker" onClick={this.addSticker}>
+            + New Sticker
+          </h2>
+        </div>
+        {/* if there are stickers render them */}
         {this.state.stickers.length ? (
           <div>
-            {this.state.stickers.map((sticker) => (
-              <StickerLink sticker={sticker} key={sticker.id} />
+            {this.state.stickers.reverse().map((sticker) => (
+              <StickerLinkPersonal sticker={sticker} key={sticker.id} />
             ))}
           </div>
         ) : (
+          // if not, display a message indicating no sticker
           <div>No Stickers</div>
         )}
       </div>

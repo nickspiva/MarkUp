@@ -10,32 +10,23 @@
     "tabs",
     "identity"
   ],
-  "oauth2": {
-    "client_id": "1056316355417-v165qua3831g8bfif7k5l3ci0vgqn6qr.apps.googleusercontent.com",
-    "scopes": [
-      "https://www.googleapis.com/auth/contacts.readonly",
-      "https://www.googleapis.com/auth/userinfo.email"
-    ]
-  },
   "version": "0.0.0.1",
   "background": {
     "scripts": ["bundledBackground.js"],
     "persistent": false
   },
   "icons": {
-    "16": "images/get_started16.png",
-    "32": "images/get_started32.png",
-    "48": "images/get_started48.png",
-    "128": "images/get_started128.png"
+    "16": "images/mark_up16.png",
+    "48": "images/mark_up48.png",
+    "128": "images/mark_up128.png"
   },
   "manifest_version": 2,
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "images/get_started16.png",
-      "32": "images/get_started32.png",
-      "48": "images/get_started48.png",
-      "128": "images/get_started128.png"
+      "16": "images/mark_up16.png",
+      "48": "images/mark_up48.png",
+      "128": "images/mark_up128.png"
     }
   },
   "content_scripts": [
