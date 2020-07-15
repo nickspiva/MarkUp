@@ -49,6 +49,8 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    console.log("ngrokURL: ", ngrokUrl);
+
     if (!this.props.user) {
       return (
         <React.Fragment>
