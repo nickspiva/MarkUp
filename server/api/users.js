@@ -2,7 +2,7 @@ const router = require("express").Router();
 const User = require("../db/user");
 const Sequelize = require("sequelize");
 const pickPropsFromObj = require("./utils/pickPropsFromObj");
-const bcrypt = require("bcrypt");
+const bcrypt = require("../bcryptExport").bcrypt;
 const saltRounds = 10;
 
 //get all users; GET /users
