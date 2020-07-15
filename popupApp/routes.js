@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 //import { me } from "./store";
 const LoginForm = require("./components/loginForm");
 // const AuthStuff = require("./components/auth-form");

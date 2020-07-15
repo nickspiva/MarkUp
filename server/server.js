@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const compression = require("compression");
 const { db } = require("./db/index");
 const session = require("express-session");
-const passport = require("passport");
+// const passport = require("passport");
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require("constants");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const sessionStore = new SequelizeStore({ db });
@@ -15,15 +15,15 @@ const PORT = 1337;
 const app = express();
 
 //passport setup
-passport.serializeUser((user, done) => done(null, user.id));
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await db.models.user.findByPk(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
+// passport.serializeUser((user, done) => done(null, user.id));
+// passport.deserializeUser(async (id, done) => {
+//   try {
+//     const user = await db.models.user.findByPk(id);
+//     done(null, user);
+//   } catch (err) {
+//     done(err);
+//   }
+// });
 
 const createApp = () => {
   //middleware setup
