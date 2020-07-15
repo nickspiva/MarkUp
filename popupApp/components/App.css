@@ -45,6 +45,7 @@ button:focus {
   padding-right: 10px;
   padding-bottom: 10px;
   padding-top: 2px;
+  min-height: 150px;
 }
 
 #newSticker {
