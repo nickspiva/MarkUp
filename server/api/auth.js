@@ -3,6 +3,7 @@ const User = require("../db/user");
 const jwt = require("jsonwebtoken");
 const checkUser = require("./utils/checkUser");
 const checkToken = require("./utils/checkToken");
+require("dotenv").config();
 
 router.get("/tokenDateCheck", checkToken, async (req, res, next) => {
   try {

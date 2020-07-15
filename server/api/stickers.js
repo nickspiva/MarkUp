@@ -6,6 +6,7 @@ const pickPropsFromObj = require("./utils/pickPropsFromObj");
 const jwt = require("jsonwebtoken");
 const checkToken = require("./utils/checkToken");
 const checkUser = require("./utils/checkUser");
+require("dotenv").config();
 
 //**HELPER FUNCTIONS**
 

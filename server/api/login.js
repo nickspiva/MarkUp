@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../db/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 /*
  * Handles users attempting to log in w/ encryption and jwt creation.

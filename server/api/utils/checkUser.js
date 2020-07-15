@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 //check token is for correct user based on route params
 const checkUser = (req, res, next) => {
   try {

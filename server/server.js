@@ -9,7 +9,7 @@ const passport = require("passport");
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require("constants");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const sessionStore = new SequelizeStore({ db });
-if (process.env.NODE_ENV !== "production") require("../secrets");
+// if (process.env.NODE_ENV !== "production") require("../secrets");
 const PORT = 1337;
 
 const app = express();
@@ -32,18 +32,6 @@ const createApp = () => {
   app.use(express.static(path.join(__dirname, "./static.html")));
   app.use(bodyParser.json()); //body-parsing
   app.use(compression()); //compression middleware
-
-  //session middleware w/ passport
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET || "markup markdown test sup",
-      store: sessionStore,
-      resave: false,
-      saveUninitialized: false,
-    })
-  );
-  app.use(passport.initialize());
-  app.use(passport.session());
 
   app.use("/api", require("./api"));
 
@@ -71,7 +59,7 @@ const startListening = () => {
 };
 
 async function bootApp() {
-  await sessionStore.sync();
+  // await sessionStore.sync();
   await syncDb();
   await createApp();
   await startListening();

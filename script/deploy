@@ -38,6 +38,8 @@ git checkout -b deploy
 # "force" add the otherwise gitignored build files
 git add -f node_modules bundledContentScripts.js
 
+NODE_ENV='production'
+
 # create a commit, even if nothing changed
 git commit --allow-empty -m 'Deploying'
 

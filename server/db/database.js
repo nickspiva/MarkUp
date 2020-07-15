@@ -5,6 +5,7 @@
 // const chalk = require("chalk");
 const Sequelize = require("sequelize");
 const pkg = require("../../package.json");
+require("dotenv").config();
 
 // We'll need to reset the database many times while we're testing, and
 // it'd be a major bummer if we lost all of the data that we made while
@@ -16,12 +17,14 @@ const pkg = require("../../package.json");
 const dbName = pkg.name + (process.env.NODE_ENV === "test" ? "-test" : "");
 console.log(`Opening database connection to ${dbName}`);
 
-const db = new Sequelize(
-  process.env.DATABASE_URL || `postgres://localhost:5432/${dbName}`,
-  {
-    logging: false,
-  }
-);
+const dbURL =
+  process.env.NODE_ENV === "production"
+    ? process.env.DATABASE_URL
+    : `postgres://localhost:5432/${dbName}`;
+
+const db = new Sequelize(dbURL, {
+  logging: false,
+});
 
 if (process.env.NODE_ENV === "test") {
   after("close database connection", () => db.close());
