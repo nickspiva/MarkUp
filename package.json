@@ -9,7 +9,7 @@
     "rebundle-background": "npx webpack --config webpack.config.background.js",
     "bundleAll": "script/bundleAll",
     "start-server": "nodemon server/server.js -e html,js,css --ignore public",
-    "start": "node server -e html,js,css --ignore public",
+    "start": "NODE_ENV='production' node server/server.js -e html,js,css --ignore public",
     "seed": "node seed.js",
     "deploy": "script/deploy",
     "stage": "script/stage",
@@ -17,7 +17,7 @@
     "lint-fix": "npm run lint -- --fix",
     "test": "mocha tests/basic.spec.js",
     "start-dev": "NODE_ENV='development' npm run start-server",
-    "start-production": "NODE_ENV='production' npm run start-server"
+    "start-production": "NODE_ENV='production' node server/server.js -e html,js,css --ignore public"
   },
   "repository": {
     "type": "git",
@@ -45,7 +45,7 @@
     "eslint-plugin-react": "^7.19.0",
     "prettier": "^2.0.2",
     "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "axios": "^0.19.2",
