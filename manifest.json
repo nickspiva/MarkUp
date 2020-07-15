@@ -1,11 +1,14 @@
 {
   "name": "MarkUp Extension",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkPEiefNAOkJjXJ00qhJjmCSupSBFF3dtEoJUXiLd+QPzUsl29Vw5Zi9SBfOQ+R2r3HFwjprG66gjGbjzt4XstOkUh9whV6zXkqVdB8FKZbyLHVxn0jDwxy23lxIDBa5i2PqO4UU+sp+OIfUyxlHBNUzlyx0C2gHFNKjjmJy+MKhlnZdpKCk25KWisPg6JMBC2UHIHKwO1g8To2mSlC2QMDYyhGLloUaWT4zGlVZZtxNv5ZsoIdkmsbUI7ad0iCb3ozjtw5ljGBN83b4+FGEBHDZyosFV8of8VLbUbD9IsJYeLNTusz5IGlprg9erEVJ7iLy5iKdJWKUbOZMrPav0tQIDAQAB",
   "description": "Base Level Extension",
   "permissions": [
     "http://localhost/*",
     "https://markup-extension.herokuapp.com/*",
+    "https://d735b5635bef.ngrok.io/*",
     "storage",
-    "tabs"
+    "tabs",
+    "identity"
   ],
   "version": "0.0.0.1",
   "background": {
@@ -13,19 +16,17 @@
     "persistent": false
   },
   "icons": {
-    "16": "images/get_started16.png",
-    "32": "images/get_started32.png",
-    "48": "images/get_started48.png",
-    "128": "images/get_started128.png"
+    "16": "images/mark_up16.png",
+    "48": "images/mark_up48.png",
+    "128": "images/mark_up128.png"
   },
   "manifest_version": 2,
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "images/get_started16.png",
-      "32": "images/get_started32.png",
-      "48": "images/get_started48.png",
-      "128": "images/get_started128.png"
+      "16": "images/mark_up16.png",
+      "48": "images/mark_up48.png",
+      "128": "images/mark_up128.png"
     }
   },
   "content_scripts": [

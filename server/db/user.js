@@ -12,6 +12,18 @@ const User = db.define("user", {
     allowNull: false,
     validate: { notEmpty: true },
   },
+  imageUrl: {
+    type: Sequelize.STRING,
+    validate: {
+      isUrl: true,
+    },
+  },
+  email: {
+    type: Sequelize.STRING,
+    validate: {
+      isEmail: true,
+    },
+  },
 });
 
 module.exports = User;

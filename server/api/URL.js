@@ -3,9 +3,15 @@ const User = require("../db/user");
 const Sticker = require("../db/sticker");
 const { Op } = require("sequelize");
 const getFriendIds = require("./utils/getFriendIds");
+const checkUser = require("./utils/checkUser");
+const checkToken = require("./utils/checkToken");
 
 //get all relevant stickers for this user at this url
-router.get("/:url/:userId", async function (req, res, next) {
+router.get("/:url/:userId", checkToken, checkUser, async function (
+  req,
+  res,
+  next
+) {
   try {
     const decodedUrl = decodeURIComponent(req.params.url);
     const userId = req.params.userId;

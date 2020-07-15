@@ -23,12 +23,18 @@ class LoginForm extends React.Component {
       password: this.state.password,
     });
     if (response.data) {
+      console.log("response: ", response.data);
       //store user info in chrome storage
-      await chrome.storage.sync.set({ user: response.data }, function () {});
+      await chrome.storage.sync.set(
+        { markUp: response.data.token, user: response.data.user },
+        function () {
+          console.log("value is set to: ", response.data.token);
+        }
+      );
       //add logged in status to app state
       this.props.loggedIn();
       //add user to app state
-      await this.props.updateUser(response.data);
+      await this.props.updateUser(response.data.user);
       //clear form
       this.setState((prevState) => {
         return { userName: "", password: "" };
@@ -56,7 +62,7 @@ class LoginForm extends React.Component {
               onChange={this.handleChange}
             />
             <Form.Input
-              type="text"
+              type="password"
               label="password"
               name="password"
               value={this.state.password}
@@ -69,7 +75,7 @@ class LoginForm extends React.Component {
     } else {
       return (
         <div>
-          <h1>Logged In! {this.props.user.userName}</h1>
+          <h1>Logged in as: {this.props.user.userName}</h1>
           <Button onClick={this.props.logout}>Logout</Button>
         </div>
       );

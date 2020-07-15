@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import LoginForm from "./components/loginForm";
 import UserProfile from "./components/user-profile";
 import Navbar from "./components/navbar";
@@ -6,8 +6,10 @@ import MyStickers from "./components/myStickers";
 import TaggedStickers from "./components/taggedStickers";
 import MyFriends from "./components/friends";
 import SignupForm from "./components/signup-form";
+import getUser from "../utils/getUser";
+import getToken from "../utils/getToken";
+import ngrokUrl from "./components/ngrok";
 import axios from "axios";
-const ngrokUrl = require("./components/ngrok");
 
 class App extends React.Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class App extends React.Component {
     this.updateUser = this.updateUser.bind(this);
     this.logout = this.logout.bind(this);
     this.loggedIn = this.loggedIn.bind(this);
+    this.renderPage = this.renderPage.bind(this);
   }
 
   updateUser(user) {
@@ -36,168 +39,108 @@ class App extends React.Component {
   }
 
   async logout() {
-    //Removes userdata from local storage & sets local app state for user to null
-    await chrome.storage.sync.remove("user", function (response) {});
+    await chrome.storage.sync.remove(["markUp", "user"], function (
+      response
+    ) {});
     this.setState((state) => {
       return { page: "login", user: null, loggedIn: false };
     });
   }
 
   async componentDidMount() {
-    //Checks to see if the user has already logged in recently, if so...
-    //Grabs their info from chrome storage and sets it on popup local state
+    //Check to see if user is still logged in & valid, and get their data on local state,
+    //else clear their data.
     if (!this.state.user) {
-      let promise = new Promise(function (resolve, reject) {
-        chrome.storage.sync.get("user", function (user) {
-          resolve(user);
-        });
-      });
-      const { user } = await promise;
-      if (user) {
-        this.updateUser(user);
+      const userData = await getUser();
+
+      if (userData) {
+        this.updateUser(userData);
         this.loggedIn();
       }
     }
 
-    const user = this.state.user;
-
-    chrome.runtime.onMessage.addListener(async function (
-      req,
-      res,
-      sendResponse
-    ) {
-      console.log("in component did mount message inc");
-      console.log("user: ", user);
-      if (req.msg === "passing saved sticker to popup") {
-        const sticker = req.sticker;
-        sticker.url = req.website;
-        sticker.user = user;
-        sticker.xPos = sticker.left;
-        sticker.yPos = sticker.top;
-        console.log("comp mount req.sticker: ", req.sticker);
-        const stickerResponse = await axios.post(
-          `${ngrokUrl}api/stickers/`,
-          sticker
-        );
-        console.log("sending sticker response: ", stickerResponse);
-        // chrome.tabs.query({ active: true, currentWindow: true }, function (
-        //   tabs
-        // ) {
-        //   chrome.tabs.sendMessage(
-        //     tabs[0].id,
-        //     { msg: "sending updated sticker back", sticker: stickerResponse },
-        //     function (response) {
-        //       console.log("response received");
-        //     }
-        //   );
-        // });
-        sendResponse({
-          msg: "got info on stickers",
-          sticker: "testing empty sticker",
-        });
-        return true;
+    //check to see if token has expired
+    const token = await getToken();
+    //if no token, do nothing
+    if (token !== undefined) {
+      const config = {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      };
+      //check w/ server to see if token is still valid
+      const response = await axios.get(
+        `${ngrokUrl}api/auth/tokenDateCheck`,
+        config
+      );
+      const isCurrent = response.data === "token valid" ? true : false;
+      //if the token is expired, removed user info from chrome storage and empty state
+      if (!isCurrent) {
+        await this.logout();
       }
-      return true;
-    });
+
+      if (isCurrent) {
+        this.changePage("feed");
+      }
+    }
   }
 
+  //changes the page to a different page using component state
   changePage(page) {
     this.setState({ page: page });
   }
 
-  render() {
+  //returns as JSX element of the current page (e.g. login page v. my stickers page)
+  renderPage() {
     switch (this.state.page) {
       case "login":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <LoginForm
-              changePage={this.changePage}
-              user={this.state.user}
-              logout={this.logout}
-              updateUser={this.updateUser}
-              loggedIn={this.loggedIn}
-            />
-          </div>
+          <LoginForm
+            changePage={this.changePage}
+            user={this.state.user}
+            logout={this.logout}
+            updateUser={this.updateUser}
+            loggedIn={this.loggedIn}
+          />
         );
       case "signup":
-        return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <SignupForm changePage={this.changePage} />
-          </div>
-        );
+        return <SignupForm changePage={this.changePage} />;
       case "profile":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <UserProfile changePage={this.changePage} user={this.state.user} />
-          </div>
+          <UserProfile changePage={this.changePage} user={this.state.user} />
         );
-      case "myStickers":
+      case "my stickers":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <MyStickers changePage={this.changePage} user={this.state.user} />
-          </div>
+          <MyStickers changePage={this.changePage} user={this.state.user} />
         );
-      case "taggedStickers":
+      case "feed":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <TaggedStickers
-              changePage={this.changePage}
-              user={this.state.user}
-            />
-          </div>
+          <TaggedStickers changePage={this.changePage} user={this.state.user} />
         );
       case "friends":
         return (
-          <div>
-            <Navbar
-              changePage={this.changePage}
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-            />
-            <MyFriends
-              changePage={this.changePage}
-              user={this.state.user}
-              loggedIn={this.state.loggedIn}
-            />
-          </div>
+          <MyFriends
+            changePage={this.changePage}
+            user={this.state.user}
+            loggedIn={this.state.loggedIn}
+          />
         );
       default:
-        return (
-          <div>
-            <Navbar
-              loggedIn={this.state.loggedIn}
-              page={this.state.page}
-              changePage={this.changePage}
-            />
-            <div>Default</div>
-          </div>
-        );
+        return <div>Default</div>;
     }
+  }
+
+  render() {
+    return (
+      <div>
+        <Navbar
+          loggedIn={this.state.loggedIn}
+          page={this.state.page}
+          changePage={this.changePage}
+        />
+        <div className="contentArea">{this.renderPage()}</div>
+      </div>
+    );
   }
 }
 export default App;

@@ -13,7 +13,7 @@ const pkg = require("../../package.json");
 // Otherwise, the app connects with the normal database.
 
 //Currently have it set to test DB
-const dbName = `${pkg.name}-test`;
+const dbName = pkg.name + (process.env.NODE_ENV === "test" ? "-test" : "");
 console.log(`Opening database connection to ${dbName}`);
 
 const db = new Sequelize(
@@ -22,5 +22,9 @@ const db = new Sequelize(
     logging: false,
   }
 );
+
+if (process.env.NODE_ENV === "test") {
+  after("close database connection", () => db.close());
+}
 
 module.exports = db;
