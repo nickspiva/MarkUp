@@ -21,11 +21,14 @@ router.post("/", async (req, res, next) => {
     //compare the encrypted db password with the submitted password
     bcrypt.compare(password, user.password, function (err, result) {
       if (err) {
+        console.log("in bcrypt compare some error");
         throw err;
       }
       if (!result) {
+        console.log("in bcrypt compare wrong password");
         res.json("wrong password");
       } else {
+        console.log("in bcrypt compare correct password");
         //build the response object with only basic safe to send user info
         const response = {
           user: {

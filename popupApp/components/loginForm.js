@@ -22,7 +22,8 @@ class LoginForm extends React.Component {
       userName: this.state.userName,
       password: this.state.password,
     });
-    if (response.data) {
+    console.log("response: ", response);
+    if (response.data && response.data !== "wrong password") {
       console.log("response: ", response.data);
       //store user info in chrome storage
       await chrome.storage.sync.set(
@@ -49,7 +50,7 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    console.log("ngrokURL: ", ngrokUrl);
+    // console.log("ngrokURL: ", ngrokUrl);
 
     if (!this.props.user) {
       return (
