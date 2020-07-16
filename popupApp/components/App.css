@@ -1,7 +1,3 @@
-.active {
-  color: white;
-}
-
 body {
   min-width: 325px;
   min-height: 150px;
@@ -16,7 +12,7 @@ body {
 }
 
 #navbar {
-  background-color: #e27d60;
+  background-color: #353535;
   padding: 8px;
   display: flex;
   flex-direction: row;
@@ -29,9 +25,15 @@ body {
   margin: 0px;
   border-width: 0px;
   background-color: transparent;
+  color: #6999c3;
 }
 
 .navButton:hover {
+  text-decoration: underline;
+}
+
+.active {
+  color: white;
   text-decoration: underline;
 }
 
@@ -39,8 +41,12 @@ button:focus {
   outline: none;
 }
 
+input:focus {
+  outline: none;
+}
+
 .contentArea {
-  background-color: #d8c3a5;
+  background-color: #18181b;
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
@@ -55,6 +61,14 @@ button:focus {
   padding: 3px;
 }
 
+.newSticker {
+  border-width: 1px;
+  border: solid;
+  border-radius: 5px;
+  padding: 3px;
+  border-color: grey;
+}
+
 #header {
   display: flex;
   justify-content: space-between;
@@ -62,6 +76,13 @@ button:focus {
 }
 
 #newSticker:hover {
+  background-color: #e85a4f;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+}
+
+.newSticker:hover {
   background-color: #e85a4f;
   color: #eae7dc;
   border-color: slategrey;
@@ -80,30 +101,48 @@ button:focus {
 }
 
 .userName {
+  background-color: #353535;
+  color: #d5d6d0;
+  width: fit-content;
+  border-width: 0px 0px 0px 0px;
+  border-style: solid;
+  border-radius: 5px 5px 0px 0px;
+  padding: 2px 5px 2px 5px;
+  font-size: larger;
+  font-weight: 600;
+  border-bottom: dashed 1px;
+  border-color: #776f6f;
+}
+
+input {
+  background-color: lightgrey;
+}
+
+/* .friendName {
   background-color: #ffcd86;
   width: fit-content;
   border-width: 0px 0px 0px 0px;
   border-style: solid;
   border-color: black;
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 5px;
   padding: 2px 5px 2px 5px;
   font-size: larger;
   font-weight: 600;
-}
+} */
 
 /* .spacer {
 } */
 
 .stickerLink {
   border-radius: 0px 5px 0px 0px;
-  background: lightcyan;
-  background-color: white;
+  background-color: #353535;
   border-width: 0px 1px 1px 1px;
   padding-left: 5px;
   padding-right: 5px;
   padding-bottom: 5px;
   padding-top: 3px;
   cursor: pointer;
+  color: #d67e21;
 }
 
 .stickerLinkPersonal {
@@ -117,14 +156,183 @@ button:focus {
 
 .timePassed {
   font-size: smaller;
-  color: gray;
+  color: #9c8a8a;
+}
+
+h1,
+h2,
+h3 {
+  color: #6999c3;
 }
 
 .urlFooter {
-  background-color: #81a8ec;
+  background-color: #353535;
   border-radius: 0px 0px 5px 5px;
-  padding: 2px 2px 2px 10px;
+  padding: 2px 2px 6px 10px;
   font-style: italic;
-  color: white;
+  color: #9e58d2;
   cursor: pointer;
+  border-top: dashed 1px;
+  border-color: #776f6f;
+}
+
+.searchForm {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  /* padding: 0px 10px; */
+  background-color: #353535;
+  padding: 10px 0px 10px 0px;
+  border-radius: 5px;
+}
+
+.searchLabel {
+  background-color: #353535;
+  border-radius: 5px 5px 5px 5px;
+  padding: 5px;
+  font-style: italic;
+  color: #6999c3;
+}
+
+.checkBoxOption {
+  display: flex;
+  align-items: center;
+  background-color: #353535;
+  width: fit-content;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: larger;
+  margin: 5px;
+  color: #81a8ec;
+}
+
+.profileOptions {
+  display: flex;
+  flex-direction: column;
+}
+
+.userInfoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 20px;
+  background: #353535;
+  margin: 10px 0px;
+  border-radius: 5px;
+  font-size: larger;
+  color: #81a8ec;
+}
+
+.activeEditWrapper {
+  background-color: #81a8ec;
+  padding: 10px;
+  border-radius: 5px;
+  border: solid;
+  display: flex;
+  flex-direction: column;
+  border-color: grey;
+}
+
+.editField {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  padding: 5px 0px;
+}
+
+.editHeader {
+  font-size: larger;
+  font-weight: 700;
+  background-color: lightgrey;
+  width: fit-content;
+  padding: 5px;
+  border-radius: 5px;
+  color: black;
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+.editFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0px 0px 0px;
+}
+
+.updateButton {
+  border-width: 1px;
+  border: solid;
+  border-color: gray;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.updateButton:hover {
+  background-color: seagreen;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+}
+
+.cancelButton {
+  border-width: 1px;
+  border: solid;
+  border-color: grey;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.cancelButton:hover {
+  background-color: #e85a4f;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+}
+
+.searchInput {
+  background-color: #516971;
+  border: 1px dashed gray;
+  padding: 2px;
+  color: white;
+}
+
+.friendName {
+  background-color: #353535;
+  color: #d5d6d0;
+  width: fit-content;
+  border-width: 0px 0px 0px 0px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 2px 5px 2px 5px;
+  font-size: larger;
+  font-weight: 600;
+  border: dashed 1px;
+  border-color: #776f6f;
+}
+
+.lilPad {
+  padding: 8px;
+}
+
+.touchOGray {
+  color: grey;
+}
+
+.botPad {
+  padding-bottom: 8px;
+}
+
+.signUp {
+  border-width: 1px;
+  border: solid;
+  border-radius: 5px;
+  padding: 3px;
+  border-color: grey;
+  width: fit-content;
+  margin-top: 10px;
+}
+
+.sadText {
+  color: white;
 }

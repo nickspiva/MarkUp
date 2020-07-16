@@ -81,17 +81,20 @@ class Friends extends React.Component {
     return (
       <div>
         <div>
-          <h2>Search for Friend</h2>
+          <h2>Search for Friends</h2>
           <React.Fragment>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit} className="searchForm">
               <Form.Input
                 type="text"
                 label="Friend's Name?"
+                className="searchLabel"
                 name="friendName"
                 value={this.state.friendName}
                 onChange={this.handleChange}
               />
-              <Form.Input type="submit" value="Search" />
+              <Button type="submit" value="Search" className="newSticker">
+                Search
+              </Button>
             </Form>
           </React.Fragment>
         </div>
@@ -102,7 +105,7 @@ class Friends extends React.Component {
           addFriend={this.addFriend}
         />
         <div className="friendList">
-          <h2>Friends!</h2>
+          <h2>Your Friends!</h2>
           {this.state.friends.length ? (
             <ul>
               {/* Add in delete icon next to each friend */}
@@ -117,18 +120,19 @@ class Friends extends React.Component {
                       margin: "5px",
                     }}
                   >
-                    <div>{`${friend.userName}`} </div>
+                    <div className="friendName">{`${friend.userName}`} </div>
                     <Button
                       onClick={() => this.deleteFriend(userId, friend.id)}
+                      className="newSticker"
                     >
-                      - del
+                      Remove Friend
                     </Button>
                   </li>
                 );
               })}
             </ul>
           ) : (
-            <div>No friends</div>
+            <div className="sadText">No friends</div>
           )}
         </div>
       </div>

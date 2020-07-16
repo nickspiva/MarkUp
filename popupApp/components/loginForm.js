@@ -50,36 +50,52 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    // console.log("ngrokURL: ", ngrokUrl);
-
+    let isDisabled = false;
+    if (!this.state.userName.length || !this.state.password.length) {
+      isDisabled = true;
+    }
     if (!this.props.user) {
       return (
-        <React.Fragment>
-          <h3>Log-in</h3>
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Input
+        <div className="profileOptions lilPad">
+          <h3>Log-In</h3>
+          <div className="botPad">
+            <div className="touchOGray">username</div>
+            <input
               type="text"
               label="username"
               name="userName"
+              className="searchLabel"
               value={this.state.userName}
               onChange={this.handleChange}
-            />
-            <Form.Input
+            ></input>
+          </div>
+          <div className="botPad">
+            <div className="touchOGray">password</div>
+            <input
               type="password"
               label="password"
               name="password"
+              className="searchLabel"
               value={this.state.password}
               onChange={this.handleChange}
-            />
-            <Form.Input type="submit" value="Submit" />
-          </Form>
-        </React.Fragment>
+            ></input>
+          </div>
+          <button
+            onClick={this.handleSubmit}
+            className="signUp"
+            disabled={isDisabled}
+          >
+            Log-In!
+          </button>
+        </div>
       );
     } else {
       return (
         <div>
           <h1>Logged in as: {this.props.user.userName}</h1>
-          <Button onClick={this.props.logout}>Logout</Button>
+          <Button onClick={this.props.logout} className="updateButton">
+            Logout
+          </Button>
         </div>
       );
     }

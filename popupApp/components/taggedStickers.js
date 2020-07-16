@@ -57,7 +57,7 @@ class TaggedStickers extends React.Component {
             ))}
           </div>
         ) : (
-          <div>No Stickers</div>
+          <div className="sadText">No Stickers</div>
         )}
         <h2>Friends' Stickers</h2>
         {this.state.friendStickers.length ? (
@@ -67,7 +67,7 @@ class TaggedStickers extends React.Component {
             ))}
           </div>
         ) : (
-          <div>No Stickers</div>
+          <div className="sadText">No Stickers</div>
         )}
       </div>
     );

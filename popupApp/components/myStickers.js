@@ -94,7 +94,7 @@ class MyStickers extends React.Component {
           </div>
         ) : (
           // if not, display a message indicating no sticker
-          <div>No Stickers</div>
+          <div className="sadText">No Stickers</div>
         )}
       </div>
     );

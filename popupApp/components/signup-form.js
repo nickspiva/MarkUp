@@ -9,6 +9,7 @@ class SignupForm extends React.Component {
     this.state = {
       userName: "",
       password: "",
+      email: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -30,29 +31,58 @@ class SignupForm extends React.Component {
   }
 
   render() {
+    let isDisabled = false;
+    if (
+      !this.state.userName.length ||
+      !this.state.password.length ||
+      !this.state.email.length
+    ) {
+      isDisabled = true;
+    }
     return (
-      <React.Fragment>
-        {/* <Button onClick={this.addSticker}>Add Sticker</Button>
-        <Button onClick={this.getSticker}>Get Sticker</Button> */}
+      <div className="profileOptions lilPad">
         <h3>Sign-Up</h3>
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Input
+        <div className="botPad">
+          <div className="touchOGray">email</div>
+          <input
+            type="text"
+            label="email"
+            name="email"
+            className="searchLabel"
+            value={this.state.email}
+            onChange={this.handleChange}
+          ></input>
+        </div>
+        <div className="botPad">
+          <div className="touchOGray">username</div>
+          <input
             type="text"
             label="username"
             name="userName"
+            className="searchLabel"
             value={this.state.userName}
             onChange={this.handleChange}
-          />
-          <Form.Input
-            type="text"
+          ></input>
+        </div>
+        <div className="botPad">
+          <div className="touchOGray">password</div>
+          <input
+            type="password"
             label="password"
             name="password"
+            className="searchLabel"
             value={this.state.password}
             onChange={this.handleChange}
-          />
-          <Button type="submit">Submit</Button>
-        </Form>
-      </React.Fragment>
+          ></input>
+        </div>
+        <button
+          onClick={this.handleSubmit}
+          className="signUp"
+          disabled={isDisabled}
+        >
+          Sign-Up!
+        </button>
+      </div>
     );
   }
 }

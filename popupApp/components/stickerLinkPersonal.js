@@ -22,7 +22,6 @@ const stickerLinkPersonal = (props) => {
     <div className="stickerContainer">
       <div className="stickerHeader">
         <div className="userName">
-          Mine{" "}
           <span class="timePassed"> {moment(sticker.createdAt).fromNow()}</span>
         </div>
         <div className="spacer"></div>

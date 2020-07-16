@@ -22,13 +22,18 @@ const SearchResults = (props) => {
                 margin: "5px",
               }}
             >
-              <div>{`${elem.userName}  `} </div>
-              <Button onClick={() => addFriend(userId, elem.id)}>+ add</Button>
+              <div className="friendName">{`${elem.userName}  `} </div>
+              <Button
+                className="updateButton"
+                onClick={() => addFriend(userId, elem.id)}
+              >
+                Add Friend
+              </Button>
             </li>
           ))}
         </ul>
       ) : (
-        <div>No friends found</div>
+        <div style={{ color: "white" }}>No friends found</div>
       )}
     </div>
   );

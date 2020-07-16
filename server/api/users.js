@@ -4,6 +4,38 @@ const Sequelize = require("sequelize");
 const pickPropsFromObj = require("./utils/pickPropsFromObj");
 const bcrypt = require("../bcryptExport").bcrypt;
 const saltRounds = 10;
+const checkToken = require("./utils/checkToken");
+
+const confirmUserInfo = async (req, res, next) => {
+  console.log("confirm user info");
+  try {
+    const { userName, password } = req.body;
+    const user = await User.findOne({
+      where: {
+        userName: userName,
+      },
+    });
+    bcrypt.compare(password, user.password, function (err, result) {
+      if (err) {
+        console.log("in bcrypt compare some error");
+        throw err;
+      }
+      if (!result) {
+        console.log("in bcrypt compare wrong password");
+        res.json("wrong password");
+      } else {
+        console.log("in bcrypt compare correct password");
+        //build the response object with only basic safe to send user info
+
+        //attach user and pass to next
+        req.body.user = user;
+        next();
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 //get all users; GET /users
 router.get("/", function (req, res, next) {
@@ -26,23 +58,33 @@ router.post("/friendSearch", async function (req, res, next) {
 });
 
 //update userinfo
-router.put("/", async (req, res, next) => {
+router.put("/", confirmUserInfo, async (req, res, next) => {
   try {
     console.log("in backend update user");
     const userData = pickPropsFromObj(
-      ["userName", "password", "userId"],
+      ["updateField", "newFieldContent"],
       req.body
     );
-    const user = await User.findByPk(userData.userId);
-    if (userData.userName) {
-      user.userName = userData.userName;
+    console.log("userData:", userData);
+    console.log("req: ", req.body);
+
+    if (userData.updateField === "password") {
+      bcrypt.hash(userData.newFieldContent, saltRounds, async function (
+        err,
+        hash
+      ) {
+        if (err) {
+          throw err;
+        }
+        console.log("hash: ", await hash);
+        const newPassword = await hash;
+        req.body.user["password"] = newPassword;
+      });
+    } else {
+      req.body.user[userData.updateField] = userData.newFieldContent;
     }
-    if (userData.password) {
-      user.password = userData.password;
-    }
-    await user.save();
-    console.log("user updated");
-    res.json(user);
+    await req.body.user.save();
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }

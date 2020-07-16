@@ -24,9 +24,7 @@
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "images/mark_up16.png",
-      "48": "images/mark_up48.png",
-      "128": "images/mark_up128.png"
+      "16": "images/mark_up16.png"
     }
   },
   "content_scripts": [
