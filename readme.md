@@ -6,9 +6,9 @@ MarkUp is a chrome extension that allows users to mark up the internet with stic
 
 - Requires Chrome browser (download [here][chromelink])
 
-### Installation
+### Installing on Chrome
 
-- Download this repository as a zip file.
+- Download this repository as a zip file (shared by Nicky)
 - Unzip the repository on your local system.
 - In the chrome browser, go to the extensions page: [chrome://extensions][extensionspage]
 - Activate developer mode (button in top right of window)
