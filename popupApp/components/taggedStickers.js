@@ -29,10 +29,34 @@ class TaggedStickers extends React.Component {
       `${ngrokUrl}api/stickers/tagged/ByFriends/${id}`,
       config
     );
+    if (atTaggedResponse.data.length) {
+      atTaggedResponse.data.sort((a, b) => {
+        if (a.updatedAt < b.updatedAt) {
+          return 1;
+        } else if (a.updatedAt > b.updatedAt) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
     const friendStickerResponse = await axios.get(
       `${ngrokUrl}api/stickers/friends/${id}`,
       config
     );
+
+    if (friendStickerResponse.data.length) {
+      friendStickerResponse.data.sort((a, b) => {
+        if (a.updatedAt < b.updatedAt) {
+          return 1;
+        } else if (a.updatedAt > b.updatedAt) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    }
 
     console.log("atTagged: ", atTaggedResponse);
     console.log("friends: ", friendStickerResponse);
@@ -40,8 +64,8 @@ class TaggedStickers extends React.Component {
     //add stickers to local state
     this.setState((prevState) => {
       return {
-        taggedStickers: atTaggedResponse.data.reverse(),
-        friendStickers: friendStickerResponse.data.reverse(),
+        taggedStickers: atTaggedResponse.data,
+        friendStickers: friendStickerResponse.data,
       };
     });
   }

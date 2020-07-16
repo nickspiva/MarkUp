@@ -94,6 +94,8 @@ router.get("/:userId", checkToken, checkUser, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId);
     const stickers = await user.getStickers();
+    // console.log("stickers[0]", stickers[0].createdAt);
+    // stickers.sort((a, b) => b.updatedAt - a.updatedAt);
     res.json(stickers);
   } catch (err) {
     next(err);

@@ -20,6 +20,7 @@ class SignupForm extends React.Component {
     await axios.post(`${postUrl}`, {
       userName: this.state.userName,
       password: this.state.password,
+      email: this.state.email,
     });
     this.props.changePage("login");
   }

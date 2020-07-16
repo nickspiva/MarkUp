@@ -43,9 +43,9 @@ class UserProfile extends React.Component {
     };
 
     const response = await axios.put(`${ngrokUrl}api/users`, request);
-    console.log("response: ", response.request);
+    console.log("response: ", response.request.responseText);
 
-    if ((response.request.responseText = "OK")) {
+    if (response.request.responseText === "OK") {
       this.setState({
         submitMessage: "Profile Updated!",
         editField: null,
@@ -106,7 +106,10 @@ class UserProfile extends React.Component {
       <div>
         <h1>{this.props.user.userName}'s User Profile</h1>
         <div>
-          {this.state.submitMessage !== "" ? this.state.submitMessage : ""}
+          <div className="sadText">
+            {this.state.submitMessage !== "" ? this.state.submitMessage : ""}
+          </div>
+
           <div className="profileOptions">
             <h2>Options: </h2>
             <div className="profileOptions">

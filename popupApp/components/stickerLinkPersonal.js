@@ -3,7 +3,7 @@ import moment from "moment";
 
 const stickerLinkPersonal = (props) => {
   const { sticker } = props;
-  const { message, url, createdAt } = sticker;
+  const { message, url, updatedAt } = sticker;
   let shortUrl = url;
 
   const openNewTab = (newUrl) => {
@@ -15,14 +15,13 @@ const stickerLinkPersonal = (props) => {
     shortUrl = url.slice(0, 35) + "...";
   }
 
-  const correctDate = moment(createdAt);
-  const displayDate = correctDate.calendar();
+  const displayDate = moment(updatedAt).fromNow();
 
   return (
     <div className="stickerContainer">
       <div className="stickerHeader">
         <div className="userName">
-          <span class="timePassed"> {moment(sticker.createdAt).fromNow()}</span>
+          <span class="timePassed"> {displayDate}</span>
         </div>
         <div className="spacer"></div>
       </div>

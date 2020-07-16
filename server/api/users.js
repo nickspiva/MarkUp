@@ -79,12 +79,14 @@ router.put("/", confirmUserInfo, async (req, res, next) => {
         console.log("hash: ", await hash);
         const newPassword = await hash;
         req.body.user["password"] = newPassword;
+        await req.body.user.save();
+        res.sendStatus(200);
       });
     } else {
       req.body.user[userData.updateField] = userData.newFieldContent;
+      await req.body.user.save();
+      res.sendStatus(200);
     }
-    await req.body.user.save();
-    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
@@ -93,7 +95,10 @@ router.put("/", confirmUserInfo, async (req, res, next) => {
 //create user; POST /users
 router.post("/", async (req, res, next) => {
   try {
-    const userData = pickPropsFromObj(["userName", "password"], req.body);
+    const userData = pickPropsFromObj(
+      ["userName", "password", "email"],
+      req.body
+    );
 
     bcrypt.hash(userData.password, saltRounds, async function (err, hash) {
       if (err) {

@@ -70,9 +70,24 @@ class MyStickers extends React.Component {
     };
     //sends request to server for all this user's stickers
     let response = await axios.get(`${ngrokUrl}api/stickers/${id}`, config);
+    let stickers = response.data;
+    console.log("stickers: ", stickers);
+    if (stickers.length) {
+      stickers = stickers.sort((a, b) => {
+        if (a.updatedAt < b.updatedAt) {
+          return 1;
+        } else if (a.updatedAt > b.updatedAt) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
+    console.log("stickers sorted: ", stickers);
     //updates state with stickers from server
     this.setState((prevState) => {
-      return { stickers: response.data };
+      return { stickers };
     });
   }
 
@@ -88,7 +103,7 @@ class MyStickers extends React.Component {
         {/* if there are stickers render them */}
         {this.state.stickers.length ? (
           <div>
-            {this.state.stickers.reverse().map((sticker) => (
+            {this.state.stickers.map((sticker) => (
               <StickerLinkPersonal sticker={sticker} key={sticker.id} />
             ))}
           </div>
