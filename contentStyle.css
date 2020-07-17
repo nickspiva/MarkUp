@@ -1,0 +1,11 @@
+.stickerButton {
+  bottom: 10%;
+  background-color: #373940;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+  border-radius: 5px;
+  border-style: none;
+  padding: 4px 4px;
+  color: #c8e4c8;
+}

@@ -30,7 +30,8 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["bundledContentScripts.js"]
+      "js": ["bundledContentScripts.js"],
+      "css": ["contentStyle.css"]
     }
   ],
   "commands": {

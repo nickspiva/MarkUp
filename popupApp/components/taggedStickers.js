@@ -12,6 +12,50 @@ class TaggedStickers extends React.Component {
       taggedStickers: [],
       friendStickers: [],
     };
+    this.addSticker = this.addSticker.bind(this);
+  }
+
+  async addSticker() {
+    //sets up the query to fetch the current url
+    const query = { active: true, currentWindow: true };
+
+    //sets up the callback function to process result of the query,
+    //aka build the sticker
+    const returnUrl = async (tabs) => {
+      const currentTab = tabs[0];
+      //build a basic sticker with the url and user set
+      const defaultSticker = {
+        message: "default sticker",
+        height: "200px",
+        width: "200px",
+        xPos: "200px",
+        yPos: "200px",
+        url: currentTab.url,
+        user: this.props.user,
+      };
+      //fetches the user's token
+      const token = await getToken();
+      const config = {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      };
+      //sends the default sticker to the database (to get the id)
+      const dbSticker = await axios.post(
+        `${ngrokUrl}api/stickers/`,
+        defaultSticker,
+        config
+      );
+      //set's it as belonging to the user
+      dbSticker.data.mine = true;
+      //sends message to the content script for processing the new sticker
+      chrome.tabs.sendMessage(currentTab.id, {
+        subject: "adding new sticker",
+        sticker: dbSticker,
+      });
+    };
+
+    chrome.tabs.query(query, returnUrl);
   }
 
   async componentDidMount() {
@@ -73,7 +117,13 @@ class TaggedStickers extends React.Component {
   render() {
     return (
       <div>
-        <h2>@ Tagged Stickers</h2>
+        <div id="header">
+          <h2>@ Tagged Stickers</h2>
+          <h2 id="newSticker" onClick={this.addSticker}>
+            + New Sticker
+          </h2>
+        </div>
+
         {this.state.taggedStickers.length ? (
           <div>
             {this.state.taggedStickers.map((sticker) => (

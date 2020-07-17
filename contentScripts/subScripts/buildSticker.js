@@ -49,6 +49,7 @@ export default function buildSticker(stickerProp) {
   console.log("checking mine");
   if (mine) {
     let saveButton = document.createElement("Button");
+    saveButton.className = "stickerButton";
     saveButton.style.bottom = "10%";
     saveButton.innerHTML = "save";
     stickerButtons.appendChild(saveButton);
@@ -77,6 +78,7 @@ export default function buildSticker(stickerProp) {
     console.log("adding edit button");
     //add edit button
     const editButton = document.createElement("Button");
+    editButton.className = "stickerButton";
     editButton.style.bottom = "10%";
     editButton.innerHTML = "edit";
     stickerButtons.appendChild(editButton);
@@ -121,6 +123,7 @@ export default function buildSticker(stickerProp) {
 
   //add delete button
   let stickerDelete = document.createElement("Button");
+  stickerDelete.className = "stickerButton";
   stickerDelete.style.bottom = "10%";
   stickerDelete.innerHTML = "delete";
   stickerDelete.innerHTML = "delete";
