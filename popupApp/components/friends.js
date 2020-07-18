@@ -103,6 +103,7 @@ class Friends extends React.Component {
           searched={this.state.hasSearched}
           userId={this.props.user.id}
           addFriend={this.addFriend}
+          yourFriends={this.state.friends}
         />
         <div className="friendList">
           <h2>Your Friends!</h2>
