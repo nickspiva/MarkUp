@@ -50,7 +50,7 @@ router.post("/friendSearch", async function (req, res, next) {
       userName: Sequelize.where(
         Sequelize.fn("LOWER", Sequelize.col("userName")),
         "LIKE",
-        `%${query}%`
+        `${query}%`
       ),
     },
   });

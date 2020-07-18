@@ -74,29 +74,28 @@ class Friends extends React.Component {
   }
 
   render() {
-    console.log("this.props.loggedIn: ", this.props.loggedIn);
-    console.log("rendering");
     if (!this.props.loggedIn) return <h3>Not Logged In...</h3>;
     const userId = this.props.user.id;
     return (
       <div>
         <div>
           <h2>Search for Friends</h2>
-          <React.Fragment>
-            <Form onSubmit={this.handleSubmit} className="searchForm">
-              <Form.Input
+          <div className="inputField">
+            <div>
+              <div className="inputLabel">Friend's Name</div>
+              <input
                 type="text"
                 label="Friend's Name?"
                 className="searchLabel"
                 name="friendName"
                 value={this.state.friendName}
                 onChange={this.handleChange}
-              />
-              <Button type="submit" value="Search" className="newSticker">
-                Search
-              </Button>
-            </Form>
-          </React.Fragment>
+              ></input>
+            </div>
+            <button className="newSticker" onClick={this.handleSubmit}>
+              {this.state.friendName.length ? "Search" : "See All Users"}
+            </button>
+          </div>
         </div>
         <SearchResults
           results={this.state.searchResults}
@@ -108,19 +107,11 @@ class Friends extends React.Component {
         <div className="friendList">
           <h2>Your Friends!</h2>
           {this.state.friends.length ? (
-            <ul>
+            <ul className="resultList">
               {/* Add in delete icon next to each friend */}
               {this.state.friends.map((friend) => {
                 return (
-                  <li
-                    key={friend.id}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      padding: "5px",
-                      margin: "5px",
-                    }}
-                  >
+                  <li key={friend.id} className="resultItem">
                     <div className="friendName">{`${friend.userName}`} </div>
                     <Button
                       onClick={() => this.deleteFriend(userId, friend.id)}

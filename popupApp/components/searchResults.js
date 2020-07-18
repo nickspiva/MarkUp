@@ -47,19 +47,11 @@ const SearchResults = (props) => {
   //display no friends.
   return (
     <div>
-      <h3>Search Results</h3>
+      <h2>Search Results</h2>
       {results.length ? (
-        <ul>
+        <ul className="resultList">
           {filteredResults.map((elem) => (
-            <li
-              key={elem.id}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "5px",
-                margin: "5px",
-              }}
-            >
+            <li key={elem.id} className="resultItem">
               <div className="friendName">{`${elem.userName}  `} </div>
               <Button
                 className="updateButton"

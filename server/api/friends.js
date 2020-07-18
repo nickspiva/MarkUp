@@ -11,7 +11,7 @@ router.get("/:userId", async (req, res, next) => {
     const friendIds = await getFriendIds(userId);
     console.log("friendIds: ", friendIds);
     const friendUsers = await User.findAll({
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ["password, email"] },
       where: {
         id: {
           [Sequelize.Op.in]: friendIds,

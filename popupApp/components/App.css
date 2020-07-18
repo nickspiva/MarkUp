@@ -184,6 +184,7 @@ h3 {
   background-color: #353535;
   padding: 10px 0px 10px 0px;
   border-radius: 5px;
+  margin: 5px;
 }
 
 .searchLabel {
@@ -192,6 +193,7 @@ h3 {
   padding: 5px;
   font-style: italic;
   color: #6999c3;
+  border-style: solid;
 }
 
 .checkBoxOption {
@@ -335,4 +337,40 @@ h3 {
 
 .sadText {
   color: white;
+}
+
+.inputLabel {
+  font-style: italic;
+  color: #81a8ec;
+}
+
+.inputField {
+  background-color: #353535;
+  border-radius: 5px 5px 5px 5px;
+  padding: 10px;
+  font-style: italic;
+  color: #383631;
+  border-style: none;
+  margin: 5px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+input {
+  color: #eae7dc;
+}
+
+.resultList {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-inline-start: unset;
+}
+
+.resultItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  margin: 5px;
 }
