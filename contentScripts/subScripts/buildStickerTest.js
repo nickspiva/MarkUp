@@ -1,21 +1,19 @@
 /* eslint-disable max-statements */
 console.log("in build sticker...");
-import saveSticker from "./saveSticker";
 import buildContainer from "./buildContainer";
-import buildStickerArea from "./buildStickerArea";
 
 /*
-    * Takes a sticker prop and builds a sticker for insertion into the DOM.
-    * @param stickerProp, {obj}, contains basic sticker info
-    * text (what text is inside the sticker)
-    * left & top (position of the sticker)
-    * width & height (size of the sticker)
-    * id (id of the sticker from db - unique)
-    * shareType (what type of shared sticker it is, e.g. withFriends)
-    * mine (boolean indicating whether the sticker belongs to the user)
-    * TBI: userName (userName of the creator of the sticker)
-
+ * Takes a sticker prop and builds a sticker for insertion into the DOM.
+ * @param stickerProp, {obj}, contains basic sticker info
+ * text (what text is inside the sticker)
+ * left & top (position of the sticker)
+ * width & height (size of the sticker)
+ * id (id of the sticker from db - unique)
+ * shareType (what type of shared sticker it is, e.g. withFriends)
+ * mine (boolean indicating whether the sticker belongs to the user)
+ * TBI: userName (userName of the creator of the sticker)
  */
+
 const buildSticker = (stickerProp) => {
   //extract object properties
   let {
@@ -46,8 +44,6 @@ const buildSticker = (stickerProp) => {
    * Add listeners to buttons
    * Add dragging functionality/listener to sticker container
    */
-
-  let toggleEdit = false;
 
   //BUILD KEY HTML ELEMENTS
   const stickerContainer = buildContainer(stickerProp);
@@ -89,6 +85,7 @@ const buildSticker = (stickerProp) => {
 
   //DEFINE FUNCTIONALITY
   function handleEdit(event) {
+    console.log("event: ", event);
     const currentSticker = document.getElementById(`sticker${id}`);
     //store the sticker html as default text for the input field
     let defaultText = sticker.innerHTML;
@@ -106,6 +103,7 @@ const buildSticker = (stickerProp) => {
     currentSticker.appendChild(input);
     editButton.innerHTML = "done";
     editButton.removeEventListener("click", handleEdit);
+    sticker.removeEventListener("dblclick", handleEdit);
     editButton.addEventListener("click", finishEdit);
   }
 
@@ -119,6 +117,7 @@ const buildSticker = (stickerProp) => {
     //update listeners
     editButton.removeEventListener("click", finishEdit);
     editButton.addEventListener("click", handleEdit);
+    sticker.addEventListener("dblclick", handleEdit);
     saveSticker(currentSticker);
   }
 
@@ -162,6 +161,8 @@ const buildSticker = (stickerProp) => {
     console.log("clicked");
   });
 
+  sticker.addEventListener("dblclick", handleEdit);
+
   //--------------------------------------
 
   //SETUP DRAGGING FUNCTIONALITY
@@ -170,6 +171,7 @@ const buildSticker = (stickerProp) => {
   stickerContainer.onmousedown = function (event) {
     //don't drag if clicking on a button
     if (event.target.className === "stickerButton") return;
+    if (event.target.className === "stickerInput") return;
 
     const stickerContainer = this;
 
@@ -204,7 +206,7 @@ const buildSticker = (stickerProp) => {
 
     //remove listener from document to move and remove onmouseup after complete
     stickerContainer.onmouseup = function () {
-      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mousemove", onMouseMove, true);
       stickerContainer.onmouseup = null;
       //save when user finishes dragging
       const sticker = document.getElementById(`sticker${id}`);
