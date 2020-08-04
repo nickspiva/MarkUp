@@ -87,6 +87,7 @@ const buildSticker = (stickerProp) => {
 
   //SETUP BUTTON FUNCTIONALITY
 
+  //DEFINE FUNCTIONALITY
   function handleEdit(event) {
     const currentSticker = document.getElementById(`sticker${id}`);
     //store the sticker html as default text for the input field
@@ -151,6 +152,7 @@ const buildSticker = (stickerProp) => {
     return true;
   }
 
+  //ATTACH LISTENERS
   if (mine) {
     editButton.addEventListener("click", handleEdit);
     deleteButton.addEventListener("click", deleteSticker);
@@ -159,6 +161,8 @@ const buildSticker = (stickerProp) => {
   archiveButton.addEventListener("click", (event) => {
     console.log("clicked");
   });
+
+  //--------------------------------------
 
   //SETUP DRAGGING FUNCTIONALITY
   //three key functions: clickDown, dragging, releaseClick
