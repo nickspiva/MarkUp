@@ -9,3 +9,11 @@
   padding: 4px 4px;
   color: #c8e4c8;
 }
+
+.sticker {
+  height: "100%";
+  width: "100%";
+  border-width: 2px;
+  border-style: solid;
+  border-color: greenyellow;
+}

@@ -4,7 +4,7 @@ export default function buildContainer(stickerProp) {
   const { left, top, width, height, id, mine } = stickerProp;
   stickerContainer.setAttribute("id", `stickercontainer${id}`);
 
-  stickerContainer.style.padding = "20px";
+  stickerContainer.style.padding = "10px";
   stickerContainer.style.top = top;
   stickerContainer.style.height = height;
   stickerContainer.style.width = width;

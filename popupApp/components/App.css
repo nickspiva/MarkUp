@@ -1,3 +1,51 @@
+.navButton:hover {
+  text-decoration: underline;
+}
+
+#newSticker:hover {
+  background-color: #e85a4f;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+}
+
+.newSticker:hover {
+  background-color: #e85a4f;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+}
+
+.updateButton {
+  border-width: 1px;
+  border: solid;
+  border-color: gray;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.updateButton:hover {
+  background-color: seagreen;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+}
+
+.cancelButton {
+  border-width: 1px;
+  border: solid;
+  border-color: grey;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.cancelButton:hover {
+  background-color: #e85a4f;
+  color: #eae7dc;
+  border-color: slategrey;
+  cursor: pointer;
+}
+
 body {
   min-width: 325px;
   min-height: 150px;
@@ -26,10 +74,6 @@ body {
   border-width: 0px;
   background-color: transparent;
   color: #6999c3;
-}
-
-.navButton:hover {
-  text-decoration: underline;
 }
 
 .active {
@@ -73,20 +117,6 @@ input:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-#newSticker:hover {
-  background-color: #e85a4f;
-  color: #eae7dc;
-  border-color: slategrey;
-  cursor: pointer;
-}
-
-.newSticker:hover {
-  background-color: #e85a4f;
-  color: #eae7dc;
-  border-color: slategrey;
-  cursor: pointer;
 }
 
 .stickerContainer {
@@ -260,36 +290,6 @@ h3 {
   align-items: center;
   justify-content: space-between;
   padding: 10px 0px 0px 0px;
-}
-
-.updateButton {
-  border-width: 1px;
-  border: solid;
-  border-color: gray;
-  border-radius: 5px;
-  padding: 3px;
-}
-
-.updateButton:hover {
-  background-color: seagreen;
-  color: #eae7dc;
-  border-color: slategrey;
-  cursor: pointer;
-}
-
-.cancelButton {
-  border-width: 1px;
-  border: solid;
-  border-color: grey;
-  border-radius: 5px;
-  padding: 3px;
-}
-
-.cancelButton:hover {
-  background-color: #e85a4f;
-  color: #eae7dc;
-  border-color: slategrey;
-  cursor: pointer;
 }
 
 .searchInput {

@@ -15,20 +15,49 @@ class UserProfile extends React.Component {
       oldPassword: "",
       newEmail: "",
       newImageUrl: "",
+      autoLoad: null,
     };
-    this.handleDoneClick = this.handleDoneClick.bind(this);
+
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleUpdateUserName = this.handleUpdateUserName.bind(this);
-    this.handleUpdatePassword = this.handleUpdatePassword.bind(this);
     this.updateUserInfo = this.updateUserInfo.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
+    // this.fetchAutoLoadStatus = this.fetchAutoLoadStatus.bind(this);
+    // this.toggleAutoLoad = this.toggleAutoLoad.bind(this);
   }
 
   handleEditClick(event) {
     console.log("event", event);
     this.setState({ editField: event.target.id });
   }
+
+  // async fetchAutoLoadStatus() {
+  //   let promise = new Promise(function (resolve, reject) {
+  //     chrome.storage.sync.get("autoLoad", function (token) {
+  //       resolve(token);
+  //     });
+  //   });
+  //   const fulfilledPromise = await promise;
+  //   console.log("fulfilledPromise: ", fulfilledPromise);
+  //   if (fulfilledPromise.autoLoad) {
+  //     this.setState({ autoLoad: true });
+  //   } else {
+  //     this.setState({ autoLoad: false });
+  //   }
+  // }
+
+  // async toggleAutoLoad() {
+  //   const newAutoLoadState = !this.state.autoLoad;
+  //   await chrome.storage.sync.set({ autoLoad: newAutoLoadState }, function () {
+  //     console.log("value is set to: ", response.data);
+  //   });
+  // }
+
+  // async componentDidMount() {
+  //   if (this.state.autoLoad === null) {
+  //     await this.fetchAutoLoadStatus();
+  //   }
+  // }
 
   async updateUserInfo(updateField, oldPassword, newFieldContent) {
     console.log("type: ", updateField);
@@ -66,17 +95,6 @@ class UserProfile extends React.Component {
     }
   }
 
-  handleDoneClick(event) {
-    if (event.target.id === "userName") {
-      this.handleUpdateUserName(this.state.newUserName);
-    }
-
-    if (event.target.id === "password") {
-      this.handleUpdatePassword(this.state.newPassword);
-    }
-    this.setState({ editField: null });
-  }
-
   handleChange() {
     this.setState({
       [event.target.name]: event.target.value,
@@ -85,14 +103,6 @@ class UserProfile extends React.Component {
 
   cancelEdit() {
     this.setState({ editField: null });
-  }
-
-  handleUpdatePassword(newPassword) {
-    console.log("update password: ", newPassword);
-  }
-
-  handleUpdateUserName(newUserName) {
-    console.log("update username: ", newUserName);
   }
 
   render() {
@@ -115,7 +125,12 @@ class UserProfile extends React.Component {
             <div className="profileOptions">
               <div className="checkBoxOption">
                 <div>Auto-Load Stickers</div>
-                <input type="checkbox" label="Auto-Load Stickers"></input>
+                <input
+                  type="checkbox"
+                  label="Auto-Load Stickers"
+                  checked={this.state.autoLoad}
+                  // onClick={this.toggleAutoLoad}
+                ></input>
               </div>
               <div className="checkBoxOption">
                 <div>Daily New Sticker Emails</div>

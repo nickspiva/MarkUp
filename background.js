@@ -5,8 +5,27 @@ import getUser from "./utils/getUser";
 import getToken from "./utils/getToken";
 /* global chrome */
 //Listening for the on-load message
-chrome.extension.onConnect.addListener(function (port) {
+
+//on log-in in the app, fetching the user info
+//depending on the db user info, set the auto-load status
+//on toggling the auto-load status, update in the db,
+//update local state
+//and send message to the background to add the listener
+
+// let promise = new Promise(function (resolve, reject) {
+//   chrome.storage.sync.get("autoLoad", function (token) {
+//     resolve(token);
+//   });
+// });
+// const fulfilledPromise = await promise;
+// console.log("fulfilledPromise: ", fulfilledPromise);
+
+//if setting is set to autoLoad, then add the listener,
+//otherwise don't add the listener
+
+chrome.extension.onConnect.addListener(async function (port) {
   if (port.name === "loadedURL") {
+    //if receiving a message that the site is loaded
     port.onMessage.addListener(async (msg) => {
       if (msg.subject === "site ready") {
         console.log("fetching stickers...");
@@ -20,12 +39,13 @@ chrome.extension.onConnect.addListener(function (port) {
   }
 });
 
-//listening for the update-sticker message
+//listening for the update-sticker message and delete sticker message
 chrome.runtime.onMessage.addListener(async function (
   request,
   sender,
   sendResponse
 ) {
+  //update sticker
   console.log("background script receiving message");
   if (request.msg && request.msg === "saveSticker") {
     const user = await getUser();
@@ -57,6 +77,7 @@ chrome.runtime.onMessage.addListener(async function (
     return true;
   }
 
+  //delete sticker
   if (request.msg && request.msg === "deleteSticker") {
     const token = await getToken();
     const config = {
@@ -72,4 +93,7 @@ chrome.runtime.onMessage.addListener(async function (
     );
     return true;
   }
+
+  //if receiving a message to toggle auto-load
+  //add or remove the auto-load listener
 });

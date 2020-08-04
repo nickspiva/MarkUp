@@ -28,8 +28,8 @@ class LoginForm extends React.Component {
       //store user info in chrome storage
       await chrome.storage.sync.set(
         { markUp: response.data.token, user: response.data.user },
-        function () {
-          console.log("value is set to: ", response.data.token);
+        function (result) {
+          console.log("value of chrome storage: ", result);
         }
       );
       //add logged in status to app state

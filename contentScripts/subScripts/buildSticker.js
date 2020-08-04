@@ -33,17 +33,12 @@ export default function buildSticker(stickerProp) {
 
   //build sticker area
   const sticker = buildStickerArea(stickerProp);
+  sticker.className = "sticker";
   stickerContainer.appendChild(sticker);
 
   //build sticker buttons
   let stickerButtons = document.createElement("DIV");
   stickerContainer.appendChild(stickerButtons);
-
-  sticker.ondragstart = function () {
-    return false;
-  };
-  // sticker.ondblclick = dblClickHandler;
-  stickerContainer.onmousedown = clickDown;
 
   //add save button if it's my own sticker
   console.log("checking mine");
@@ -142,46 +137,59 @@ export default function buildSticker(stickerProp) {
       });
     }
   });
-  //dragging functionality
-  // let mouseStatus;
-  //on down click add event listeners for movement and mouseup
-  function clickDown(event) {
-    //ensures they aren't clicking the resize stickerContainer
-    if (event.target.className === "sticker") {
-      document.addEventListener("mousemove", dragging, false);
-      document.addEventListener("mouseup", releaseClick);
-      // mouseStatus = "down";
-      console.log("event: ", event);
-      event.target.parentNode.style.borderColor = "blue";
+
+  //DRAGGING ************************
+
+  sticker.ondragstart = function () {
+    return false;
+  };
+
+  stickerContainer.onmousedown = function (event) {]
+    //don't drag if clicking on a button
+    if (event.target.className === "stickerButton") return;
+
+    const stickerContainer = this;
+
+    //shift z-index
+    stickerContainer.style.zIndex += 1;
+
+    //fetch the difference between the click position and the top left of the sticker container
+    let shiftX = event.clientX - stickerContainer.getBoundingClientRect().left;
+    let shiftY = event.clientY - stickerContainer.getBoundingClientRect().top;
+
+    //fetch the width & height of the sticker container
+    let widthNum = stickerContainer.getBoundingClientRect().width;
+    let heightNum = stickerContainer.getBoundingClientRect().height;
+
+    //if the user is resizing the sticker in the bottom left, do nothing
+    if (shiftX > widthNum * 0.8 && shiftY > heightNum * 0.75) return;
+
+    //initial non-move
+    moveStartingAt(event.pageX, event.pageY);
+
+    //move the sticker container to the cursor location, offset by the initial cursor
+    //location within the container div
+    function moveStartingAt(pageX, pageY) {
+      stickerContainer.style.left = pageX - shiftX + "px";
+      stickerContainer.style.top = pageY - shiftY + "px";
     }
-  }
 
-  //if mouse is clicked drag the thing
-  function dragging(event) {
-    // console.log("event: ", event);
-    // if (mouseStatus === "down") {
-    let x = event.clientX;
-    let y = event.clientY;
-    // let stickerContainer = document.getElementById("stickerContainer");
-    let stickerContainer = event.target.parentNode;
-    //centers the drag, would prefer to have it drag from where you clicked
-    stickerContainer.style.left = `${
-      x - Number(stickerContainer.style.width.split("p")[0]) / 2
-    }px`;
-    stickerContainer.style.top = `${
-      y - Number(stickerContainer.style.height.split("p")[0]) / 2
-    }px`;
-    // }
-  }
+    //while the mouse is moving, reposition the stickerContainer
+    function onMouseMove(event) {
+      moveStartingAt(event.pageX, event.pageY);
+    }
 
-  function releaseClick(event) {
-    //remove event listener change mouse status
-    //   mouseStatus = "up";
-    document.removeEventListener("mousemove", dragging, false);
-    event.target.parentNode.style.borderColor = "black";
-    //turned off so it only saves on click
-    // saveSticker(event);
-  }
+    //listen for movement at the document (highest) level, in case curosr moves beyond sticker
+    document.addEventListener("mousemove", onMouseMove);
+
+    //remove listener from document to move and remove onmouseup after complete
+    stickerContainer.onmouseup = function () {
+      document.removeEventListener("mousemove", onMouseMove);
+      stickerContainer.onmouseup = null;
+    };
+  };
+
+  //DRAGGING COMPLETE
 
   //focus functionality (flipping between input and text)
   function focusInText() {

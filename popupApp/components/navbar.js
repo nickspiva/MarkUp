@@ -10,7 +10,7 @@ const Navbar = (props) => {
     <div id="navbar">
       {/* if logged out, render login button first */}
       {!props.loggedIn && (
-        <Button
+        <button
           name="login"
           onClick={handleClick}
           className={`${
@@ -18,10 +18,10 @@ const Navbar = (props) => {
           } navButton`}
         >
           {props.loggedIn ? "logout" : "login"}
-        </Button>
+        </button>
       )}
       {!props.loggedIn && (
-        <Button
+        <button
           name="signup"
           onClick={handleClick}
           className={`${
@@ -29,12 +29,12 @@ const Navbar = (props) => {
           } navButton`}
         >
           sign-up
-        </Button>
+        </button>
       )}
       {props.loggedIn &&
         pages.map((page) => {
           return (
-            <Button
+            <button
               name={page}
               onClick={handleClick}
               className={`${
@@ -42,12 +42,12 @@ const Navbar = (props) => {
               } navButton`}
             >
               {page}
-            </Button>
+            </button>
           );
         })}
       {/* if logged in, render logout button last */}
       {props.loggedIn && (
-        <Button
+        <button
           name="login"
           onClick={handleClick}
           className={`${
@@ -55,7 +55,7 @@ const Navbar = (props) => {
           } navButton`}
         >
           {props.loggedIn ? "logout" : "login"}
-        </Button>
+        </button>
       )}
     </div>
   );
