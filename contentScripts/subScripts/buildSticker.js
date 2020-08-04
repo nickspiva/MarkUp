@@ -144,7 +144,7 @@ export default function buildSticker(stickerProp) {
     return false;
   };
 
-  stickerContainer.onmousedown = function (event) {]
+  stickerContainer.onmousedown = function (event) {
     //don't drag if clicking on a button
     if (event.target.className === "stickerButton") return;
 
@@ -192,24 +192,24 @@ export default function buildSticker(stickerProp) {
   //DRAGGING COMPLETE
 
   //focus functionality (flipping between input and text)
-  function focusInText() {
-    console.log("focused: ", document.activeElement);
-  }
-  function focusOutText(event) {
-    let input = document.getElementById("stickerInput");
-    let sticker = document.getElementById("sticker");
-    //if the thing that lost focus was the input field then...
-    if (event.target.id === "stickerInput") {
-      //log out the value of the input
-      console.log(document.getElementById("stickerInput").value);
-      //remove the focus event listeners
-      document.removeEventListener("focusin", focusInText, true);
-      document.removeEventListener("focusout", focusOutText, true);
-      //set the text of the field to be the inputed text
-      let newText = input.value;
-      sticker.innerHTML = newText;
-    }
-  }
+  // function focusInText() {
+  //   console.log("focused: ", document.activeElement);
+  // }
+  // function focusOutText(event) {
+  //   let input = document.getElementById("stickerInput");
+  //   let sticker = document.getElementById("sticker");
+  //   //if the thing that lost focus was the input field then...
+  //   if (event.target.id === "stickerInput") {
+  //     //log out the value of the input
+  //     console.log(document.getElementById("stickerInput").value);
+  //     //remove the focus event listeners
+  //     document.removeEventListener("focusin", focusInText, true);
+  //     document.removeEventListener("focusout", focusOutText, true);
+  //     //set the text of the field to be the inputed text
+  //     let newText = input.value;
+  //     sticker.innerHTML = newText;
+  //   }
+  // }
 
   // function dblClickHandler(event) {
   //   console.log("dblclick event: ", event);

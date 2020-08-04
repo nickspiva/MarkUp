@@ -34,14 +34,18 @@ const buildSticker = (stickerProp) => {
   //--container
   //----sticker area
   //----sticker buttons
-  //------edit
-  //------archive
+  //------edit (if yours)
   //------delete (if yours)
+  //------archive
+
+  let toggleEdit = false;
 
   //BUILD KEY HTML ELEMENTS
   const stickerContainer = buildContainer(stickerProp);
+  stickerContainer.setAttribute("id", `stickercontainer${id}`);
   const sticker = document.createElement("DIV");
   sticker.setAttribute("id", `sticker${id}`);
+  sticker.innerHTML = text;
   const stickerButtons = document.createElement("DIV");
   const editButton = document.createElement("Button");
   const deleteButton = document.createElement("Button");
@@ -58,28 +62,72 @@ const buildSticker = (stickerProp) => {
   stickerButtons.appendChild(archiveButton);
 
   //ADD STYLES
+  sticker.className = "sticker";
+  stickerContainer.className = "stickerContainer";
   stickerButtons.className = "stickerButtonContainer";
-  editButton.className = "stickerButton";
-  deleteButton.className = "stickerButton";
-  archiveButton.className = "stickerButton";
+  editButton.className = "stickerButton edit";
+  deleteButton.className = "stickerButton delete";
+  archiveButton.className = "stickerButton archive";
+
+  //ADD BUTTON TEXT
+  editButton.innerHTML = "edit";
+  deleteButton.innerHTML = "delete";
+  archiveButton.innerHTML = "archive";
 
   //------------------------------------------
 
+  //SETUP BUTTON FUNCTIONALITY
+
+  function handleEdit(event) {
+    const currentSticker = document.getElementById(`sticker${id}`);
+    //store the sticker html as default text for the input field
+    let defaultText = sticker.innerHTML;
+    currentSticker.innerHTML = "";
+
+    //build input field
+    //set text from earlier sticker text, set style & initial value
+    let input = document.createElement("TEXTAREA");
+    input.setAttribute("id", `stickerInput${id}`);
+    input.innerHTML = defaultText;
+    input.setAttribute("value", defaultText);
+    input.className = "stickerInput";
+
+    //attach input and update listeners and button text
+    currentSticker.appendChild(input);
+    editButton.innerHTML = "done";
+    editButton.removeEventListener("click", handleEdit);
+    editButton.addEventListener("click", finishEdit);
+  }
+
+  function finishEdit(event) {
+    //update button text, update sticker innerHTML, remove input
+    const currentSticker = document.getElementById(`sticker${id}`);
+    editButton.innerHTML = "edit";
+    const input = document.getElementById(`stickerInput${id}`);
+    currentSticker.innerHTML = input.value;
+    input.remove();
+    //update listeners
+    editButton.removeEventListener("click", finishEdit);
+    editButton.addEventListener("click", handleEdit);
+  }
+
+  if (mine) {
+    editButton.addEventListener("click", handleEdit);
+    deleteButton.addEventListener("click", (event) => handleDelete(event));
+  }
+
+  archiveButton.addEventListener("click", (event) => {
+    console.log("clicked");
+  });
+
   //SETUP DRAGGING FUNCTIONALITY
   //three key functions: clickDown, dragging, releaseClick
-  sticker.ondragstart = function () {
-    return false;
-  };
 
-  //DRAGGING ************************
+  stickerContainer.onmousedown = function (event) {
+    //don't drag if clicking on a button
+    if (event.target.className === "stickerButton") return;
 
-  sticker.ondragstart = function () {
-    return false;
-  };
-
-  sticker.onmousedown = function (event) {
-    //fetch sticker top-lvl parent
-    const stickerContainer = event.target.parentNode;
+    const stickerContainer = this;
 
     //shift z-index
     stickerContainer.style.zIndex += 1;
@@ -87,6 +135,13 @@ const buildSticker = (stickerProp) => {
     //fetch the difference between the click position and the top left of the sticker container
     let shiftX = event.clientX - stickerContainer.getBoundingClientRect().left;
     let shiftY = event.clientY - stickerContainer.getBoundingClientRect().top;
+
+    //fetch the width & height of the sticker container
+    let widthNum = stickerContainer.getBoundingClientRect().width;
+    let heightNum = stickerContainer.getBoundingClientRect().height;
+
+    //if the user is resizing the sticker in the bottom left, do nothing
+    if (shiftX > widthNum * 0.8 && shiftY > heightNum * 0.75) return;
 
     //initial non-move
     moveStartingAt(event.pageX, event.pageY);
@@ -107,9 +162,15 @@ const buildSticker = (stickerProp) => {
     document.addEventListener("mousemove", onMouseMove);
 
     //remove listener from document to move and remove onmouseup after complete
-    sticker.onmouseup = function () {
+    stickerContainer.onmouseup = function () {
       document.removeEventListener("mousemove", onMouseMove);
-      sticker.onmouseup = null;
+      stickerContainer.onmouseup = null;
     };
   };
+
+  //DRAGGING COMPLETE
+
+  //SETUP BUTTON FUNCTIONALITY
 };
+
+export default buildSticker;

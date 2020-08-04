@@ -1,4 +1,5 @@
-import buildSticker from "../subScripts/buildSticker";
+// import buildSticker from "../subScripts/buildSticker";
+import buildSticker from "../subScripts/buildStickerTest";
 
 export default function insertStickers(arrOfStickers) {
   arrOfStickers.forEach((sticker) => {
