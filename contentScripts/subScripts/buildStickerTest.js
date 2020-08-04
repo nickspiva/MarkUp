@@ -52,6 +52,7 @@ const buildSticker = (stickerProp) => {
   const sticker = document.createElement("DIV");
   sticker.setAttribute("id", `sticker${id}`);
   sticker.innerHTML = text;
+  sticker.editing = false;
   const stickerButtons = document.createElement("DIV");
   const editButton = document.createElement("Button");
   const deleteButton = document.createElement("Button");
@@ -75,7 +76,9 @@ const buildSticker = (stickerProp) => {
   //ADD STYLES
   sticker.className = "sticker";
   stickerContainer.className = "stickerContainer";
-  stickerButtons.className = "stickerButtonContainer";
+  stickerButtons.className = `stickerButtonContainer ${
+    mine ? "mine" : "notMine"
+  }`;
   editButton.className = "stickerButton edit";
   deleteButton.className = "stickerButton delete";
   archiveButton.className = "stickerButton archive";
@@ -91,9 +94,21 @@ const buildSticker = (stickerProp) => {
 
   //SETUP BUTTON FUNCTIONALITY
 
+  function moveCursorToEnd(el) {
+    if (typeof el.selectionStart == "number") {
+      el.selectionStart = el.selectionEnd = el.value.length;
+    } else if (typeof el.createTextRange != "undefined") {
+      el.focus();
+      var range = el.createTextRange();
+      range.collapse(false);
+      range.select();
+    }
+  }
+
   //DEFINE FUNCTIONALITY
   function handleEdit(event) {
-    console.log("event: ", event);
+    console.log("starting edit");
+    sticker.editing = true;
     const currentSticker = document.getElementById(`sticker${id}`);
     //store the sticker html as default text for the input field
     let defaultText = sticker.innerHTML;
@@ -103,20 +118,27 @@ const buildSticker = (stickerProp) => {
     //set text from earlier sticker text, set style & initial value
     let input = document.createElement("TEXTAREA");
     input.setAttribute("id", `stickerInput${id}`);
-    input.innerHTML = defaultText;
-    input.setAttribute("value", defaultText);
     input.className = "stickerInput";
+    input.setAttribute("value", defaultText);
+    input.innerHTML = defaultText;
 
     //attach input and update listeners and button text
     currentSticker.appendChild(input);
+    input.selectionStart = input.selectionEnd;
     editButton.innerHTML = "done";
+
+    //focuses on the input (how to have it start at the end of text?)
+    //maybe delay focus w/ setTimeout, or set selectionStart = selectionEnd for input?
     input.focus();
+    moveCursorToEnd(input);
     editButton.removeEventListener("click", handleEdit);
     sticker.removeEventListener("dblclick", handleEdit);
     editButton.addEventListener("click", finishEdit);
   }
 
   function finishEdit(event) {
+    console.log("finishing edit");
+    sticker.editing = false;
     //update button text, update sticker innerHTML, remove input
     const currentSticker = document.getElementById(`sticker${id}`);
     editButton.innerHTML = "edit";
@@ -164,13 +186,12 @@ const buildSticker = (stickerProp) => {
   if (mine) {
     editButton.addEventListener("click", handleEdit);
     deleteButton.addEventListener("click", deleteSticker);
+    sticker.addEventListener("dblclick", handleEdit);
   }
 
   archiveButton.addEventListener("click", (event) => {
     console.log("clicked");
   });
-
-  sticker.addEventListener("dblclick", handleEdit);
 
   //--------------------------------------
 
@@ -179,9 +200,24 @@ const buildSticker = (stickerProp) => {
 
   stickerContainer.onmousedown = function (event) {
     //don't drag if clicking on a button
-    if (event.target.className === "stickerButton") return;
+    console.log("event:", event.target);
+    if (event.target.className.includes("stickerButton")) return;
     if (event.target.className === "stickerInput") return;
-
+    console.log("clicked container");
+    //if you were editing and you click on the sticker border
+    //finish editing
+    if (sticker.editing) {
+      console.log("didnt catch button");
+      finishEdit();
+      return;
+    }
+    // if (
+    //   event.target.firstChild &&
+    //   event.target.firstChild.firstChild &&
+    //   event.target.firstChild.firstChild.className === "stickerInput"
+    // ) {
+    //   finishEdit();
+    // }
     const stickerContainer = this;
 
     //fetch the difference between the click position and the top left of the sticker container
@@ -219,7 +255,7 @@ const buildSticker = (stickerProp) => {
       stickerContainer.onmouseup = null;
       //save when user finishes dragging
       const sticker = document.getElementById(`sticker${id}`);
-      saveSticker(sticker);
+      if (mine) saveSticker(sticker);
     };
   };
   //DRAGGING COMPLETE
