@@ -202,7 +202,7 @@ const buildSticker = (stickerProp) => {
     }
 
     //listen for movement at the document (highest) level, in case curosr moves beyond sticker
-    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mousemove", onMouseMove, true);
 
     //remove listener from document to move and remove onmouseup after complete
     stickerContainer.onmouseup = function () {
