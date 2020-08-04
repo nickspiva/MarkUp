@@ -1,5 +1,4 @@
 /* eslint-disable max-statements */
-console.log("in build sticker...");
 import buildContainer from "./buildContainer";
 
 /*
@@ -107,7 +106,6 @@ const buildSticker = (stickerProp) => {
 
   //DEFINE FUNCTIONALITY
   function handleEdit(event) {
-    console.log("starting edit");
     sticker.editing = true;
     const currentSticker = document.getElementById(`sticker${id}`);
     //store the sticker html as default text for the input field
@@ -137,7 +135,6 @@ const buildSticker = (stickerProp) => {
   }
 
   function finishEdit(event) {
-    console.log("finishing edit");
     sticker.editing = false;
     //update button text, update sticker innerHTML, remove input
     const currentSticker = document.getElementById(`sticker${id}`);
@@ -200,24 +197,15 @@ const buildSticker = (stickerProp) => {
 
   stickerContainer.onmousedown = function (event) {
     //don't drag if clicking on a button
-    console.log("event:", event.target);
     if (event.target.className.includes("stickerButton")) return;
     if (event.target.className === "stickerInput") return;
-    console.log("clicked container");
     //if you were editing and you click on the sticker border
     //finish editing
     if (sticker.editing) {
-      console.log("didnt catch button");
       finishEdit();
       return;
     }
-    // if (
-    //   event.target.firstChild &&
-    //   event.target.firstChild.firstChild &&
-    //   event.target.firstChild.firstChild.className === "stickerInput"
-    // ) {
-    //   finishEdit();
-    // }
+
     const stickerContainer = this;
 
     //fetch the difference between the click position and the top left of the sticker container
