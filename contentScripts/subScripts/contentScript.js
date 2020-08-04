@@ -6,6 +6,7 @@ document.onreadystatechange = function () {
     var port = chrome.runtime.connect({ name: "loadedURL" });
     port.postMessage({ subject: "site ready", url: document.location.href });
     port.onMessage.addListener(function (msg) {
+      console.log("stickers: ", msg.urlStickers.data);
       insertStickers(msg.urlStickers.data);
     });
   }

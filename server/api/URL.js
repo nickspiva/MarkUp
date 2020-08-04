@@ -44,6 +44,10 @@ router.get("/:url/:userId", checkToken, checkUser, async function (
           { [Op.and]: [{ url: decodedUrl }, { shareType: "withWorld" }] },
         ],
       },
+      include: {
+        model: User,
+        attributes: ["userName"],
+      },
     });
     res.json(urlStickers);
   } catch (err) {

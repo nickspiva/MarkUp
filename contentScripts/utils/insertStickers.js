@@ -15,6 +15,7 @@ export default function insertStickers(arrOfStickers) {
       shareType: sticker.shareType,
       userId: sticker.userId,
       mine: sticker.mine,
+      userName: sticker.user.userName,
     });
   });
 }

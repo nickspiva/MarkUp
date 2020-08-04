@@ -12,17 +12,17 @@
 
 .sticker {
   height: 90%;
-  width: 90%;
-  border-width: 2px;
-  border-style: solid;
-  border-color: greenyellow;
-  padding: 2%;
+  width: 97%;
+  /* border-width: 2px;
+  border-style: solid; */
+  /* border-color: greenyellow; */
+  padding: 15px 0px 0px 0px;
   margin: 2%;
 }
 
 .stickerContainer {
   padding: 1%;
-  border: 5px solid black;
+  border: 3px solid #353535;
   border-radius: 3px;
   overflow: auto;
   resize: both;
@@ -42,4 +42,16 @@
   width: 100%;
   height: 100%;
   resize: none;
+}
+
+.stickerBanner {
+  position: absolute;
+  padding: 2px 6px;
+  height: 20px;
+  max-height: 60px;
+  top: 6px;
+  max-width: 70%;
+  left: 0%;
+  background-color: #353535;
+  color: #d5d6d0;
 }

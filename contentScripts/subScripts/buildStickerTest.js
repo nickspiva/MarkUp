@@ -26,6 +26,7 @@ const buildSticker = (stickerProp) => {
     shareType,
     userId,
     mine,
+    userName,
   } = stickerProp;
 
   //HTML components of the sticker
@@ -55,6 +56,8 @@ const buildSticker = (stickerProp) => {
   const editButton = document.createElement("Button");
   const deleteButton = document.createElement("Button");
   const archiveButton = document.createElement("Button");
+  const stickerBanner = document.createElement("DIV");
+  stickerBanner.innerHTML = userName;
 
   //ESTABLISH RELATIONSHIPS B/W HTML ELEMENTS
   document.body.appendChild(stickerContainer);
@@ -65,6 +68,7 @@ const buildSticker = (stickerProp) => {
     stickerButtons.appendChild(deleteButton);
   }
   stickerButtons.appendChild(archiveButton);
+  stickerContainer.appendChild(stickerBanner);
 
   //ADD STYLES
   sticker.className = "sticker";
@@ -73,6 +77,7 @@ const buildSticker = (stickerProp) => {
   editButton.className = "stickerButton edit";
   deleteButton.className = "stickerButton delete";
   archiveButton.className = "stickerButton archive";
+  stickerBanner.className = "stickerBanner";
 
   //ADD BUTTON TEXT
   editButton.innerHTML = "edit";
