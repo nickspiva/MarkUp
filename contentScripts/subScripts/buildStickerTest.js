@@ -57,6 +57,7 @@ const buildSticker = (stickerProp) => {
   const deleteButton = document.createElement("Button");
   const archiveButton = document.createElement("Button");
   const stickerBanner = document.createElement("DIV");
+  const stickerBannerWrapper = document.createElement("DIV");
   stickerBanner.innerHTML = userName;
 
   //ESTABLISH RELATIONSHIPS B/W HTML ELEMENTS
@@ -68,7 +69,8 @@ const buildSticker = (stickerProp) => {
     stickerButtons.appendChild(deleteButton);
   }
   stickerButtons.appendChild(archiveButton);
-  stickerContainer.appendChild(stickerBanner);
+  stickerContainer.appendChild(stickerBannerWrapper);
+  stickerBannerWrapper.appendChild(stickerBanner);
 
   //ADD STYLES
   sticker.className = "sticker";
@@ -77,6 +79,7 @@ const buildSticker = (stickerProp) => {
   editButton.className = "stickerButton edit";
   deleteButton.className = "stickerButton delete";
   archiveButton.className = "stickerButton archive";
+  stickerBannerWrapper.className = "stickerBannerWrapper";
   stickerBanner.className = "stickerBanner";
 
   //ADD BUTTON TEXT
@@ -107,6 +110,7 @@ const buildSticker = (stickerProp) => {
     //attach input and update listeners and button text
     currentSticker.appendChild(input);
     editButton.innerHTML = "done";
+    input.focus();
     editButton.removeEventListener("click", handleEdit);
     sticker.removeEventListener("dblclick", handleEdit);
     editButton.addEventListener("click", finishEdit);
