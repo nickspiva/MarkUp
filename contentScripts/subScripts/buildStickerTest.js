@@ -38,6 +38,15 @@ const buildSticker = (stickerProp) => {
   //------delete (if yours)
   //------archive
 
+  /* Table of Contents
+   * Build HTML elements
+   * Establish relationships between elements
+   * Apply styling to elements
+   * Define edit, save, delete, & archive functions
+   * Add listeners to buttons
+   * Add dragging functionality/listener to sticker container
+   */
+
   let toggleEdit = false;
 
   //BUILD KEY HTML ELEMENTS
@@ -109,11 +118,42 @@ const buildSticker = (stickerProp) => {
     //update listeners
     editButton.removeEventListener("click", finishEdit);
     editButton.addEventListener("click", handleEdit);
+    saveSticker(currentSticker);
+  }
+
+  function deleteSticker(event) {
+    document.body.removeChild(stickerContainer);
+    if (mine) {
+      //send message to background to delete from db
+      chrome.runtime.sendMessage({
+        msg: "deleteSticker",
+        URL: window.location.href,
+        stickerId: id,
+      });
+    }
+  }
+
+  function saveSticker(stickerDiv) {
+    const updatedSticker = {
+      message: stickerDiv.innerText,
+      left: stickerDiv.parentNode.style.left,
+      top: stickerDiv.parentNode.style.top,
+      height: stickerDiv.parentNode.style.height,
+      width: stickerDiv.parentNode.style.width,
+      user: "inProgress",
+    };
+    updatedSticker.id = id;
+    chrome.runtime.sendMessage({
+      msg: "saveSticker",
+      URL: window.location.href,
+      sticker: updatedSticker,
+    });
+    return true;
   }
 
   if (mine) {
     editButton.addEventListener("click", handleEdit);
-    deleteButton.addEventListener("click", (event) => handleDelete(event));
+    deleteButton.addEventListener("click", deleteSticker);
   }
 
   archiveButton.addEventListener("click", (event) => {
@@ -128,9 +168,6 @@ const buildSticker = (stickerProp) => {
     if (event.target.className === "stickerButton") return;
 
     const stickerContainer = this;
-
-    //shift z-index
-    stickerContainer.style.zIndex += 1;
 
     //fetch the difference between the click position and the top left of the sticker container
     let shiftX = event.clientX - stickerContainer.getBoundingClientRect().left;
@@ -165,12 +202,12 @@ const buildSticker = (stickerProp) => {
     stickerContainer.onmouseup = function () {
       document.removeEventListener("mousemove", onMouseMove);
       stickerContainer.onmouseup = null;
+      //save when user finishes dragging
+      const sticker = document.getElementById(`sticker${id}`);
+      saveSticker(sticker);
     };
   };
-
   //DRAGGING COMPLETE
-
-  //SETUP BUTTON FUNCTIONALITY
 };
 
 export default buildSticker;
