@@ -6,6 +6,10 @@ MarkUp is a chrome extension that allows users to mark up the internet with stic
 
 - Requires Chrome browser (download [here][chromelink])
 
+### Rough Demo!
+
+- Check it out [here](https://www.youtube.com/watch?v=Bg9fpmVAtC4&feature=youtu.be)!
+
 ### Installing on Chrome
 
 - Download the production version of this repo as a [zip file](https://drive.google.com/file/d/1D5tYmUUFfnZPVMONDHyT0HwBI310FSB0/view?usp=sharing)
@@ -18,13 +22,13 @@ MarkUp is a chrome extension that allows users to mark up the internet with stic
 
 ### Dependencies
 
-- Pending.
 - [React] - front-end framework for the popup.
 - [Seqelize] - ORM for working with relational databases such as PostgreSQL.
 - [Webpack] - bundles popup scripts, content scripts, and background scripts into their respective bundles.
 - [node.js] - evented I/O for the backend
 - [Express] - fast node.js network app framework [@tjholowaychuk]
 - [Axios] - promise based http client for browser / node.js
+- There are more...
 
 ### Getting Started
 
