@@ -61,6 +61,7 @@ const checkUserPost = (req, res, next) => {
 router.use("/URL", require("./URL")); //getting stickers based on URL
 router.use("/tagged", require("./tagged")); //getting tagged stickers
 router.use("/public", require("./public")); //getting public stickers
+router.use("/archive", require("./archive"));
 
 //get all the user's friends stickers that have been shared with all friends
 router.get(
