@@ -16,9 +16,10 @@ class MyStickers extends React.Component {
   }
 
   //adds a default sticker to the webpage
-  async addSticker() {
+  async addSticker(sticker) {
     //sets up the query to fetch the current url
     const query = { active: true, currentWindow: true };
+    if (!sticker) sticker = {};
 
     //sets up the callback function to process result of the query,
     //aka build the sticker
@@ -26,11 +27,11 @@ class MyStickers extends React.Component {
       const currentTab = tabs[0];
       //build a basic sticker with the url and user set
       const defaultSticker = {
-        message: "default sticker",
-        height: "200px",
-        width: "200px",
-        xPos: "200px",
-        yPos: "200px",
+        message: sticker.message || "default sticker",
+        height: sticker.height || "200px",
+        width: sticker.width || "200px",
+        xPos: sticker.xPos || "200px",
+        yPos: sticker.yPos || "200px",
         url: currentTab.url,
         user: this.props.user,
       };
@@ -92,6 +93,7 @@ class MyStickers extends React.Component {
   }
 
   render() {
+    console.log("this.state.stickers[0]", this.state.stickers[0]);
     return (
       <div>
         <div id="header">
@@ -104,7 +106,11 @@ class MyStickers extends React.Component {
         {this.state.stickers.length ? (
           <div>
             {this.state.stickers.map((sticker) => (
-              <StickerLinkPersonal sticker={sticker} key={sticker.id} />
+              <StickerLinkPersonal
+                sticker={sticker}
+                key={sticker.id}
+                user={this.props.user}
+              />
             ))}
           </div>
         ) : (

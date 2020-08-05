@@ -6,6 +6,7 @@ const pickPropsFromObj = require("./utils/pickPropsFromObj");
 const jwt = require("jsonwebtoken");
 const checkToken = require("./utils/checkToken");
 const checkUser = require("./utils/checkUser");
+const Archive = require("../db/archive");
 require("dotenv").config();
 
 //**HELPER FUNCTIONS**
@@ -61,6 +62,7 @@ const checkUserPost = (req, res, next) => {
 router.use("/URL", require("./URL")); //getting stickers based on URL
 router.use("/tagged", require("./tagged")); //getting tagged stickers
 router.use("/public", require("./public")); //getting public stickers
+router.use("/archive", require("./archive"));
 
 //get all the user's friends stickers that have been shared with all friends
 router.get(
@@ -72,7 +74,7 @@ router.get(
       const userId = req.params.userId;
       const friendIds = await getFriendIds(userId);
 
-      const taggedStickers = await Sticker.findAll({
+      const sharedStickers = await Sticker.findAll({
         where: {
           userId: friendIds,
           shareType: "withFriends",
@@ -82,7 +84,22 @@ router.get(
           attributes: ["userName"],
         },
       });
-      res.json(taggedStickers);
+
+      const archivedStickers = await Archive.findAll({
+        where: {
+          userId: req.params.userId,
+        },
+      });
+      const archivedIds = archivedStickers.map((elem) => elem.stickerId);
+      sharedStickers.forEach((sticker) => {
+        if (archivedIds.includes(sticker.id)) {
+          sticker.dataValues.archived = true;
+        } else {
+          sticker.dataValues.archived = false;
+        }
+      });
+
+      res.json(sharedStickers);
     } catch (err) {
       next(err);
     }
@@ -94,7 +111,21 @@ router.get("/:userId", checkToken, checkUser, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId);
     const stickers = await user.getStickers();
-    // console.log("stickers[0]", stickers[0].createdAt);
+    // console.log("user: ", user.__proto__);
+    const archivedStickers = await Archive.findAll({
+      where: {
+        userId: req.params.userId,
+      },
+    });
+    const archivedIds = archivedStickers.map((elem) => elem.stickerId);
+    stickers.forEach((sticker) => {
+      if (archivedIds.includes(sticker.id)) {
+        sticker.dataValues.archived = true;
+      } else {
+        sticker.dataValues.archived = false;
+      }
+    });
+    // console.log("stickers[0]", stickers[0]);
     // stickers.sort((a, b) => b.updatedAt - a.updatedAt);
     res.json(stickers);
   } catch (err) {

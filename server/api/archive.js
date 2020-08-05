@@ -5,6 +5,47 @@ const Sequelize = require("sequelize");
 const getFriendIds = require("./utils/getFriendIds");
 const checkToken = require("../api/utils/checkToken");
 const checkUser = require("../api/utils/checkUser");
+const Friends = require("../db/friends");
+
+//fetch user's archived stickers
+router.get("/:userId", async (req, res, next) => {
+  try {
+    console.log("in archive route");
+    res.json("in the archive");
+  } catch (err) {
+    next(err);
+  }
+});
+
+//archive a sticker
+router.post("/:userId/:stickerId", async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.userId);
+    const sticker = await Sticker.findByPk(req.params.stickerId);
+    console.log("sticker: ", sticker.__proto__);
+    sticker.addArchived(user);
+    res.json({ user, sticker });
+  } catch (err) {
+    next(err);
+  }
+});
+
+//un-archive a sticker
+router.delete("/:userId/:stickerId", async (req, res, next) => {
+  console.log("deleting archived rel");
+  try {
+    const archivedSticker = await Archive.findOne({
+      where: {
+        userId: req.params.userId,
+        stickerId: req.params.stickerId,
+      },
+    });
+    await archivedSticker.destroy();
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.get(
   "/ByFriends/:userId",
@@ -28,21 +69,6 @@ router.get(
           attributes: ["userName"],
         },
       });
-
-      const archivedStickers = await Archive.findAll({
-        where: {
-          userId: req.params.userId,
-        },
-      });
-      const archivedIds = archivedStickers.map((elem) => elem.stickerId);
-      taggedStickers.forEach((sticker) => {
-        if (archivedIds.includes(sticker.id)) {
-          sticker.dataValues.archived = true;
-        } else {
-          sticker.dataValues.archived = false;
-        }
-      });
-
       res.json(taggedStickers);
     } catch (err) {
       next(err);

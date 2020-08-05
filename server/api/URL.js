@@ -5,6 +5,7 @@ const { Op } = require("sequelize");
 const getFriendIds = require("./utils/getFriendIds");
 const checkUser = require("./utils/checkUser");
 const checkToken = require("./utils/checkToken");
+const Archive = require("../db/archive");
 
 //get all relevant stickers for this user at this url
 router.get("/:url/:userId", checkToken, checkUser, async function (
@@ -49,7 +50,19 @@ router.get("/:url/:userId", checkToken, checkUser, async function (
         attributes: ["userName"],
       },
     });
-    res.json(urlStickers);
+
+    const archivedStickers = await Archive.findAll({
+      where: {
+        userId: userId,
+      },
+    });
+
+    const archivedIds = archivedStickers.map((sticker) => sticker.stickerId);
+    console.log("archivedStickers: ", archivedIds);
+    const unarchivedStickers = urlStickers.filter(
+      (sticker) => !archivedIds.includes(sticker.id)
+    );
+    res.json(unarchivedStickers);
   } catch (err) {
     next(err);
   }
