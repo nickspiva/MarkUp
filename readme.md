@@ -6,19 +6,23 @@ MarkUp is a chrome extension that allows users to mark up the internet with stic
 
 - Requires Chrome browser (download [here][chromelink])
 
-### Rough Demo!
+### Video Demonstration!
 
 - Check it out [here](https://www.youtube.com/watch?v=Bg9fpmVAtC4&feature=youtu.be)!
 
+### Screenshot
+
+![image info](./images/screencap.png)
+
 ### Installing on Chrome
 
-- Download the production version of this repo as a [zip file](https://drive.google.com/file/d/1D5tYmUUFfnZPVMONDHyT0HwBI310FSB0/view?usp=sharing)
+- Download the production version of this repo as a [zip file](https://drive.google.com/file/d/1D5tYmUUFfnZPVMONDHyT0HwBI310FSB0/view?usp=sharing).
 - Unzip the repository on your local system.
 - In the chrome browser, go to the extensions page: [chrome://extensions][extensionspage]
-- Activate developer mode (button in top right of window)
-- Click "load unpacked" in the top left, and select the unzipped MarkUp folder
+- Activate developer mode (button in top right of window).
+- Click "load unpacked" in the top left, and select the unzipped MarkUp folder.
 - Voila! You now have the extension installed in your browser.
-- (installation video pending)
+- (installation video coming soon)
 
 ### Dependencies
 
@@ -36,10 +40,6 @@ MarkUp is a chrome extension that allows users to mark up the internet with stic
 - On the myStickers tab, click "addSticker" to add a sticker to a webpage
 - On the friends tab, search for your friends by their userName and add them as friends
 - Try adding a sticker and using the @ tag to tag one of your friends by their username (e.g. "check out this website @nicky")
-
-### Demo Video
-
-- Pending
 
 ### Team
 
