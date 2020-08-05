@@ -20,6 +20,7 @@ chrome.runtime.onMessage.addListener(async function (
 ) {
   //if the request is one requesting to add a new sticker, then insert the stickers
   if (request.subject === "adding new sticker") {
+    request.sticker.data.userName = "mine";
     insertStickers([request.sticker.data]);
   }
 });

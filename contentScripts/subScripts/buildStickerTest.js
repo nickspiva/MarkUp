@@ -179,6 +179,14 @@ const buildSticker = (stickerProp) => {
     return true;
   }
 
+  function archiveSticker() {
+    chrome.runtime.sendMessage({
+      msg: "archiveSticker",
+      id,
+    });
+    stickerContainer.remove();
+  }
+
   //ATTACH LISTENERS
   if (mine) {
     editButton.addEventListener("click", handleEdit);
@@ -186,9 +194,7 @@ const buildSticker = (stickerProp) => {
     sticker.addEventListener("dblclick", handleEdit);
   }
 
-  archiveButton.addEventListener("click", (event) => {
-    console.log("clicked");
-  });
+  archiveButton.addEventListener("click", archiveSticker);
 
   //--------------------------------------
 
