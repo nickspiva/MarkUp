@@ -48,8 +48,18 @@ chrome.runtime.onMessage.addListener(async function (
   //update sticker
   console.log("background script receiving message");
   if (request.msg && request.msg === "archiveSticker") {
+    console.log("archiving sticker");
     const user = await getUser();
     const archiveResponse = await axios.post(
+      `${ngrokUrl}api/stickers/archive/${user.id}/${request.id}`
+    );
+    return true;
+  }
+
+  if (request.msg && request.msg === "unarchiveSticker") {
+    console.log("unarchiving sticker");
+    const user = await getUser();
+    const unarchiveResponse = await axios.delete(
       `${ngrokUrl}api/stickers/archive/${user.id}/${request.id}`
     );
     return true;

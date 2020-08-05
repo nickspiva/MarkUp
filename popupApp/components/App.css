@@ -131,17 +131,50 @@ input:focus {
 }
 
 .userName {
-  background-color: #353535;
+  /* background-color: #353535; */
   color: #d5d6d0;
-  width: fit-content;
+  width: 100%;
   border-width: 0px 0px 0px 0px;
   border-style: solid;
   border-radius: 5px 5px 0px 0px;
-  padding: 2px 5px 2px 5px;
   font-size: larger;
   font-weight: 600;
   border-bottom: dashed 1px;
   border-color: #776f6f;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.blankSpace {
+  padding: 2px 5px 2px 5px;
+  background-color: #18181b;
+  flex-grow: 1;
+  border-style: none;
+}
+
+.timePassed {
+  padding: 2px 5px 2px 5px;
+  font-size: smaller;
+  width: fit-content;
+  color: #9c8a8a;
+  border-radius: 3px 3px 0px 0px;
+  background-color: #353535;
+}
+
+.archived {
+  font-weight: lighter;
+  padding: 2px 5px 2px 5px;
+  font-size: smaller;
+  color: #9c8a8a;
+  font-style: italic;
+  border-radius: 3px 3px 0px 0px;
+  width: fit-content;
+  background-color: #353535;
+}
+
+.archived:hover {
+  color: green;
 }
 
 input {
@@ -164,7 +197,7 @@ input {
 } */
 
 .stickerLink {
-  border-radius: 0px 5px 0px 0px;
+  /* border-radius: 0px 5px 0px 0px; */
   background-color: #353535;
   border-width: 0px 1px 1px 1px;
   padding-left: 5px;
@@ -182,11 +215,6 @@ input {
   background: lightcyan;
   background-color: #d8c3a5;
   cursor: pointer;
-}
-
-.timePassed {
-  font-size: smaller;
-  color: #9c8a8a;
 }
 
 h1,

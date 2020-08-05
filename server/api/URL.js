@@ -50,7 +50,6 @@ router.get("/:url/:userId", checkToken, checkUser, async function (
         attributes: ["userName"],
       },
     });
-    console.log("urlStickers: ", urlStickers[0].id);
 
     const archivedStickers = await Archive.findAll({
       where: {

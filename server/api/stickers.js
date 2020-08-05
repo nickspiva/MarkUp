@@ -6,6 +6,7 @@ const pickPropsFromObj = require("./utils/pickPropsFromObj");
 const jwt = require("jsonwebtoken");
 const checkToken = require("./utils/checkToken");
 const checkUser = require("./utils/checkUser");
+const Archive = require("../db/archive");
 require("dotenv").config();
 
 //**HELPER FUNCTIONS**
@@ -95,7 +96,21 @@ router.get("/:userId", checkToken, checkUser, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId);
     const stickers = await user.getStickers();
-    // console.log("stickers[0]", stickers[0].createdAt);
+    // console.log("user: ", user.__proto__);
+    const archivedStickers = await Archive.findAll({
+      where: {
+        userId: req.params.userId,
+      },
+    });
+    const archivedIds = archivedStickers.map((elem) => elem.stickerId);
+    stickers.forEach((sticker) => {
+      if (archivedIds.includes(sticker.id)) {
+        sticker.dataValues.archived = true;
+      } else {
+        sticker.dataValues.archived = false;
+      }
+    });
+    console.log("stickers[0]", stickers[0]);
     // stickers.sort((a, b) => b.updatedAt - a.updatedAt);
     res.json(stickers);
   } catch (err) {

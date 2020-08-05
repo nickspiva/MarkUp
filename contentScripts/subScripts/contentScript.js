@@ -7,7 +7,9 @@ document.onreadystatechange = function () {
     port.postMessage({ subject: "site ready", url: document.location.href });
     port.onMessage.addListener(function (msg) {
       console.log("stickers: ", msg.urlStickers.data);
-      insertStickers(msg.urlStickers.data);
+      if (msg.urlStickers.data.length) {
+        insertStickers(msg.urlStickers.data);
+      }
     });
   }
 };
@@ -20,7 +22,6 @@ chrome.runtime.onMessage.addListener(async function (
 ) {
   //if the request is one requesting to add a new sticker, then insert the stickers
   if (request.subject === "adding new sticker") {
-    request.sticker.data.userName = "mine";
     insertStickers([request.sticker.data]);
   }
 });

@@ -32,6 +32,7 @@ router.post("/:userId/:stickerId", async (req, res, next) => {
 
 //un-archive a sticker
 router.delete("/:userId/:stickerId", async (req, res, next) => {
+  console.log("deleting archived rel");
   try {
     const archivedSticker = await Archive.findOne({
       where: {

@@ -92,6 +92,7 @@ class MyStickers extends React.Component {
   }
 
   render() {
+    console.log("this.state.stickers[0]", this.state.stickers[0]);
     return (
       <div>
         <div id="header">
