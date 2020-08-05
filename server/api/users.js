@@ -94,6 +94,7 @@ router.put("/", confirmUserInfo, async (req, res, next) => {
 
 //create user; POST /users
 router.post("/", async (req, res, next) => {
+  console.log("creating user in server");
   try {
     const userData = pickPropsFromObj(
       ["userName", "password", "email"],

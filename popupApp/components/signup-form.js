@@ -16,7 +16,9 @@ class SignupForm extends React.Component {
   }
 
   async handleSubmit() {
+    console.log("submitting new user info");
     const postUrl = ngrokUrl + "api/users";
+    console.log("postUrl", postUrl);
     await axios.post(`${postUrl}`, {
       userName: this.state.userName,
       password: this.state.password,
