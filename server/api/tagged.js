@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Sticker = require("../db/sticker");
-const { User } = require("../db/index");
+const { User, Archive } = require("../db/index");
 const Sequelize = require("sequelize");
 const getFriendIds = require("./utils/getFriendIds");
 const checkToken = require("../api/utils/checkToken");
@@ -28,6 +28,21 @@ router.get(
           attributes: ["userName"],
         },
       });
+
+      const archivedStickers = await Archive.findAll({
+        where: {
+          userId: req.params.userId,
+        },
+      });
+      const archivedIds = archivedStickers.map((elem) => elem.stickerId);
+      taggedStickers.forEach((sticker) => {
+        if (archivedIds.includes(sticker.id)) {
+          sticker.dataValues.archived = true;
+        } else {
+          sticker.dataValues.archived = false;
+        }
+      });
+
       res.json(taggedStickers);
     } catch (err) {
       next(err);

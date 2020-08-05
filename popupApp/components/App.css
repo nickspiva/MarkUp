@@ -132,7 +132,7 @@ input:focus {
 
 .userName {
   /* background-color: #353535; */
-  color: #d5d6d0;
+  color: #eeeeee;
   width: 100%;
   border-width: 0px 0px 0px 0px;
   border-style: solid;
@@ -144,6 +144,16 @@ input:focus {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.rightWrapper {
+  padding: 2px 5px 2px 5px;
+  width: fit-content;
+  border-radius: 5px 5px 0px 0px;
+  background-color: #353535;
+  border-bottom: dashed 1px;
+  border-color: #776f6f;
+  font-size: small;
 }
 
 .blankSpace {
@@ -160,6 +170,18 @@ input:focus {
   color: #9c8a8a;
   border-radius: 3px 3px 0px 0px;
   background-color: #353535;
+}
+
+.other {
+  padding: 2px 5px 2px 5px;
+  width: fit-content;
+  border-radius: 3px 3px 0px 0px;
+  background-color: #353535;
+  /* font-size: unset; */
+}
+
+.larger {
+  font-size: larger;
 }
 
 .archived {
@@ -205,7 +227,8 @@ input {
   padding-bottom: 5px;
   padding-top: 3px;
   cursor: pointer;
-  color: #d67e21;
+  color: #e0e0e0;
+  font-weight: 550;
 }
 
 .stickerLinkPersonal {
@@ -220,7 +243,7 @@ input {
 h1,
 h2,
 h3 {
-  color: #6999c3;
+  color: #bdbdbd;
 }
 
 .urlFooter {
@@ -228,7 +251,7 @@ h3 {
   border-radius: 0px 0px 5px 5px;
   padding: 2px 2px 6px 10px;
   font-style: italic;
-  color: #9e58d2;
+  color: #6999c3;
   cursor: pointer;
   border-top: dashed 1px;
   border-color: #776f6f;

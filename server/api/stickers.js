@@ -74,7 +74,7 @@ router.get(
       const userId = req.params.userId;
       const friendIds = await getFriendIds(userId);
 
-      const taggedStickers = await Sticker.findAll({
+      const sharedStickers = await Sticker.findAll({
         where: {
           userId: friendIds,
           shareType: "withFriends",
@@ -84,7 +84,22 @@ router.get(
           attributes: ["userName"],
         },
       });
-      res.json(taggedStickers);
+
+      const archivedStickers = await Archive.findAll({
+        where: {
+          userId: req.params.userId,
+        },
+      });
+      const archivedIds = archivedStickers.map((elem) => elem.stickerId);
+      sharedStickers.forEach((sticker) => {
+        if (archivedIds.includes(sticker.id)) {
+          sticker.dataValues.archived = true;
+        } else {
+          sticker.dataValues.archived = false;
+        }
+      });
+
+      res.json(sharedStickers);
     } catch (err) {
       next(err);
     }
@@ -110,7 +125,7 @@ router.get("/:userId", checkToken, checkUser, async (req, res, next) => {
         sticker.dataValues.archived = false;
       }
     });
-    console.log("stickers[0]", stickers[0]);
+    // console.log("stickers[0]", stickers[0]);
     // stickers.sort((a, b) => b.updatedAt - a.updatedAt);
     res.json(stickers);
   } catch (err) {

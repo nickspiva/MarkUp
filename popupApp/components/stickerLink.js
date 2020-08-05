@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 
 const stickerLink = (props) => {
   const { sticker } = props;
   const { message, url, createdAt } = sticker;
   let shortUrl = url;
+
+  const [archived, toggleArchiveStatus] = useState(sticker.archived);
+
+  const toggleArchived = () => {
+    if (!archived) {
+      chrome.runtime.sendMessage({
+        msg: "archiveSticker",
+        id: sticker.id,
+      });
+    } else {
+      chrome.runtime.sendMessage({
+        msg: "unarchiveSticker",
+        id: sticker.id,
+      });
+    }
+    toggleArchiveStatus(!archived);
+  };
 
   const openNewTab = (newUrl) => {
     chrome.tabs.create({ url: newUrl });
@@ -18,11 +35,18 @@ const stickerLink = (props) => {
   return (
     <div className="stickerContainer">
       <div className="stickerHeader">
-        <div className="userName">
-          {sticker.user.userName}{" "}
-          <span class="timePassed"> {moment(sticker.createdAt).fromNow()}</span>
+        <div className="userName other">{sticker.user.userName}</div>
+        <div className="blankSpace"></div>
+        <div className="rightWrapper">
+          <span class="timePassed other">
+            {" "}
+            {moment(sticker.createdAt).fromNow()}
+          </span>
+          <span onClick={toggleArchived} class="archived other">
+            {" "}
+            {archived ? " (hidden)" : " (visible)"}
+          </span>
         </div>
-        <div className="spacer"></div>
       </div>
       <div className="stickerLink" onClick={() => openNewTab(url)}>
         <div>{message} </div>

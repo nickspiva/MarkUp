@@ -20,8 +20,24 @@ chrome.runtime.onMessage.addListener(async function (
   sender,
   sendResponse
 ) {
+  console.log("content received msg");
   //if the request is one requesting to add a new sticker, then insert the stickers
   if (request.subject === "adding new sticker") {
     insertStickers([request.sticker.data]);
+  }
+
+  if (request.subject === "showSticker") {
+    console.log("toggling sticker visibility");
+    console.log("sticker: ", request.sticker);
+    insertStickers(request.sticker);
+  }
+
+  if (request.subject === "removeSticker") {
+    console.log("removing sticker from dom");
+    const div = document.getElementById(`stickercontainer${request.id}`);
+    if (div) {
+      console.log("removing div for real");
+      div.remove();
+    }
   }
 });

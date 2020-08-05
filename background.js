@@ -47,6 +47,11 @@ chrome.runtime.onMessage.addListener(async function (
 ) {
   //update sticker
   console.log("background script receiving message");
+
+  if (request.subject && request.subject === "showSticker") {
+    console.log("background received show sticker msg");
+  }
+
   if (request.msg && request.msg === "archiveSticker") {
     console.log("archiving sticker");
     const user = await getUser();
