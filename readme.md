@@ -2,10 +2,6 @@
 
 MarkUp is a chrome extension that allows users to mark up the internet with stickers while tagging their friends in the fun.
 
-# Setup
-
-- Requires Chrome browser (download [here][chromelink])
-
 ### Video Demonstration!
 
 - Check it out [here](https://www.youtube.com/watch?v=Bg9fpmVAtC4&feature=youtu.be)!
@@ -13,6 +9,10 @@ MarkUp is a chrome extension that allows users to mark up the internet with stic
 ### Screenshot
 
 ![image info](./images/screencap.png)
+
+# Setup
+
+- Requires Chrome browser ([download][chromelink]).
 
 ### Installing on Chrome
 
