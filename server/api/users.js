@@ -45,7 +45,7 @@ router.get("/", function (req, res, next) {
 router.post("/friendSearch", async function (req, res, next) {
   const query = req.body.query.toLowerCase();
   const potentialFriends = await User.findAll({
-    attributes: ["userName", "id"],
+    attributes: ["userName", "id", "email"],
     where: {
       userName: Sequelize.where(
         Sequelize.fn("LOWER", Sequelize.col("userName")),
