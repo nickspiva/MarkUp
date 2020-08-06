@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import moment from "moment";
+const md5 = require("md5");
 
 const stickerLink = (props) => {
   const { sticker } = props;
   const { message, url, createdAt } = sticker;
   let shortUrl = url;
+
+  sticker.emailHash = md5(sticker.user.email);
+  console.log("sticker: ", sticker);
 
   const [archived, toggleArchiveStatus] = useState(sticker.archived);
 
@@ -88,26 +92,37 @@ const stickerLink = (props) => {
   }
 
   return (
-    <div className="stickerContainer">
-      <div className="stickerHeader">
-        <div className="userName other">{sticker.user.userName}</div>
-        <div className="blankSpace"></div>
-        <div className="rightWrapper">
-          <span class="timePassed other">
-            {" "}
-            {moment(sticker.createdAt).fromNow()}
-          </span>
-          <span onClick={toggleArchived} class="archived other">
-            {" "}
-            {archived ? " (hidden)" : " (visible)"}
-          </span>
+    <div className="wrapper">
+      <div className="imageWrapper">
+        <div className="tightWrapper">
+          <img
+            src={`https://www.gravatar.com/avatar/${sticker.emailHash}?s=65`}
+            className="profilePic"
+          />
         </div>
       </div>
-      <div className="stickerLink" onClick={() => openNewTab(url)}>
-        <div>{message} </div>
-      </div>
-      <div className="urlFooter" onClick={() => openNewTab(url)}>
-        {shortUrl}
+
+      <div className="stickerContainer">
+        <div className="stickerHeader">
+          <div className="userName other">{sticker.user.userName}</div>
+          <div className="blankSpace"></div>
+          <div className="rightWrapper">
+            <span class="timePassed other">
+              {" "}
+              {moment(sticker.createdAt).fromNow()}
+            </span>
+            <span onClick={toggleArchived} class="archived other">
+              {" "}
+              {archived ? " (hidden)" : " (visible)"}
+            </span>
+          </div>
+        </div>
+        <div className="stickerLink" onClick={() => openNewTab(url)}>
+          <div>{message} </div>
+        </div>
+        <div className="urlFooter" onClick={() => openNewTab(url)}>
+          {shortUrl}
+        </div>
       </div>
     </div>
   );

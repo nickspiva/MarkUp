@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../db/user");
 const bcrypt = require("../bcryptExport").bcrypt;
 const jwt = require("jsonwebtoken");
+const md5 = require("md5");
 require("dotenv").config();
 
 /*
@@ -34,6 +35,8 @@ router.post("/", async (req, res, next) => {
           user: {
             userName: user.userName,
             id: user.id,
+            emailHash: md5(user.email),
+            email: user.email,
           },
         };
         //also build a jwt token and attach it to the reponse to be sent

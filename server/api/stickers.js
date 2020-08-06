@@ -8,6 +8,7 @@ const checkToken = require("./utils/checkToken");
 const checkUser = require("./utils/checkUser");
 const Archive = require("../db/archive");
 require("dotenv").config();
+const md5 = require("md5");
 
 //**HELPER FUNCTIONS**
 
@@ -81,9 +82,12 @@ router.get(
         },
         include: {
           model: User,
-          attributes: ["userName"],
+          attributes: ["userName", "email"],
         },
       });
+
+      // at some point come back and remove email from data being sent only send hash
+      // console.log("sharedStickers[0]", sharedStickers[0].user);
 
       const archivedStickers = await Archive.findAll({
         where: {

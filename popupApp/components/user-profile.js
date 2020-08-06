@@ -22,6 +22,7 @@ class UserProfile extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.updateUserInfo = this.updateUserInfo.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
+    this.openNewTab = this.openNewTab.bind(this);
     // this.fetchAutoLoadStatus = this.fetchAutoLoadStatus.bind(this);
     // this.toggleAutoLoad = this.toggleAutoLoad.bind(this);
   }
@@ -103,6 +104,10 @@ class UserProfile extends React.Component {
 
   cancelEdit() {
     this.setState({ editField: null });
+  }
+
+  openNewTab(newUrl) {
+    chrome.tabs.create({ url: newUrl });
   }
 
   render() {
@@ -277,16 +282,26 @@ class UserProfile extends React.Component {
                 <div>Change Image</div>
               </div>
               <div className="editField">
-                <div>Current Password:</div>
-                <input
+                <div>
+                  To change your profile picture, visit{" "}
+                  <a
+                    href="https://en.gravatar.com/"
+                    onClick={() => this.openNewTab("https://en.gravatar.com/")}
+                  >
+                    gravatar.com
+                  </a>
+                  , which is where we get a profile picture based on your email
+                  address.
+                </div>
+                {/* <input
                   type="text"
                   label="oldPassword"
                   name="oldPassword"
                   onChange={this.handleChange}
                   value={this.state.oldPassword}
                 />
-              </div>
-              <div className="editField">
+              </div> */}
+                {/* <div className="editField">
                 <div>New Image Link: </div>
                 <input
                   type="text"
@@ -295,9 +310,9 @@ class UserProfile extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.imageUrl}
                 />
-              </div>
-              <div className="editFooter">
-                <Button
+              </div> */}
+                <div className="editFooter">
+                  {/* <Button
                   onClick={() =>
                     this.updateUserInfo(
                       "imageUrl",
@@ -308,22 +323,30 @@ class UserProfile extends React.Component {
                   id="newImageUrl"
                 >
                   Update
-                </Button>
-                <Button
-                  className="cancelButton"
-                  onClick={() => {
-                    this.setState({ editField: null });
-                  }}
-                >
-                  Cancel
-                </Button>
+                </Button> */}
+                  <Button
+                    className="cancelButton"
+                    onClick={() => {
+                      this.setState({ editField: null });
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
               </div>
             </div>
           ) : (
             <div className={userInfoWrapper}>
-              <div>Current imageUrl: </div>
+              <div>Current Profile Picture: </div>
               <div>
-                <span>Hidden</span>
+                <div className="imageWrapper">
+                  <div className="tightWrapper">
+                    <img
+                      src={`https://www.gravatar.com/avatar/${this.props.user.emailHash}?s=65`}
+                      className="profilePic"
+                    />
+                  </div>
+                </div>
               </div>
               <Button
                 className="updateButton"

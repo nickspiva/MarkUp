@@ -1,5 +1,28 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .navButton:hover {
   text-decoration: underline;
+}
+
+.padded {
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+.bordered {
+  border: 1px solid white;
+}
+
+.imageWrapper {
+  height: 70px;
+  width: 70px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 #newSticker:hover {
@@ -47,9 +70,9 @@
 }
 
 body {
-  min-width: 325px;
+  min-width: 400px;
   min-height: 150px;
-  max-width: 325px;
+  max-width: 400px;
   max-height: 450px;
   position: relative;
   vertical-align: middle;
@@ -122,6 +145,7 @@ input:focus {
 .stickerContainer {
   padding: 5px;
   margin: 5px;
+  flex-grow: 1;
 }
 
 .stickerHeader {
@@ -196,7 +220,12 @@ input:focus {
 }
 
 .archived:hover {
-  color: green;
+  color: orange;
+  cursor: pointer;
+}
+
+.profilePic {
+  border-radius: 60px;
 }
 
 input {

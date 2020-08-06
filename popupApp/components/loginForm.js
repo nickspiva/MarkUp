@@ -50,6 +50,8 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    // // console.log("this.props.user.email", this.props.user.email);
+    // console.log("this.props.user.email", this.props.user.emailHash);
     let isDisabled = false;
     if (!this.state.userName.length || !this.state.password.length) {
       isDisabled = true;
@@ -92,7 +94,21 @@ class LoginForm extends React.Component {
     } else {
       return (
         <div>
-          <h1>Logged in as: {this.props.user.userName}</h1>
+          <div className="wrapper">
+            <h1>Logged in as: {this.props.user.userName}</h1>
+            <div className="imageWrapper">
+              <div className="tightWrapper padded">
+                <img
+                  src={`https://www.gravatar.com/avatar/${this.props.user.emailHash}?s=65`}
+                  className="profilePic bordered"
+                />
+              </div>
+            </div>
+          </div>
+          {/* 
+          <img
+            src={`https://www.gravatar.com/avatar/${this.props.user.emailHash}`}
+          /> */}
           <Button onClick={this.props.logout} className="updateButton">
             Logout
           </Button>
