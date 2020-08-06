@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "semantic-ui-react";
+const md5 = require("md5");
 
 /*
  * Search results is a functional react component that takes a props object
@@ -52,13 +53,29 @@ const SearchResults = (props) => {
         <ul className="resultList">
           {filteredResults.map((elem) => (
             <li key={elem.id} className="resultItem">
-              <div className="friendName">{`${elem.userName}  `} </div>
-              <Button
-                className="updateButton"
-                onClick={() => addFriend(userId, elem.id)}
-              >
-                Add Friend
-              </Button>
+              <div className="columnWrap start">
+                <div className="friendName">{`${elem.userName}  `} </div>
+              </div>
+              <div className="columnWrap">
+                <div className="imageWrapper">
+                  <div className="tightWrapper">
+                    <img
+                      src={`https://www.gravatar.com/avatar/${md5(
+                        elem.email
+                      )}?s=65`}
+                      className="profilePic"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="columnWrap end">
+                <Button
+                  className="updateButton"
+                  onClick={() => addFriend(userId, elem.id)}
+                >
+                  Add Friend
+                </Button>
+              </div>
             </li>
           ))}
         </ul>

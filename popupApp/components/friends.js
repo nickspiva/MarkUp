@@ -3,6 +3,7 @@ import axios from "axios";
 import SearchResults from "./searchResults";
 import { Form, Button } from "semantic-ui-react";
 const ngrokUrl = require("./ngrok");
+const md5 = require("md5");
 
 class Friends extends React.Component {
   constructor(props) {
@@ -112,13 +113,31 @@ class Friends extends React.Component {
               {this.state.friends.map((friend) => {
                 return (
                   <li key={friend.id} className="resultItem">
-                    <div className="friendName">{`${friend.userName}`} </div>
-                    <Button
-                      onClick={() => this.deleteFriend(userId, friend.id)}
-                      className="newSticker"
-                    >
-                      Remove Friend
-                    </Button>
+                    <div className="columnWrap start">
+                      {" "}
+                      <div className="friendName">{`${friend.userName}`} </div>
+                    </div>
+                    <div className="columnWrap">
+                      <div className="imageWrapper">
+                        <div className="tightWrapper">
+                          <img
+                            src={`https://www.gravatar.com/avatar/${md5(
+                              friend.email
+                            )}?s=65`}
+                            className="profilePic"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="columnWrap end">
+                      {" "}
+                      <Button
+                        onClick={() => this.deleteFriend(userId, friend.id)}
+                        className="newSticker"
+                      >
+                        Remove Friend
+                      </Button>
+                    </div>
                   </li>
                 );
               })}
