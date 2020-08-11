@@ -12,16 +12,6 @@ import getToken from "./utils/getToken";
 //update local state
 //and send message to the background to add the listener
 
-// let promise = new Promise(function (resolve, reject) {
-//   chrome.storage.sync.get("autoLoad", function (token) {
-//     resolve(token);
-//   });
-// });
-// const fulfilledPromise = await promise;
-// console.log("fulfilledPromise: ", fulfilledPromise);
-
-//if setting is set to autoLoad, then add the listener,
-//otherwise don't add the listener
 const loadListener = async function (port) {
   if (port.name === "loadedURL") {
     //if receiving a message that the site is loaded
@@ -109,7 +99,6 @@ chrome.runtime.onMessage.addListener(async function (
     return true;
   }
 
-  //delete sticker
   if (request.msg && request.msg === "deleteSticker") {
     const token = await getToken();
     const config = {
@@ -135,7 +124,4 @@ chrome.runtime.onMessage.addListener(async function (
     console.log("deactivating auto load");
     chrome.extension.onConnect.removeListener(loadListener);
   }
-
-  //if receiving a message to toggle auto-load
-  //add or remove the auto-load listener
 });

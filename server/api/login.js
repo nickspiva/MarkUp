@@ -39,6 +39,7 @@ router.post("/", async (req, res, next) => {
             emailHash: md5(user.email),
             email: user.email,
             autoLoad: user.autoLoad,
+            dailyEmails: user.dailyEmails,
           },
         };
         //also build a jwt token and attach it to the reponse to be sent

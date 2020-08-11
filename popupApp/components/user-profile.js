@@ -18,6 +18,7 @@ class UserProfile extends React.Component {
       newEmail: "",
       newImageUrl: "",
       autoLoad: "",
+      dailyEmails: "",
     };
 
     this.handleEditClick = this.handleEditClick.bind(this);
@@ -26,14 +27,15 @@ class UserProfile extends React.Component {
     this.cancelEdit = this.cancelEdit.bind(this);
     this.openNewTab = this.openNewTab.bind(this);
     this.toggleField = this.toggleField.bind(this);
-    // this.fetchAutoLoadStatus = this.fetchAutoLoadStatus.bind(this);
-    // this.toggleAutoLoad = this.toggleAutoLoad.bind(this);
   }
 
   async componentDidMount() {
     const userData = await getUser();
     console.log("userData: ", userData);
-    this.setState({ autoLoad: userData.autoLoad });
+    this.setState({
+      autoLoad: userData.autoLoad,
+      dailyEmails: userData.dailyEmails,
+    });
   }
 
   handleEditClick(event) {
@@ -41,31 +43,23 @@ class UserProfile extends React.Component {
     this.setState({ editField: event.target.id });
   }
 
-  // async fetchAutoLoadStatus() {
-  //   let promise = new Promise(function (resolve, reject) {
-  //     chrome.storage.sync.get("autoLoad", function (token) {
-  //       resolve(token);
-  //     });
-  //   });
-  //   const fulfilledPromise = await promise;
-  //   console.log("fulfilledPromise: ", fulfilledPromise);
-  //   if (fulfilledPromise.autoLoad) {
-  //     this.setState({ autoLoad: true });
-  //   } else {
-  //     this.setState({ autoLoad: false });
-  //   }
-  // }
-
   async toggleField(field) {
     //update db, update chrome storage user, send message to background script?, update checkbox status
     console.log("updating field");
 
     //update chrome storage
     const userData = await getUser();
-    userData.autoLoad = !userData.autoLoad;
-    await chrome.storage.sync.set({ user: userData }, function (result) {
-      console.log("value of chrome storage user: ", userData);
-    });
+    if (field === "autoLoad") {
+      userData.autoLoad = !userData.autoLoad;
+      await chrome.storage.sync.set({ user: userData }, function (result) {
+        console.log("value of chrome storage user: ", userData);
+      });
+    } else if (field === "dailyEmails") {
+      userData.dailyEmails = !userData.dailyEmails;
+      await chrome.storage.sync.set({ user: userData }, function (result) {
+        console.log("value of chrome storage user: ", userData);
+      });
+    }
 
     //update db
     const token = await getToken();
@@ -96,7 +90,11 @@ class UserProfile extends React.Component {
     }
 
     //update local state to toggle checkbox
-    this.setState({ autoLoad: !this.state.autoLoad });
+    if (field === "autoLoad") {
+      this.setState({ autoLoad: !this.state.autoLoad });
+    } else if (field === "dailyEmails") {
+      this.setState({ dailyEmails: !this.state.dailyEmails });
+    }
   }
 
   async updateUserInfo(updateField, oldPassword, newFieldContent) {
@@ -176,7 +174,12 @@ class UserProfile extends React.Component {
               </div>
               <div className="checkBoxOption">
                 <div>Daily New Sticker Emails</div>
-                <input type="checkbox" label="Daily New Sticker Emails"></input>
+                <input
+                  type="checkbox"
+                  label="Daily New Sticker Emails"
+                  checked={this.state.dailyEmails ? "checked" : null}
+                  onChange={() => this.toggleField("dailyEmails")}
+                ></input>
               </div>
             </div>
           </div>
