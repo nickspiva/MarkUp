@@ -22,8 +22,7 @@ import getToken from "./utils/getToken";
 
 //if setting is set to autoLoad, then add the listener,
 //otherwise don't add the listener
-
-chrome.extension.onConnect.addListener(async function (port) {
+const loadListener = async function (port) {
   if (port.name === "loadedURL") {
     //if receiving a message that the site is loaded
     port.onMessage.addListener(async (msg) => {
@@ -37,7 +36,17 @@ chrome.extension.onConnect.addListener(async function (port) {
       }
     });
   }
-});
+};
+
+const bootUp = async () => {
+  const user = await getUser();
+  if (user.autoLoad) {
+    console.log("adding listener");
+    chrome.extension.onConnect.addListener(loadListener);
+  }
+};
+
+bootUp();
 
 //listening for the update-sticker message and delete sticker message
 chrome.runtime.onMessage.addListener(async function (
@@ -115,6 +124,16 @@ chrome.runtime.onMessage.addListener(async function (
       config
     );
     return true;
+  }
+
+  if (request.msg && request.msg === "activateAutoLoad") {
+    console.log("activating auto load");
+    chrome.extension.onConnect.addListener(loadListener);
+  }
+
+  if (request.msg && request.msg === "deactivateAutoLoad") {
+    console.log("deactivating auto load");
+    chrome.extension.onConnect.removeListener(loadListener);
   }
 
   //if receiving a message to toggle auto-load

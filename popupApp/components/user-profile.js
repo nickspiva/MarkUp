@@ -3,6 +3,8 @@ import { Button } from "semantic-ui-react";
 import axios from "axios";
 import UpdateField from "./updateField";
 const ngrokUrl = require("./ngrok");
+import getToken from "../../utils/getToken";
+import getUser from "../../utils/getUser";
 
 class UserProfile extends React.Component {
   constructor(props) {
@@ -15,7 +17,7 @@ class UserProfile extends React.Component {
       oldPassword: "",
       newEmail: "",
       newImageUrl: "",
-      autoLoad: null,
+      autoLoad: "",
     };
 
     this.handleEditClick = this.handleEditClick.bind(this);
@@ -23,8 +25,15 @@ class UserProfile extends React.Component {
     this.updateUserInfo = this.updateUserInfo.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
     this.openNewTab = this.openNewTab.bind(this);
+    this.toggleField = this.toggleField.bind(this);
     // this.fetchAutoLoadStatus = this.fetchAutoLoadStatus.bind(this);
     // this.toggleAutoLoad = this.toggleAutoLoad.bind(this);
+  }
+
+  async componentDidMount() {
+    const userData = await getUser();
+    console.log("userData: ", userData);
+    this.setState({ autoLoad: userData.autoLoad });
   }
 
   handleEditClick(event) {
@@ -47,18 +56,48 @@ class UserProfile extends React.Component {
   //   }
   // }
 
-  // async toggleAutoLoad() {
-  //   const newAutoLoadState = !this.state.autoLoad;
-  //   await chrome.storage.sync.set({ autoLoad: newAutoLoadState }, function () {
-  //     console.log("value is set to: ", response.data);
-  //   });
-  // }
+  async toggleField(field) {
+    //update db, update chrome storage user, send message to background script?, update checkbox status
+    console.log("updating field");
 
-  // async componentDidMount() {
-  //   if (this.state.autoLoad === null) {
-  //     await this.fetchAutoLoadStatus();
-  //   }
-  // }
+    //update chrome storage
+    const userData = await getUser();
+    userData.autoLoad = !userData.autoLoad;
+    await chrome.storage.sync.set({ user: userData }, function (result) {
+      console.log("value of chrome storage user: ", userData);
+    });
+
+    //update db
+    const token = await getToken();
+    console.log("token: ", token);
+    console.log("background token for save");
+    const config = {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    };
+    const response = await axios.put(
+      `${ngrokUrl}api/users/toggleSetting/${this.props.user.id}`,
+      { toggleField: field },
+      config
+    );
+
+    //send message to background to adjust autoload listener
+    if (field === "autoLoad") {
+      if (this.state.autoLoad) {
+        await chrome.runtime.sendMessage({
+          msg: "deactivateAutoLoad",
+        });
+      } else {
+        await chrome.runtime.sendMessage({
+          msg: "activateAutoLoad",
+        });
+      }
+    }
+
+    //update local state to toggle checkbox
+    this.setState({ autoLoad: !this.state.autoLoad });
+  }
 
   async updateUserInfo(updateField, oldPassword, newFieldContent) {
     console.log("type: ", updateField);
@@ -113,10 +152,8 @@ class UserProfile extends React.Component {
   render() {
     console.log("props: ", this.props);
     const userInfoWrapper = "userInfoWrapper";
+    console.log("autoLoad: ", this.props.autoLoad);
 
-    //max edit one field at a time
-    //state: editing?, fieldToEdit?, errorMessage?
-    console.log("editField: ", this.state.editField);
     return (
       <div>
         <h1>{this.props.user.userName}'s User Profile</h1>
@@ -133,8 +170,8 @@ class UserProfile extends React.Component {
                 <input
                   type="checkbox"
                   label="Auto-Load Stickers"
-                  checked={this.state.autoLoad}
-                  // onClick={this.toggleAutoLoad}
+                  checked={this.state.autoLoad ? "checked" : null}
+                  onChange={() => this.toggleField("autoLoad")}
                 ></input>
               </div>
               <div className="checkBoxOption">
@@ -195,17 +232,21 @@ class UserProfile extends React.Component {
             </div>
           ) : (
             <div className={userInfoWrapper}>
-              <div>Password: </div>
-              <div>
+              <div className="columnWrap start">
+                <span>Password: </span>
+              </div>
+              <div className="columnWrap center">
                 <span>Hidden</span>
               </div>
-              <Button
-                className="updateButton"
-                onClick={this.handleEditClick}
-                id="password"
-              >
-                Edit
-              </Button>
+              <div className="columnWrap end">
+                <Button
+                  className="updateButton"
+                  onClick={this.handleEditClick}
+                  id="password"
+                >
+                  Edit
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -261,17 +302,22 @@ class UserProfile extends React.Component {
             </div>
           ) : (
             <div className={userInfoWrapper}>
-              <div>Current Email: </div>
-              <div>
+              <div className="columnWrap start">
+                <span>Email: </span>
+              </div>
+
+              <div className="columnWrap center">
                 <span>Hidden</span>
               </div>
-              <Button
-                className="updateButton"
-                onClick={this.handleEditClick}
-                id="newEmail"
-              >
-                Edit
-              </Button>
+              <div className="columnWrap end">
+                <Button
+                  className="updateButton"
+                  onClick={this.handleEditClick}
+                  id="newEmail"
+                >
+                  Edit
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -337,8 +383,10 @@ class UserProfile extends React.Component {
             </div>
           ) : (
             <div className={userInfoWrapper}>
-              <div>Current Profile Picture: </div>
-              <div>
+              <div className="columnWrap start">
+                <span>Profile Picture: </span>
+              </div>
+              <div className="columnWrap center">
                 <div className="imageWrapper">
                   <div className="tightWrapper">
                     <img
@@ -348,13 +396,16 @@ class UserProfile extends React.Component {
                   </div>
                 </div>
               </div>
-              <Button
-                className="updateButton"
-                onClick={this.handleEditClick}
-                id="newImageUrl"
-              >
-                Edit
-              </Button>
+              <div className="columnWrap end">
+                {" "}
+                <Button
+                  className="updateButton"
+                  onClick={this.handleEditClick}
+                  id="newImageUrl"
+                >
+                  Edit
+                </Button>
+              </div>
             </div>
           )}
           {/* <div>Image URL: {this.props.user.imageUrl}</div>

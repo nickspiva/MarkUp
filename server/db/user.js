@@ -24,6 +24,14 @@ const User = db.define("user", {
       isEmail: true,
     },
   },
+  autoLoad: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  },
+  dailyEmails: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  },
 });
 
 module.exports = User;

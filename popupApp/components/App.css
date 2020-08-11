@@ -308,13 +308,15 @@ h3 {
 
 .checkBoxOption {
   display: flex;
+  width: 200px;
+  justify-content: space-between;
   align-items: center;
   background-color: #353535;
-  width: fit-content;
+  /* width: fit-content; */
   padding: 5px;
   border-radius: 5px;
   font-size: larger;
-  margin: 5px;
+  margin: 5px 5px 5px 0px;
   color: #81a8ec;
 }
 
@@ -471,4 +473,8 @@ input {
 
 .end {
   justify-content: flex-end;
+}
+
+.center {
+  justify-content: center;
 }

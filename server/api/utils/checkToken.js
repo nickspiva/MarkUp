@@ -1,6 +1,7 @@
 //check req has token
 const checkToken = (req, res, next) => {
   const header = req.headers["authorization"];
+  console.log("header: ", header);
   if (typeof header !== "undefined") {
     const bearer = header.split(" ");
     const token = bearer[1];

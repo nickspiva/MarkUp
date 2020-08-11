@@ -12,6 +12,7 @@ require("dotenv").config();
  */
 router.post("/", async (req, res, next) => {
   try {
+    console.log("req.body: ", req.body);
     //From the username and password submitted, find a user in the db
     const { userName, password } = req.body;
     const user = await User.findOne({
@@ -37,6 +38,7 @@ router.post("/", async (req, res, next) => {
             id: user.id,
             emailHash: md5(user.email),
             email: user.email,
+            autoLoad: user.autoLoad,
           },
         };
         //also build a jwt token and attach it to the reponse to be sent

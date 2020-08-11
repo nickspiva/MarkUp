@@ -5,6 +5,7 @@ const pickPropsFromObj = require("./utils/pickPropsFromObj");
 const bcrypt = require("../bcryptExport").bcrypt;
 const saltRounds = 10;
 const checkToken = require("./utils/checkToken");
+const checkUser = require("./utils/checkUser");
 
 const confirmUserInfo = async (req, res, next) => {
   console.log("confirm user info");
@@ -92,6 +93,25 @@ router.put("/", confirmUserInfo, async (req, res, next) => {
   }
 });
 
+//toggle settings
+router.put(
+  "/toggleSetting/:userId",
+  checkToken,
+  // checkUser,
+  async (req, res, next) => {
+    try {
+      console.log("in backend toggle user settings");
+      const user = await User.findByPk(req.params.userId);
+      const updateField = req.body.toggleField;
+      user[updateField] = !user[updateField];
+      await user.save();
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 //create user; POST /users
 router.post("/", async (req, res, next) => {
   console.log("creating user in server");
@@ -100,6 +120,8 @@ router.post("/", async (req, res, next) => {
       ["userName", "password", "email"],
       req.body
     );
+
+    //need to handle cases where we don't have email/etc.
 
     bcrypt.hash(userData.password, saltRounds, async function (err, hash) {
       if (err) {
