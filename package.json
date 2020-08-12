@@ -11,6 +11,7 @@
     "start-server": "nodemon server/server.js -e html,js,css --ignore public",
     "start": "NODE_ENV='production' node server/server.js -e html,js,css --ignore public",
     "seed": "node seed.js",
+    "sync": "node sync.js",
     "deploy": "script/deploy",
     "stage": "script/stage",
     "lint": "eslint ./ --ignore-path .gitignore",
