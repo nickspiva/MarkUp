@@ -46,7 +46,6 @@
     "eslint-plugin-react": "^7.20.5",
     "prettier": "^2.0.5",
     "puppeteer": "^4.0.1",
-    "sequelize-cli": "^6.2.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
@@ -75,6 +74,7 @@
     "react-router-dom": "^5.2.0",
     "semantic-ui-react": "^0.88.2",
     "sequelize": "^5.22.3",
+    "sequelize-cli": "^6.2.0",
     "volleyball": "^1.5.1",
     "webpack-dev-server": "^3.11.0"
   }
