@@ -30,7 +30,7 @@ const loadListener = async function (port) {
 
 const bootUp = async () => {
   const user = await getUser();
-  if (user.autoLoad) {
+  if (user && user.autoLoad) {
     console.log("adding listener");
     chrome.extension.onConnect.addListener(loadListener);
   }
