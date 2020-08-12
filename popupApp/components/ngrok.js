@@ -5,7 +5,7 @@
 
 // const ngrokUrl = "http://8c1a7c8ae679.ngrok.io/";
 // const herokuUrl = "https://markup-extension.herokuapp.com/";
-
-const ngrokUrl = "http://8c1a7c8ae679.ngrok.io/";
+const ngrokUrl = "https://markup-extension.herokuapp.com/";
+// const ngrokUrl = "http://8c1a7c8ae679.ngrok.io/";
 
 module.exports = ngrokUrl;

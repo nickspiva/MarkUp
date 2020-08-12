@@ -3,7 +3,7 @@ const db = require("./server/db/database");
 
 const sync = async () => {
   try {
-    await db.sync({ force: true });
+    await db.sync();
   } catch (err) {
     console.log(red(err), err.status);
   }
