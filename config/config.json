@@ -1,0 +1,21 @@
+{
+  "development": {
+    "username": "nicky",
+    "password": "tangerine",
+    "database": "MarkUp",
+    "host": "localhost",
+    "port": 5432,
+    "url": "postgres://localhost:5432/MarkUp",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL"
+  }
+}

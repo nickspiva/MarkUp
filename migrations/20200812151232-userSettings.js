@@ -11,7 +11,7 @@ module.exports = {
     return queryInterface.sequelize.transaction((t) => {
       return Promise.all([
         queryInterface.addColumn(
-          "user",
+          "users",
           "autoLoad",
           {
             type: Sequelize.BOOLEAN,
@@ -20,17 +20,8 @@ module.exports = {
           { transaction: t }
         ),
         queryInterface.addColumn(
-          "user",
+          "users",
           "dailyEmails",
-          {
-            type: Sequelize.BOOLEAN,
-            defaultValue: false,
-          },
-          { transaction: t }
-        ),
-        queryInterface.addColumn(
-          "user",
-          "testMigration",
           {
             type: Sequelize.BOOLEAN,
             defaultValue: false,
@@ -52,9 +43,6 @@ module.exports = {
       return Promise.all([
         queryInterface.removeColumn("user", "autoLoad", { transaction: t }),
         queryInterface.removeColumn("user", "dailyEmails", { transaction: t }),
-        queryInterface.removeColumn("user", "testMigration", {
-          transaction: t,
-        }),
       ]);
     });
   },
