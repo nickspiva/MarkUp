@@ -3,9 +3,7 @@
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkPEiefNAOkJjXJ00qhJjmCSupSBFF3dtEoJUXiLd+QPzUsl29Vw5Zi9SBfOQ+R2r3HFwjprG66gjGbjzt4XstOkUh9whV6zXkqVdB8FKZbyLHVxn0jDwxy23lxIDBa5i2PqO4UU+sp+OIfUyxlHBNUzlyx0C2gHFNKjjmJy+MKhlnZdpKCk25KWisPg6JMBC2UHIHKwO1g8To2mSlC2QMDYyhGLloUaWT4zGlVZZtxNv5ZsoIdkmsbUI7ad0iCb3ozjtw5ljGBN83b4+FGEBHDZyosFV8of8VLbUbD9IsJYeLNTusz5IGlprg9erEVJ7iLy5iKdJWKUbOZMrPav0tQIDAQAB",
   "description": "Base Level Extension",
   "permissions": [
-    "http://localhost/*",
     "https://markup-extension.herokuapp.com/*",
-    "https://d735b5635bef.ngrok.io/*",
     "storage",
     "tabs",
     "identity"
