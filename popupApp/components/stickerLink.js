@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import moment from "moment";
+import getStickers from "../../utils/getStickers";
 const md5 = require("md5");
 
 const stickerLink = (props) => {
@@ -82,8 +83,13 @@ const stickerLink = (props) => {
     toggleArchiveStatus(!archived);
   };
 
-  const openNewTab = (newUrl) => {
-    chrome.tabs.create({ url: newUrl });
+  const openNewTab = async (newUrl) => {
+    console.log("opening a new page and loading stickers");
+    //add conditional, only fetch and send if autoload is off
+    chrome.runtime.sendMessage({
+      msg: "loadPageStickers",
+      url: newUrl,
+    });
   };
 
   //process the url into a shorter string... clear out https
@@ -117,7 +123,13 @@ const stickerLink = (props) => {
             </span>
           </div>
         </div>
-        <div className="stickerLink" onClick={() => openNewTab(url)}>
+        <div
+          className="stickerLink"
+          onClick={() => {
+            openNewTab(url);
+            console.log("opened new tab");
+          }}
+        >
           <div>{message} </div>
         </div>
         <div className="urlFooter" onClick={() => openNewTab(url)}>

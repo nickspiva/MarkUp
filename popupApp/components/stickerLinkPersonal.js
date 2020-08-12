@@ -79,8 +79,13 @@ const stickerLinkPersonal = (props) => {
     toggleArchiveStatus(!archived);
   };
 
-  const openNewTab = (newUrl) => {
-    chrome.tabs.create({ url: newUrl });
+  const openNewTab = async (newUrl) => {
+    console.log("opening a new page and loading stickers");
+    //add conditional, only fetch and send if autoload is off
+    chrome.runtime.sendMessage({
+      msg: "loadPageStickers",
+      url: newUrl,
+    });
   };
 
   //process the url into a shorter string... clear out https

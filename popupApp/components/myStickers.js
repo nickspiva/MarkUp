@@ -48,7 +48,7 @@ class MyStickers extends React.Component {
         defaultSticker,
         config
       );
-      //set's it as belonging to the user
+      //sets it as belonging to the user
       dbSticker.data.mine = true;
       //sends message to the content script for processing the new sticker
       chrome.tabs.sendMessage(currentTab.id, {
