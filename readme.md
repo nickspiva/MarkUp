@@ -4,11 +4,11 @@ MarkUp is a chrome extension that allows users to mark up the internet with stic
 
 ### Video Demonstration!
 
-- Check it out [here](https://www.youtube.com/watch?v=Bg9fpmVAtC4&feature=youtu.be)!
+- Check it out [here](https://www.youtube.com/watch?v=s693cWLZf-0&feature=youtu.be)!
 
 ### Screenshot
 
-![image info](./images/screencap.png)
+![image info](./images/screencap2.png)
 
 # Setup
 
@@ -16,13 +16,13 @@ MarkUp is a chrome extension that allows users to mark up the internet with stic
 
 ### Installing on Chrome
 
+- [Installation Video](https://youtu.be/osVr5s_OV-Q)
 - Download the production version of this repo as a [zip file](https://drive.google.com/file/d/1D5tYmUUFfnZPVMONDHyT0HwBI310FSB0/view?usp=sharing).
 - Unzip the repository on your local system.
 - In the chrome browser, go to the extensions page: [chrome://extensions][extensionspage]
 - Activate developer mode (button in top right of window).
 - Click "load unpacked" in the top left, and select the unzipped MarkUp folder.
 - Voila! You now have the extension installed in your browser.
-- (installation video coming soon)
 
 ### Dependencies
 
